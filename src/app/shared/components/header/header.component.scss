@@ -1,0 +1,14 @@
+@tailwind components;
+
+@layer components {
+  .wrapper {
+    @apply w-full flex items-center justify-between
+    bg-amber-400
+    p-5
+    shadow-xl
+  }
+
+  .header {
+    @apply text-2xl text-purple-700 font-montserrat font-semibold
+  }
+}
