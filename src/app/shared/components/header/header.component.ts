@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { Button } from 'primeng/button';
 import { Image } from 'primeng/image';
 
@@ -9,6 +9,4 @@ import { Image } from 'primeng/image';
   styleUrl: './header.component.scss',
   standalone: true,
 })
-export class HeaderComponent {
-  @Input() test = 0;
-}
+export class HeaderComponent {}

@@ -5,6 +5,8 @@ module.exports = {
     extend: {
       fontFamily: {
         montserrat: ["Montserrat", "sans-serif"],
+        lora: ["Lora", "serif"],
+        "playfair-display": ["Playfair Display", "serif"],
       },
     },
   },

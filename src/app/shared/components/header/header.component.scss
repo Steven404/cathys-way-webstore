@@ -3,8 +3,9 @@
 @layer components {
   .wrapper {
     @apply w-full flex items-center justify-between
-    bg-amber-200
-    p-5
+    bg-amber-50
+    py-2.5
+    px-52
     shadow-xl
   }
 

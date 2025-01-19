@@ -1,0 +1,17 @@
+@tailwind components;
+
+@layer components {
+  .text-box {
+    @apply absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[860px]
+    z-10 bg-opacity-85 bg-white rounded-lg shadow-lg
+    flex flex-col items-center px-14 py-10 gap-8
+  }
+
+  .text-box-title {
+    @apply text-3xl font-playfair-display font-semibold tracking-wide
+  }
+
+  .text-box-description {
+    @apply text-lg text-justify
+  }
+}
