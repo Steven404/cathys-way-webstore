@@ -1,12 +1,23 @@
 <div class="wrapper">
-  <a href="/">
-    <p-image src="assets/logo_no_bg.png" alt="Image" width="200" />
-  </a>
+  <p-button (click)="changeSidebarVisibleState()" text>
+    <i class="pi pi-bars text-black" style="font-size: 25px"></i>
+  </p-button>
   <div>
+    <a href="/">
+      <p-image src="assets/logo_no_bg.png" alt="Image" width="200" />
+    </a>
+  </div>
+  <div class="max-xl:hidden">
     <p-button label="Προϊόντα" variant="text" />
     <p-button label="Επικοινωνία" variant="text" />
   </div>
-  <div class="w-[200px]">
-    <p-button icon="pi pi-shopping-cart" text size="large" />
-  </div>
+  <p-button text>
+    <i class="pi pi-shopping-bag text-black" style="font-size: 25px"></i>
+  </p-button>
 </div>
+<p-drawer [(visible)]="isSidebarVisible" position="full">
+  <div class="flex flex-col h-full items-center justify-center">
+    <p-button label="Προϊόντα" variant="text" size="large" />
+    <p-button label="Επικοινωνία" variant="text" size="large" />
+  </div>
+</p-drawer>

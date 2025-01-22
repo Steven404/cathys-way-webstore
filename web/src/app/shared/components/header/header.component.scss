@@ -2,11 +2,14 @@
 
 @layer components {
   .wrapper {
-    @apply w-full flex items-center justify-between
+    @apply w-full flex items-center justify-between sticky
     bg-amber-50
     py-2.5
     px-52
     shadow-xl
+
+    max-lg:px-7
+    max-lg:py-5
   }
 
   .header {

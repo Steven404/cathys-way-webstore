@@ -1,17 +1,36 @@
 @tailwind components;
 
 @layer components {
+  .background-image {
+    @apply w-full h-[calc(100vh-63px)] object-cover z-0 max-sm:hidden
+  }
+
+  .mobile-image {
+    @apply sm:hidden w-full object-cover h-[calc(100vh-83px)]
+  }
+
   .text-box {
-    @apply absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[860px]
+    @apply absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-auto
     z-10 bg-opacity-85 bg-white rounded-lg shadow-lg
     flex flex-col items-center px-14 py-10 gap-8
+
+    max-xl:w-3/4
+    max-lg:w-[90%] max-md:px-7 max-md:py-5
   }
 
   .text-box-title {
     @apply text-3xl font-playfair-display font-semibold tracking-wide
+
+    max-lg:text-center max-sm:text-2xl
   }
 
   .text-box-description {
-    @apply text-lg text-justify
+    @apply sm:text-lg text-justify
+
+
+  }
+
+  .styled-text {
+    @apply italic font-lora text-purple-700 font-semibold text-xl
   }
 }
