@@ -1,0 +1,23 @@
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { catchError, Observable } from 'rxjs';
+
+import { ApiResponse, Category } from '../../../../../../commonTypes';
+import { environment } from '../../../../environments/environment';
+import { handleError } from '../../common';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class ApiService {
+  api: string = environment.apiUrl;
+  constructor(private http: HttpClient) {}
+
+  getAllCategories(): Observable<ApiResponse & { categories: Category[] }> {
+    return this.http
+      .get<
+        ApiResponse & { categories: Category[] }
+      >(this.api + '/categories/getAll')
+      .pipe(catchError(handleError));
+  }
+}

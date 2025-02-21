@@ -1,9 +1,13 @@
 @tailwind components;
 
 @layer components {
-  .background-image {
-    @apply w-full h-[calc(100vh-63px)] object-cover z-0 max-sm:hidden
+  .wrapper {
+    @apply w-full h-screen bg-[url(/assets/main_placeholder2.jpg)] bg-center bg-cover
   }
+
+  //.background-image {
+  //  @apply w-full h-[calc(100vh-63px)] object-cover z-0 max-sm:hidden
+  //}
 
   .mobile-image {
     @apply sm:hidden w-full object-cover h-[calc(100vh-83px)]
@@ -11,7 +15,7 @@
 
   .text-box {
     @apply absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-auto
-    z-10 bg-opacity-85 bg-white rounded-lg shadow-lg
+    bg-opacity-90 bg-white rounded-lg
     flex flex-col items-center px-14 py-10 gap-8
 
     max-xl:w-3/4
@@ -19,15 +23,13 @@
   }
 
   .text-box-title {
-    @apply text-3xl font-playfair-display font-semibold tracking-wide
+    @apply text-4xl font-playfair-display font-semibold tracking-wide
 
     max-lg:text-center max-sm:text-2xl
   }
 
   .text-box-description {
-    @apply sm:text-lg text-justify
-
-
+    @apply sm:text-xl text-justify font-medium
   }
 
   .styled-text {

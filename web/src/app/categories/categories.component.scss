@@ -1,0 +1,38 @@
+@tailwind components;
+
+@layer components {
+  .wrapper {
+    @apply h-screen w-full items-center flex flex-col px-10 pt-[83px] pb-10
+  }
+
+  .page-title {
+    @apply text-purple-700 text-5xl font-semibold font-montserrat
+  }
+
+  .categories-wrapper {
+    @apply flex flex-wrap gap-x-20 justify-center w-full h-full items-center
+  }
+
+  .category-image {
+    @apply object-cover z-0 max-sm:hidden w-[300px] h-[175px]
+  }
+
+  .category-wrapper {
+    @apply cursor-pointer w-1/5 h-[37%] bg-center bg-cover bg-no-repeat relative rounded-lg overflow-hidden shadow-md hover:scale-110 hover:shadow-xl
+  }
+
+  .category-text-wrapper {
+    @apply absolute bottom-0 w-full pl-2.5
+    flex justify-center flex-col
+    min-h-[75px]
+    bg-purple-950 bg-opacity-50
+  }
+
+  .category-name {
+    @apply text-white text-xl font-semibold
+  }
+
+  .category-subtext {
+    @apply text-sm text-gray-300 font-medium
+  }
+}

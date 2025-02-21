@@ -1,5 +1,5 @@
 <div class="wrapper">
-  <p-button (click)="changeSidebarVisibleState()" text>
+  <p-button (click)="changeSidebarVisibleState()" text class="md:hidden">
     <i class="pi pi-bars text-black" style="font-size: 25px"></i>
   </p-button>
   <div>
@@ -7,11 +7,11 @@
       <p-image src="assets/logo_no_bg.png" alt="Image" width="200" />
     </a>
   </div>
-  <div class="max-xl:hidden">
-    <p-button label="Προϊόντα" variant="text" />
-    <p-button label="Επικοινωνία" variant="text" />
+  <div class="max-xl:hidden flex w-[500px] justify-center gap-x-5">
+    <p-button label="Προϊόντα" variant="text" class="global-button" />
+    <p-button label="Επικοινωνία" variant="text" class="global-button" />
   </div>
-  <p-button text>
+  <p-button text class="w-[200px] justify-center flex global-button">
     <i class="pi pi-shopping-bag text-black" style="font-size: 25px"></i>
   </p-button>
 </div>
