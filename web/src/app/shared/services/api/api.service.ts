@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable } from 'rxjs';
 
-import { ApiResponse, Category } from '../../../../../../commonTypes';
+import { ApiResponse, Category, Product } from '../../../../../../commonTypes';
 import { environment } from '../../../../environments/environment';
 import { handleError } from '../../common';
 
@@ -18,6 +18,16 @@ export class ApiService {
       .get<
         ApiResponse & { categories: Category[] }
       >(this.api + '/categories/getAll')
+      .pipe(catchError(handleError));
+  }
+
+  getCategoryProducts(
+    categoryId: string,
+  ): Observable<ApiResponse & { products: Product[] }> {
+    return this.http
+      .get<
+        ApiResponse & { products: Product[] }
+      >(this.api + '/products/?categoryId=' + categoryId)
       .pipe(catchError(handleError));
   }
 }

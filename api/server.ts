@@ -3,6 +3,7 @@ import dotenv from 'dotenv'
 
 import cors, { CorsOptions } from 'cors'
 import CategoriesRouter from "./src/api/categories/categories.router";
+import ProductsRouter from "./src/api/products/products.router";
 
 dotenv.config()
 
@@ -22,3 +23,4 @@ app.listen(port, () => {
 })
 
 app.use('/api/categories', CategoriesRouter);
+app.use('/api/products', ProductsRouter);

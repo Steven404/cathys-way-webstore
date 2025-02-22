@@ -16,6 +16,10 @@ html {
   }
 
   .global-button {
-    @apply custom-transition hover:scale-110
+    @apply custom-transition
+  }
+
+  .custom-menu-ite {
+    @apply font-montserrat
   }
 }

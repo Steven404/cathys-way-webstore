@@ -1,6 +1,5 @@
 import { type Response, type Request } from 'express';
 import { connection } from "../../utils/db";
-import {Category} from "../../../../commonTypes";
 
 export const getAllCategories =  async (req: Request, res: Response) => {
     try {

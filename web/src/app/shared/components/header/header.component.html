@@ -7,8 +7,29 @@
       <p-image src="assets/logo_no_bg.png" alt="Image" width="200" />
     </a>
   </div>
-  <div class="max-xl:hidden flex w-[500px] justify-center gap-x-5">
-    <p-button label="Προϊόντα" variant="text" class="global-button" />
+  <div class="max-md:hidden flex w-[500px] justify-center gap-x-5">
+    <p-button label="Αρχική" variant="text" class="global-button" />
+    <div *ngIf="categories.length" class="justify-center">
+      <p-button
+        id="productsButton"
+        #productsButton
+        label="Προϊόντα"
+        variant="text"
+        class="global-button"
+        (onClick)="menu.toggle($event)"
+        icon="pi pi-angle-down"
+        iconPos="right"
+      />
+      <p-tieredMenu
+        #menu
+        appendTo="body"
+        [model]="items"
+        popup
+        class="font-montserrat top-12"
+        [autoDisplay]="true"
+        [autoZIndex]="true"
+      />
+    </div>
     <p-button label="Επικοινωνία" variant="text" class="global-button" />
   </div>
   <p-button text class="w-[200px] justify-center flex global-button">
