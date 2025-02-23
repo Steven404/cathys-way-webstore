@@ -8,17 +8,23 @@
     </a>
   </div>
   <div class="max-md:hidden flex w-[500px] justify-center gap-x-5">
-    <p-button label="Αρχική" variant="text" class="global-button" />
+    <p-button
+      label="Αρχική"
+      variant="text"
+      class="global-button"
+      severity="contrast"
+    />
     <div *ngIf="categories.length" class="justify-center">
       <p-button
         id="productsButton"
         #productsButton
         label="Προϊόντα"
         variant="text"
-        class="global-button"
+        class="global-button text-button"
         (onClick)="menu.toggle($event)"
         icon="pi pi-angle-down"
         iconPos="right"
+        severity="contrast"
       />
       <p-tieredMenu
         #menu
@@ -30,7 +36,12 @@
         [autoZIndex]="true"
       />
     </div>
-    <p-button label="Επικοινωνία" variant="text" class="global-button" />
+    <p-button
+      label="Επικοινωνία"
+      variant="text"
+      class="global-button"
+      severity="contrast"
+    />
   </div>
   <p-button text class="w-[200px] justify-center flex global-button">
     <i class="pi pi-shopping-bag text-black" style="font-size: 25px"></i>

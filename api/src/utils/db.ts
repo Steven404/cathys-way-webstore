@@ -1,6 +1,7 @@
 import mysql from 'mysql2'
 import dotenv from 'dotenv'
 dotenv.config()
+
 export const connection = mysql
   .createPool({
     port: 3306,
@@ -10,3 +11,5 @@ export const connection = mysql
     database: process.env.DB_NAME
   })
   .promise()
+
+export const commonOptions = { rowsAsArray: true }

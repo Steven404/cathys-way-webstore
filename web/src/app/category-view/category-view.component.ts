@@ -1,17 +1,29 @@
+import { NgForOf, NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
+import { Category, Product } from '../../../../commonTypes';
+import { ProductCardComponent } from '../product-card/product-card.component';
 import { ApiService } from '../shared/services/api/api.service';
 
 @Component({
   selector: 'app-category-view',
   standalone: true,
-  imports: [],
+  imports: [NgIf, NgForOf, ProductCardComponent],
   templateUrl: './category-view.component.html',
   styleUrl: './category-view.component.scss',
 })
 export class CategoryViewComponent implements OnInit {
   id: string;
+
+  category: Category;
+  products: Product[];
+
+  totalProductsCount = 0;
+
+  firstProductIndex = 1;
+
+  lastProductIndex = 12;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -23,7 +35,16 @@ export class CategoryViewComponent implements OnInit {
     if (this.id) {
       this.apiService.getCategoryProducts(this.id).subscribe({
         next: (v) => {
-          console.log(v);
+          this.products = v.products;
+          this.totalProductsCount = v.totalCount;
+          if (v.totalCount < 12) {
+            this.lastProductIndex = v.totalCount;
+          }
+        },
+      });
+      this.apiService.getCategory(this.id).subscribe({
+        next: (v) => {
+          this.category = v.category;
         },
       });
     }

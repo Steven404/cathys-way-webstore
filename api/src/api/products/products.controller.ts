@@ -14,17 +14,24 @@ export const getAllProducts =  async (req: Request, res: Response) => {
     }
 }
 
-export const getCategoryProducts = async (req:Request, res: Response) => {
-    const categoryId = req.query.categoryId;
-    console.log('categoryId: ',categoryId)
+export const getCategoryProducts = async (req: Request, res: Response) => {
+  const { categoryId } = req.query
 
-    try {
-        const query = await connection.query(`SELECT * FROM PRODUCTS WHERE categoryId = ${categoryId}`)
-        const countQuery = await connection.query(`SELECT COUNT(*) FROM PRODUCTS WHERE categoryId = ${categoryId}`)
-        const result = query[0];
+  try {
+    const query = await connection.execute(
+      `SELECT * FROM PRODUCTS WHERE categoryId = ?`, [categoryId]
+    )
+    const countQuery = await connection.execute(
+      `SELECT COUNT(*) FROM PRODUCTS WHERE categoryId = ?`, [categoryId]
+    )
+    const result = query[0];
 
-        return res.status(200).json({status: 200, products: result, totalCount: countQuery[0]})
-    } catch (e) {
-        return res.status(500).json({ status: 500, message: e.message });
-    }
+    const totalCount = countQuery[0][0]['COUNT(*)']
+
+    return res
+      .status(200)
+      .json({ status: 200, products: result, totalCount: totalCount })
+  } catch (e) {
+    return res.status(500).json({ status: 500, message: e.message })
+  }
 }

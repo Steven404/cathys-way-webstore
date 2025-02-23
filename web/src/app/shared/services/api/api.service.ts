@@ -21,12 +21,20 @@ export class ApiService {
       .pipe(catchError(handleError));
   }
 
-  getCategoryProducts(
-    categoryId: string,
-  ): Observable<ApiResponse & { products: Product[] }> {
+  getCategory(id: string): Observable<ApiResponse & { category: Category }> {
     return this.http
       .get<
-        ApiResponse & { products: Product[] }
+        ApiResponse & { category: Category }
+      >(this.api + '/categories/get?categoryId=' + id)
+      .pipe(catchError(handleError));
+  }
+
+  getCategoryProducts(
+    categoryId: string,
+  ): Observable<ApiResponse & { products: Product[]; totalCount: number }> {
+    return this.http
+      .get<
+        ApiResponse & { products: Product[]; totalCount: number }
       >(this.api + '/products/?categoryId=' + categoryId)
       .pipe(catchError(handleError));
   }

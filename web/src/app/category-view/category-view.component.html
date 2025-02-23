@@ -1,1 +1,15 @@
-<p>category-view works!</p>
+<div *ngIf="category && products.length" class="wrapper">
+  <h1 class="title">{{ category.name }}</h1>
+  <div class="indexDivWrapper">
+    <span class="text-lg font-montserrat">
+      Βλέπετε
+      <b>{{ firstProductIndex }}-{{ lastProductIndex }}</b>
+      από <b>{{ totalProductsCount }}</b> προϊόντα στην κατηγορία
+    </span>
+  </div>
+  <div class="products-container">
+    <ng-template ngFor let-product [ngForOf]="products">
+      <app-product-card [product]="product" />
+    </ng-template>
+  </div>
+</div>
