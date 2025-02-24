@@ -6,11 +6,11 @@
   }
 
   .title {
-    @apply text-4xl font-montserrat
+    @apply text-3xl font-montserrat text-purple-700 font-semibold
   }
 
   .indexDivWrapper {
-    @apply w-full p-5
+    @apply w-full py-10 px-20 flex justify-between items-center
   }
 
   .products-container {

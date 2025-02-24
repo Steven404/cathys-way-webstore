@@ -2,6 +2,20 @@
 
 @layer components {
   .wrapper {
-    @apply h-[300px] w-[300px]
+    @apply h-[300px] w-[300px] relative rounded overflow-hidden bg-contain
+  }
+
+  .text-wrapper {
+    @apply absolute bottom-0 w-full h-[25%]
+    bg-purple-500 bg-opacity-50
+    p-2.5
+  }
+
+  .name-text {
+    @apply text-purple-50 text-lg font-semibold
+  }
+
+  .price-text {
+    @apply text-purple-100 font-medium
   }
 }

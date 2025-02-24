@@ -30,6 +30,9 @@ export const customPreset = definePreset(Aura, {
           color: '#ffffff',
           focusColor: '#ffffff',
         },
+        outlined: {
+          color: '{purple.500}',
+        },
       },
       dark: {
         primary: {
@@ -43,6 +46,9 @@ export const customPreset = definePreset(Aura, {
           focusBackground: 'rgba(250, 250, 250, .24)',
           color: 'rgba(255,255,255,.87)',
           focusColor: 'rgba(255,255,255,.87)',
+        },
+        outlined: {
+          color: '{purple.500}',
         },
       },
     },

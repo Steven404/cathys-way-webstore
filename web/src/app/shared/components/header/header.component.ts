@@ -42,6 +42,10 @@ export class HeaderComponent implements OnChanges {
     }
   }
 
+  navigateToHome() {
+    this.router.navigate(['home']);
+  }
+
   changeSidebarVisibleState() {
     this.isSidebarVisible = !this.isSidebarVisible;
   }

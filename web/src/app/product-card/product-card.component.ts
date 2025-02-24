@@ -11,4 +11,8 @@ import { Product } from '../../../../commonTypes';
 })
 export class ProductCardComponent {
   @Input() product: Product;
+
+  convertPriceToFloat(price: number) {
+    return price.toFixed(2);
+  }
 }

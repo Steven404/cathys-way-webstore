@@ -1,11 +1,20 @@
 <div *ngIf="category && products.length" class="wrapper">
-  <h1 class="title">{{ category.name }}</h1>
+  <h1 class="title">{{ category.name.toUpperCase() }}</h1>
   <div class="indexDivWrapper">
-    <span class="text-lg font-montserrat">
+    <p class="font-light font-montserrat text-sm">
       Βλέπετε
-      <b>{{ firstProductIndex }}-{{ lastProductIndex }}</b>
-      από <b>{{ totalProductsCount }}</b> προϊόντα στην κατηγορία
-    </span>
+      <span class="font-semibold"
+        >{{ firstProductIndex }}-{{ lastProductIndex }}</span
+      >
+      από <span class="font-semibold">{{ totalProductsCount }}</span> προϊόντα
+      στην κατηγορία
+    </p>
+    <p-dropdown
+      [options]="sortOptions"
+      optionLabel="name"
+      placeholder="Ταξινόμιση"
+      variant="outlined"
+    />
   </div>
   <div class="products-container">
     <ng-template ngFor let-product [ngForOf]="products">
