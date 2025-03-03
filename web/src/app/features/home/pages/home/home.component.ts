@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { WelcomeBoxComponent } from '../welcome-box/welcome-box.component';
+import { WelcomeBoxComponent } from '../../components/welcome-box/welcome-box.component';
 
 @Component({
   selector: 'app-home',

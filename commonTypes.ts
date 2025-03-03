@@ -8,6 +8,7 @@ export interface Category {
 }
 
 export interface Product {
+    id: number;
     code: string;
     name: string;
     categoryId: number;

@@ -2,10 +2,11 @@ import { NgForOf, NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DropdownModule } from 'primeng/dropdown';
+import { Select } from 'primeng/select';
 
-import { Category, Product } from '../../../../commonTypes';
-import { ProductCardComponent } from '../product-card/product-card.component';
-import { ApiService } from '../shared/services/api/api.service';
+import { Category, Product } from '../../../../../../../commonTypes';
+import { ApiService } from '../../../../shared/services/api/api.service';
+import { ProductCardComponent } from '../../../product/components/product-card/product-card.component';
 
 interface SortOption {
   name: string;
@@ -15,7 +16,7 @@ interface SortOption {
 @Component({
   selector: 'app-category-view',
   standalone: true,
-  imports: [NgIf, NgForOf, ProductCardComponent, DropdownModule],
+  imports: [NgIf, NgForOf, ProductCardComponent, DropdownModule, Select],
   templateUrl: './category-view.component.html',
   styleUrl: './category-view.component.scss',
 })
@@ -50,7 +51,7 @@ export class CategoryViewComponent implements OnInit {
   ngOnInit() {
     this.id = this.activatedRoute.snapshot.paramMap.get('id');
     if (this.id) {
-      this.apiService.getCategoryProducts(this.id).subscribe({
+      this.apiService.getCategoryProducts(parseInt(this.id)).subscribe({
         next: (v) => {
           this.products = v.products;
           this.totalProductsCount = v.totalCount;

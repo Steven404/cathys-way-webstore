@@ -2,11 +2,11 @@
 
 @layer components {
   .wrapper {
-    @apply h-[300px] w-[300px] relative rounded overflow-hidden bg-contain
+    @apply h-[250px] w-[300px] relative rounded overflow-hidden bg-cover hover:scale-105 hover:cursor-pointer
   }
 
   .text-wrapper {
-    @apply absolute bottom-0 w-full h-[25%]
+    @apply absolute bottom-0 w-full h-[30%]
     bg-purple-500 bg-opacity-50
     p-2.5
   }

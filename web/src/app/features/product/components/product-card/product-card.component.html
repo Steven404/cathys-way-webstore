@@ -1,4 +1,7 @@
-<div class="wrapper custom-transition bg-[url(/assets/rings.jpg)]">
+<div
+  class="wrapper custom-transition bg-[url(/assets/rings.jpg)]"
+  (click)="goToProduct()"
+>
   <div class="text-wrapper">
     <p class="name-text">{{ product.name }}</p>
     <p class="price-text">{{ convertPriceToFloat(product.price) }} &#8364;</p>
