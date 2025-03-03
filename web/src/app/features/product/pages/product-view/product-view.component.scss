@@ -1,0 +1,53 @@
+@tailwind components;
+
+@layer components {
+  .page {
+    @apply flex flex-col items-center font-manrope
+    p-10
+  }
+
+  .product {
+    @apply flex w-[60%] mt-10 justify-center gap-10
+  }
+
+  .image-wrapper {
+    @apply w-[45%] h-fit relative
+  }
+
+  .product-details {
+    @apply flex flex-col w-[45%] relative
+  }
+
+  .product-title {
+    @apply text-4xl font-bold tracking-wide
+  }
+
+  .product-code {
+    @apply text-xs mt-4 font-semibold
+  }
+
+  .dimensions {
+    @apply text-sm
+  }
+
+  .product-description {
+    @apply mt-10 text-2xl
+  }
+
+  .product-footer {
+    @apply absolute bottom-1 flex flex-col
+    gap-2.5
+  }
+
+  .price {
+    @apply mb-5 text-2xl font-semibold
+  }
+
+  .wishlist-action {
+    @apply flex items-center hover:cursor-pointer
+  }
+
+  .wishlist-text {
+    @apply text-sm underline ml-2
+  }
+}

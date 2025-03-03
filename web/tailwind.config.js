@@ -7,6 +7,7 @@ module.exports = {
         montserrat: ["Montserrat", "sans-serif"],
         lora: ["Lora", "serif"],
         "playfair-display": ["Playfair Display", "serif"],
+        "manrope": ["Manrope", "serif"],
       },
     },
   },

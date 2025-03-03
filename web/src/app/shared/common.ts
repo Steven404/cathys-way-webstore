@@ -20,3 +20,7 @@ export const handleError = (error: HttpErrorResponse) => {
     return throwError(() => new Error(error.error));
   }
 };
+
+export const convertPriceToFloat = (price: number) => {
+  return price.toFixed(2);
+};

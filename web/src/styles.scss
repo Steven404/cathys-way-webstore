@@ -4,7 +4,7 @@
 @tailwind utilities;
 
 @import "primeicons/primeicons.css";
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700family=Lora:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Lora:wght@300;400;500;600;700&family=Manrope:wght@200..800');
 
 html {
   scroll-behavior: smooth;
@@ -16,7 +16,7 @@ html {
   }
 
   .global-button {
-    @apply custom-transition
+    @apply custom-transition font-manrope
   }
 
   .custom-menu-ite {

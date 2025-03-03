@@ -1,3 +1,32 @@
-<div *ngIf="product">
-  <p>{{ product.name }}</p>
+<div *ngIf="product" class="page">
+  <div class="product">
+    <div class="image-wrapper">
+      <p-image src="./assets/rings.jpg" alt="Image" preview>
+        <ng-template #indicator>
+          <i class="pi pi-eye"></i>
+        </ng-template>
+      </p-image>
+    </div>
+    <div class="product-details">
+      <h1 class="product-title">{{ product.name }}</h1>
+      <p class="product-code">
+        Κωδικός προϊόντος: <span class="font-bold">{{ product.code }}</span>
+      </p>
+      <p class="mt-0.5 font-semibold">
+        Διαστάσεις: {{ product.dimensions }}
+        <span class="dimensions">(μήκος x πλάτος)</span>
+      </p>
+      <p *ngIf="product.description" class="product-description">
+        {{ product.description }}
+      </p>
+      <div class="product-footer">
+        <p class="price">{{ convertPriceToFloat(product.price) }} &#8364;</p>
+        <div class="wishlist-action">
+          <i class="pi pi-heart"></i>
+          <p class="wishlist-text">Προσθήκη στην λίστα επιθυμιών</p>
+        </div>
+        <p-button label="Προσθήκη στο καλάθι" />
+      </div>
+    </div>
+  </div>
 </div>

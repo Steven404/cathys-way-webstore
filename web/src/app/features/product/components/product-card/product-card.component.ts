@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Product } from '../../../../../../../commonTypes';
+import { convertPriceToFloat } from '../../../../shared/common';
 
 @Component({
   selector: 'app-product-card',
@@ -19,7 +20,5 @@ export class ProductCardComponent {
     this.router.navigate(['product/' + this.product.id]);
   }
 
-  convertPriceToFloat(price: number) {
-    return price.toFixed(2);
-  }
+  protected readonly convertPriceToFloat = convertPriceToFloat;
 }
