@@ -2,18 +2,24 @@
 
 @layer components {
   .wrapper {
-    @apply w-full h-full flex flex-col items-center p-10
+    @apply w-full h-full flex flex-col items-center lg:p-10 font-manrope py-10
   }
 
   .title {
-    @apply text-3xl font-montserrat text-purple-700 font-semibold
+    @apply text-3xl text-purple-700 font-semibold
   }
 
-  .indexDivWrapper {
-    @apply w-full py-10 px-20 flex justify-between items-center
+  .index-div-wrapper {
+    @apply w-full py-10 lg:px-20 flex lg:items-center justify-between
+    items-start max-lg:flex-col max-lg:gap-5 max-lg:px-3
+  }
+
+  .index-text {
+    @apply font-light text-sm
   }
 
   .products-container {
-    @apply flex flex-wrap gap-10 justify-center w-full h-full items-center
+    @apply flex flex-wrap lg:gap-10 justify-center w-full h-full items-center
+    gap-x-5 gap-y-8
   }
 }

@@ -8,7 +8,8 @@ export const connection = mysql
     host: 'localhost',
     user: process.env.DB_ADMIN,
     password: process.env.DB_PASS,
-    database: process.env.DB_NAME
+    database: process.env.DB_NAME,
+    multipleStatements: true,
   })
   .promise()
 

@@ -3,19 +3,22 @@
 @layer components {
   .wrapper {
     @apply h-[250px] w-[300px] relative rounded overflow-hidden bg-cover hover:scale-105 hover:cursor-pointer
+    max-lg:h-[300px] max-lg:w-[400px]
   }
 
   .text-wrapper {
     @apply absolute bottom-0 w-full h-[30%]
+    flex flex-col justify-center
     bg-purple-500 bg-opacity-50
-    p-2.5
+    px-2.5
+    max-lg:items-center
   }
 
   .name-text {
-    @apply text-purple-50 text-lg font-semibold
+    @apply text-purple-50 text-lg font-semibold max-lg:text-xl
   }
 
   .price-text {
-    @apply text-purple-100 font-medium
+    @apply text-purple-100 font-medium max-lg:text-lg
   }
 }

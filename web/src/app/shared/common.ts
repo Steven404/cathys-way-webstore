@@ -24,3 +24,7 @@ export const handleError = (error: HttpErrorResponse) => {
 export const convertPriceToFloat = (price: number) => {
   return price.toFixed(2);
 };
+
+export const removeGreekTonos = (str: string) => {
+  return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+};

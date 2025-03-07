@@ -1,6 +1,6 @@
 import type {Request, Response} from "express";
 import {connection} from "../../utils/db";
-import {Category} from "../../../../commonTypes";
+import {Category, SortOption} from "../../../../commonTypes";
 import {CategoryRowDataPacket, ProductRowDataPacket} from "../../utils/apiTypes";
 
 export const getAllProducts =  async (req: Request, res: Response) => {
@@ -17,11 +17,26 @@ export const getAllProducts =  async (req: Request, res: Response) => {
 }
 
 export const getCategoryProducts = async (req: Request, res: Response) => {
-  const { categoryId } = req.query
+  const { categoryId,first, sort } = req.query
 
   try {
+    const queryParams = [categoryId];
+
+    let queryStr = `SELECT * FROM PRODUCTS WHERE categoryId = ?`
+
+      if (sort && typeof sort === "string") {
+        let sortObj = JSON.parse(sort) as SortOption['field'];
+
+        // ✅ Whitelist valid column names to prevent SQL injection
+        const validSortFields = ['price', 'name', 'createdAt']; // <-- add all valid column names here
+        if (validSortFields.includes(sortObj.fieldName)) {
+            const sortOrder = sortObj.order === 'asc' ? 'ASC' : 'DESC';
+            queryStr += ` ORDER BY ${sortObj.fieldName} ${sortOrder}`;
+        }
+      }
+
     const query = await connection.execute<ProductRowDataPacket[]>(
-      `SELECT * FROM PRODUCTS WHERE categoryId = ?`, [categoryId]
+        queryStr, queryParams
     )
     const countQuery = await connection.execute<ProductRowDataPacket[]>(
       `SELECT COUNT(*) FROM PRODUCTS WHERE categoryId = ?`, [categoryId]

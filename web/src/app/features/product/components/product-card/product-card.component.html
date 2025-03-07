@@ -3,7 +3,9 @@
   (click)="goToProduct()"
 >
   <div class="text-wrapper">
-    <p class="name-text">{{ product.name }}</p>
-    <p class="price-text">{{ convertPriceToFloat(product.price) }} &#8364;</p>
+    <div class="flex flex-col gap-1 max-lg text-center">
+      <p class="name-text">{{ product.name }}</p>
+      <p class="price-text">{{ convertPriceToFloat(product.price) }} &#8364;</p>
+    </div>
   </div>
 </div>

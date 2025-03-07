@@ -23,3 +23,8 @@ export interface Product {
 export interface ApiResponse {
     status: number;
 }
+
+export interface SortOption {
+    name: string;
+    field: { fieldName: 'price'; order: 'asc' | 'desc' };
+}

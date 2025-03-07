@@ -2,7 +2,12 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable } from 'rxjs';
 
-import { ApiResponse, Category, Product } from '../../../../../../commonTypes';
+import {
+  ApiResponse,
+  Category,
+  Product,
+  SortOption,
+} from '../../../../../../commonTypes';
 import { environment } from '../../../../environments/environment';
 import { handleError } from '../../common';
 
@@ -31,11 +36,14 @@ export class ApiService {
 
   getCategoryProducts(
     categoryId: number,
+    sort?: SortOption,
   ): Observable<ApiResponse & { products: Product[]; totalCount: number }> {
+    let url = this.api + '/products/category?categoryId=' + categoryId;
+    if (sort) {
+      url = url + `&sort=${JSON.stringify(sort.field)}`;
+    }
     return this.http
-      .get<
-        ApiResponse & { products: Product[]; totalCount: number }
-      >(this.api + '/products/category?categoryId=' + categoryId)
+      .get<ApiResponse & { products: Product[]; totalCount: number }>(url)
       .pipe(catchError(handleError));
   }
 

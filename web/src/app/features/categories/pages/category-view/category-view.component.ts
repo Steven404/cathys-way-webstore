@@ -2,16 +2,17 @@ import { NgForOf, NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DropdownModule } from 'primeng/dropdown';
-import { Select } from 'primeng/select';
+import { Select, SelectChangeEvent } from 'primeng/select';
+import { firstValueFrom } from 'rxjs';
 
-import { Category, Product } from '../../../../../../../commonTypes';
+import {
+  Category,
+  Product,
+  SortOption,
+} from '../../../../../../../commonTypes';
+import { removeGreekTonos } from '../../../../shared/common';
 import { ApiService } from '../../../../shared/services/api/api.service';
 import { ProductCardComponent } from '../../../product/components/product-card/product-card.component';
-
-interface SortOption {
-  name: string;
-  code: string;
-}
 
 @Component({
   selector: 'app-category-view',
@@ -35,11 +36,11 @@ export class CategoryViewComponent implements OnInit {
   sortOptions: SortOption[] = [
     {
       name: 'Αύξουσα τιμή',
-      code: 'ascendingPrice',
+      field: { fieldName: 'price', order: 'asc' },
     },
     {
       name: 'Φθίνουσα τιμή',
-      code: 'descendingPrice',
+      field: { fieldName: 'price', order: 'desc' },
     },
   ];
 
@@ -67,4 +68,17 @@ export class CategoryViewComponent implements OnInit {
       });
     }
   }
+
+  async sortSelected(event: SelectChangeEvent & { value: SortOption }) {
+    const response = await firstValueFrom(
+      this.apiService.getCategoryProducts(parseInt(this.id), event.value),
+    );
+
+    if (response && response.status === 200 && response.products.length) {
+      this.products = response.products;
+      console.log(this.products);
+    }
+  }
+
+  protected readonly removeGreekTonos = removeGreekTonos;
 }
