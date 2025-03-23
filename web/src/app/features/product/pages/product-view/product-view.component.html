@@ -12,8 +12,9 @@
       <p class="product-code">
         Κωδικός προϊόντος: <span class="font-bold">{{ product.code }}</span>
       </p>
-      <p class="mt-0.5 font-semibold">
-        Διαστάσεις: {{ product.dimensions }}
+      <p class="mt-0.5 font-medium">
+        Διαστάσεις: <span class="font-semibold">{{ product.dimensions }}</span
+        >&nbsp;
         <span class="dimensions">(μήκος x πλάτος)</span>
       </p>
       <p *ngIf="product.description" class="product-description">
