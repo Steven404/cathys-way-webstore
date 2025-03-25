@@ -36,9 +36,11 @@ export class ApiService {
 
   getCategoryProducts(
     categoryId: number,
+    offset: number,
     sort?: SortOption,
   ): Observable<ApiResponse & { products: Product[]; totalCount: number }> {
-    let url = this.api + '/products/category?categoryId=' + categoryId;
+    let url =
+      this.api + `/products/category?categoryId=${categoryId}&offset=${offset}`;
     if (sort) {
       url = url + `&sort=${JSON.stringify(sort.field)}`;
     }

@@ -1,25 +1,39 @@
 @tailwind components;
 
+:host {
+  display: block;
+  height: calc(100% - 64px);
+}
+
 @layer components {
   .wrapper {
-    @apply w-full h-full flex flex-col items-center lg:p-10 font-manrope py-10
+    @apply w-full flex flex-col items-center lg:py-5 font-manrope py-2.5 relative
   }
 
   .title {
-    @apply text-3xl text-purple-700 font-semibold
+    @apply text-3xl xl:text-4xl text-purple-700 font-semibold
   }
 
   .index-div-wrapper {
-    @apply w-full py-10 lg:px-20 flex lg:items-center justify-between
+    @apply w-full py-5 lg:px-20 flex lg:items-center justify-between
     items-start max-lg:flex-col max-lg:gap-5 max-lg:px-3
   }
 
   .index-text {
-    @apply font-light text-sm
+    @apply font-light max-xl:text-sm
   }
 
   .products-container {
-    @apply flex flex-wrap lg:gap-10 justify-center w-full h-full items-center
-    gap-x-5 gap-y-8
+    @apply w-full h-3/4 grid justify-items-center grid-cols-1 gap-y-10 gap-x-2 mb-10
+    lg:px-10
+    2xl:grid-cols-5 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2
+  }
+
+  .buttons-container {
+    @apply flex absolute bottom-[-50px] gap-2.5 pb-5
+  }
+
+  .buttons-container-fixed {
+    @apply flex fixed bottom-14 gap-2.5 pb-5
   }
 }

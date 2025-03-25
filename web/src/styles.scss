@@ -10,6 +10,16 @@ html {
   scroll-behavior: smooth;
 }
 
+body {
+  min-height: 100vh;
+}
+
+app-root {
+  display: block;
+  height: 100vh !important;
+}
+
+
 @layer utilities {
   .custom-transition {
     @apply transition-all duration-300 ease-in-out

@@ -22,4 +22,20 @@
       <app-product-card [product]="product" />
     </ng-template>
   </div>
+  <div
+    class="buttons-container"
+    [ngClass]="{
+      'buttons-container-fixed': products.length <= 5,
+      'buttons-container': products.length > 5,
+    }"
+  >
+    <ng-container *ngFor="let page of pages; index as i">
+      <p-button
+        [label]="String(page)"
+        rounded
+        text
+        (click)="pageClicked(page)"
+      />
+    </ng-container>
+  </div>
 </div>

@@ -73,7 +73,7 @@ VALUES ('Mijuki', null);
 Insert mijuki products
 
 ```
-INSERT INTO products (code, categoryId, subcategoryId, dimentions, name, price, description, colours) values 
+INSERT INTO products (code, categoryId, subcategoryId, dimensions, name, price, description, colours) values 
 ('ΣΚ-013', 1, 1, '2,5cm x 1,5cm', 'Πεταλούδες', 14.00, 'Πεταλούδες σε διάφορα χρώματα με κουμπωμα κρικάκι από ανοιξείδωτο ατσάλι', null),
 ('ΣΚ-014', 1, 1, '3,5cm x 1,5cm', 'Τριγωνάκια', 14.00, 'Τριγωνάκια σε διάφορα χρώματα', '["black/gold", "gold", "silver"]'),
 ('ΣΚ-015', 1, 1, '3,5cm x 1,5cm', 'Μιννιέ', 14.00, 'Με ροζ ή κόκκινο φιόγκο', '["pink", "red"]'),

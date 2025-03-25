@@ -17,23 +17,29 @@ export const getAllProducts =  async (req: Request, res: Response) => {
 }
 
 export const getCategoryProducts = async (req: Request, res: Response) => {
-  const { categoryId,first, sort } = req.query
+  const { categoryId,first, sort, offset } = req.query
 
   try {
+
+    const offsetInt = parseInt(offset as string);
+    console.log(offsetInt)
+
     const queryParams = [categoryId];
 
     let queryStr = `SELECT * FROM PRODUCTS WHERE categoryId = ?`
 
-      if (sort && typeof sort === "string") {
-        let sortObj = JSON.parse(sort) as SortOption['field'];
+    if (sort && typeof sort === "string") {
+      let sortObj = JSON.parse(sort) as SortOption['field'];
 
-        // ✅ Whitelist valid column names to prevent SQL injection
-        const validSortFields = ['price', 'name', 'createdAt']; // <-- add all valid column names here
-        if (validSortFields.includes(sortObj.fieldName)) {
-            const sortOrder = sortObj.order === 'asc' ? 'ASC' : 'DESC';
-            queryStr += ` ORDER BY ${sortObj.fieldName} ${sortOrder}`;
-        }
+      // ✅ Whitelist valid column names to prevent SQL injection
+      const validSortFields = ['price', 'name', 'createdAt']; // <-- add all valid column names here
+      if (validSortFields.includes(sortObj.fieldName)) {
+        const sortOrder = sortObj.order === 'asc' ? 'ASC' : 'DESC';
+        queryStr += ` ORDER BY ${sortObj.fieldName} ${sortOrder}`;
       }
+    }
+
+    queryStr+= ` LIMIT 10 OFFSET ${offsetInt}`
 
     const query = await connection.execute<ProductRowDataPacket[]>(
         queryStr, queryParams

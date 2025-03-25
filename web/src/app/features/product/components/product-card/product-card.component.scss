@@ -2,8 +2,10 @@
 
 @layer components {
   .wrapper {
-    @apply h-[250px] w-[300px] relative rounded overflow-hidden bg-cover hover:scale-105 hover:cursor-pointer
-    max-lg:h-[300px] max-lg:w-[400px]
+    @apply h-[250px] w-[300px]
+    relative rounded overflow-hidden bg-cover
+    hover:scale-105 hover:cursor-pointer
+    3xl:h-[325px] 3xl:w-[350px]
   }
 
   .text-wrapper {

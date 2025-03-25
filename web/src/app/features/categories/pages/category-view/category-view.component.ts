@@ -1,6 +1,7 @@
-import { NgForOf, NgIf } from '@angular/common';
+import { NgClass, NgForOf, NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Button } from 'primeng/button';
 import { DropdownModule } from 'primeng/dropdown';
 import { Select, SelectChangeEvent } from 'primeng/select';
 import { firstValueFrom } from 'rxjs';
@@ -17,7 +18,15 @@ import { ProductCardComponent } from '../../../product/components/product-card/p
 @Component({
   selector: 'app-category-view',
   standalone: true,
-  imports: [NgIf, NgForOf, ProductCardComponent, DropdownModule, Select],
+  imports: [
+    NgIf,
+    NgForOf,
+    ProductCardComponent,
+    DropdownModule,
+    Select,
+    Button,
+    NgClass,
+  ],
   templateUrl: './category-view.component.html',
   styleUrl: './category-view.component.scss',
 })
@@ -31,7 +40,11 @@ export class CategoryViewComponent implements OnInit {
 
   firstProductIndex = 1;
 
-  lastProductIndex = 12;
+  lastProductIndex = 10;
+
+  offset = 0;
+
+  pages: number[] = [];
 
   sortOptions: SortOption[] = [
     {
@@ -44,6 +57,8 @@ export class CategoryViewComponent implements OnInit {
     },
   ];
 
+  selectedSortBy: SortOption | null = null;
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private apiService: ApiService,
@@ -52,12 +67,17 @@ export class CategoryViewComponent implements OnInit {
   ngOnInit() {
     this.id = this.activatedRoute.snapshot.paramMap.get('id');
     if (this.id) {
-      this.apiService.getCategoryProducts(parseInt(this.id)).subscribe({
+      this.apiService.getCategoryProducts(parseInt(this.id), 0).subscribe({
         next: (v) => {
           this.products = v.products;
           this.totalProductsCount = v.totalCount;
-          if (v.totalCount < 12) {
+          if (v.totalCount <= 10) {
             this.lastProductIndex = v.totalCount;
+          } else {
+            [...Array(Math.ceil(v.totalCount / 10)).keys()].forEach((v) =>
+              this.pages.push(v + 1),
+            );
+            console.log(this.pages);
           }
         },
       });
@@ -71,7 +91,7 @@ export class CategoryViewComponent implements OnInit {
 
   async sortSelected(event: SelectChangeEvent & { value: SortOption }) {
     const response = await firstValueFrom(
-      this.apiService.getCategoryProducts(parseInt(this.id), event.value),
+      this.apiService.getCategoryProducts(parseInt(this.id), 0, event.value),
     );
 
     if (response && response.status === 200 && response.products.length) {
@@ -80,5 +100,21 @@ export class CategoryViewComponent implements OnInit {
     }
   }
 
+  pageClicked(pageNumber: number) {
+    this.offset = (pageNumber - 1) * 10;
+
+    this.apiService
+      .getCategoryProducts(this.category.id, this.offset, this.selectedSortBy)
+      .subscribe((response) => {
+        if (response.status === 200) {
+          this.products = response.products;
+        }
+        if (this.offset === 10) {
+          this.products.length = this.products.length - 5;
+        }
+      });
+  }
+
   protected readonly removeGreekTonos = removeGreekTonos;
+  protected readonly String = String;
 }
