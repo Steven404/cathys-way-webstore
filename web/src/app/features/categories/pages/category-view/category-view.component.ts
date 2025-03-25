@@ -90,13 +90,13 @@ export class CategoryViewComponent implements OnInit {
   }
 
   async sortSelected(event: SelectChangeEvent & { value: SortOption }) {
+    this.selectedSortBy = event.value;
     const response = await firstValueFrom(
       this.apiService.getCategoryProducts(parseInt(this.id), 0, event.value),
     );
 
     if (response && response.status === 200 && response.products.length) {
       this.products = response.products;
-      console.log(this.products);
     }
   }
 
