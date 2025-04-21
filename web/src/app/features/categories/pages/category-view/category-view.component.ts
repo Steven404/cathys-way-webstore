@@ -4,7 +4,6 @@ import { ActivatedRoute } from '@angular/router';
 import { Button } from 'primeng/button';
 import { DropdownModule } from 'primeng/dropdown';
 import { Select, SelectChangeEvent } from 'primeng/select';
-import { firstValueFrom } from 'rxjs';
 
 import {
   Category,
@@ -45,6 +44,7 @@ export class CategoryViewComponent implements OnInit {
   offset = 0;
 
   pages: number[] = [];
+  activePage = 1;
 
   sortOptions: SortOption[] = [
     {
@@ -77,7 +77,6 @@ export class CategoryViewComponent implements OnInit {
             [...Array(Math.ceil(v.totalCount / 10)).keys()].forEach((v) =>
               this.pages.push(v + 1),
             );
-            console.log(this.pages);
           }
         },
       });
@@ -91,26 +90,28 @@ export class CategoryViewComponent implements OnInit {
 
   async sortSelected(event: SelectChangeEvent & { value: SortOption }) {
     this.selectedSortBy = event.value;
-    const response = await firstValueFrom(
-      this.apiService.getCategoryProducts(parseInt(this.id), 0, event.value),
-    );
-
-    if (response && response.status === 200 && response.products.length) {
-      this.products = response.products;
-    }
+    this.apiService
+      .getCategoryProducts(parseInt(this.id), 0, event.value)
+      .subscribe({
+        next: (v) => {
+          if (v && v.status === 200 && v.products.length) {
+            this.products = v.products;
+            this.activePage = 1;
+          }
+        },
+      });
   }
 
   pageClicked(pageNumber: number) {
+    this.activePage = pageNumber;
     this.offset = (pageNumber - 1) * 10;
 
     this.apiService
       .getCategoryProducts(this.category.id, this.offset, this.selectedSortBy)
       .subscribe((response) => {
         if (response.status === 200) {
+          console.log(response.products.length);
           this.products = response.products;
-        }
-        if (this.offset === 10) {
-          this.products.length = this.products.length - 5;
         }
       });
   }

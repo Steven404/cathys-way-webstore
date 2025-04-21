@@ -1,0 +1,22 @@
+<app-toolbar (addSubCategoryEmitter)="addSubCategoryDialogVisible = true" />
+<p-dialog
+  [(visible)]="addSubCategoryDialogVisible"
+  header="Καταχώριση Υποκατηγορίας"
+  (onHide)="subCategoryFormControl.reset()"
+>
+  <div class="w-[400px]">
+    <app-text-input
+      label="Όνομα Υποκατηγορίας"
+      [control]="subCategoryFormControl"
+    />
+    <div class="w-full flex justify-end mt-5">
+      <p-button
+        [label]="isLoading ? '' : 'Καταχώριση'"
+        severity="success"
+        [disabled]="subCategoryFormControl.invalid"
+        (click)="createSubCategory()"
+        [loading]="isLoading"
+      />
+    </div>
+  </div>
+</p-dialog>

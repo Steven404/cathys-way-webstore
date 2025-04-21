@@ -8,6 +8,8 @@
 
 html {
   scroll-behavior: smooth;
+  font-family: "Manrope", sans-serif;
+  height: 100%;
 }
 
 body {
@@ -31,5 +33,13 @@ app-root {
 
   .custom-menu-ite {
     @apply font-montserrat
+  }
+
+  .input-label {
+    @apply font-medium text-gray-500 sm:text-lg
+  }
+
+  .error-text {
+    @apply text-sm text-red-600 mt-2
   }
 }

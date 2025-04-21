@@ -1,0 +1,27 @@
+<p-toolbar>
+  <ng-template #start>
+    <p-button
+      icon="pi pi-plus"
+      class="mr-2"
+      label="Καταχώρηση προϊόντως"
+      (click)="addProductEmitter.emit(true)"
+    />
+    <p-button
+      icon="pi pi-plus"
+      class="mr-2"
+      severity="info"
+      label="Καταχώρηση κατηγορίας"
+      (click)="addCategoryEmitter.emit(true)"
+    />
+    <p-button
+      icon="pi pi-plus"
+      class="mr-2"
+      severity="help"
+      label="Καταχώρηση Υποκατηγορίας"
+      (click)="addSubCategoryEmitter.emit(true)"
+    />
+  </ng-template>
+  <ng-template #end>
+    <p-button label="Αποσύνδεση" severity="secondary" (click)="signOut()" />
+  </ng-template>
+</p-toolbar>
