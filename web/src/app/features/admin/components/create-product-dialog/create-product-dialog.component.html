@@ -1,0 +1,99 @@
+<p-dialog
+  [(visible)]="isVisible"
+  header="Καταχώριση Προϊόντως"
+  (onHide)="onDialogHide()"
+  [modal]="true"
+>
+  <form [formGroup]="newProductFormGroup">
+    <div class="w-[400px] gap-y-5 grid">
+      <app-text-input
+        label="Κωδικός"
+        [control]="newProductFormGroup.controls.code"
+        errorMessage="Το πεδίο αυτό δεν μπορεί να παραμήνει κενό"
+      />
+      <app-text-input
+        label="Όνομα"
+        [control]="newProductFormGroup.controls.name"
+        errorMessage="Το πεδίο αυτό δεν μπορεί να παραμήνει κενό"
+      />
+      <div class="w-full grid">
+        <label for="category" class="input-label">Κατηγορία</label>
+        <p-select
+          id="category"
+          formControlName="category"
+          class="mt-1.5"
+          [options]="categories"
+          optionLabel="name"
+        />
+      </div>
+      <div class="w-full grid">
+        <label for="subcategory" class="input-label">Υποκατηγορία</label>
+        <p-select
+          id="subcategory"
+          formControlName="subCategory"
+          class="mt-1.5"
+          [options]="subCategories"
+          optionLabel="name"
+        />
+      </div>
+      <div class="w-full grid">
+        <label for="description" class="input-label">Περιγραφή</label>
+        <textarea
+          pTextarea
+          rows="3"
+          cols="30"
+          id="description"
+          formControlName="description"
+          class="mt-1.5"
+        ></textarea>
+      </div>
+      <app-text-input
+        label="Τιμή"
+        [control]="newProductFormGroup.controls.price"
+        [errorMessage]="
+          getFormControlErrorMessage(newProductFormGroup.controls.price)
+        "
+        primeIcon="pi pi-euro"
+      />
+      <div class="w-full grid">
+        <label for="colours" class="input-label">Χρώματα</label>
+        <div class="flex w-full justify-between items-center mt-1.5 gap-x-1">
+          <p-colorPicker #colorPicker formControlName="colour" />
+          <input
+            pInputText
+            id="colours"
+            class="w-full"
+            [formControl]="colourForm"
+          />
+          <p-button label="Προσθήκη" (click)="addNewColour()" />
+        </div>
+        <div class="new-colours-wrapper" *ngIf="newProductColours.length">
+          <div
+            *ngFor="let newColour of newProductColours"
+            class="new-product-colour"
+            (click)="removeColour(newColour)"
+          >
+            <p>{{ newColour.name }}</p>
+            <div
+              [style]="{
+                background: newColour.hexCode,
+                height: '18px',
+                width: '18px',
+                'border-radius': '5px',
+              }"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+  <div class="w-full flex justify-end mt-5">
+    <p-button
+      [label]="isLoading ? '' : 'Καταχώριση'"
+      severity="success"
+      [disabled]="productForm.invalid"
+      (click)="createProduct()"
+      [loading]="isLoading"
+    />
+  </div>
+</p-dialog>

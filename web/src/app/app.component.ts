@@ -3,13 +3,12 @@ import { RouterOutlet } from '@angular/router';
 import { Toast } from 'primeng/toast';
 
 import { Category } from '../../../commonTypes';
-import { HeaderComponent } from './shared/components/header/header.component';
 import { ApiService } from './shared/services/api/api.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, HeaderComponent, Toast],
+  imports: [RouterOutlet, Toast],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })

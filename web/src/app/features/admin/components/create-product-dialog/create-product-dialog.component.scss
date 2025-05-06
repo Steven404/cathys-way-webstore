@@ -1,0 +1,12 @@
+@tailwind components;
+
+@layer components {
+  .new-colours-wrapper {
+    @apply w-full mt-4 flex flex-wrap gap-x-2 gap-y-1
+  }
+
+  .new-product-colour {
+    @apply flex gap-x-2 items-center
+    text-white font-light text-sm bg-gray-500 rounded-full py-1 px-4 cursor-pointer transition-all duration-200 hover:scale-105
+  }
+}
