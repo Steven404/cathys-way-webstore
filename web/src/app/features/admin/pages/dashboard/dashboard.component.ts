@@ -12,6 +12,7 @@ import {
 } from '../../../../core/types';
 import { CategoryService } from '../../../../shared/services/category/category.service';
 import { ProductService } from '../../../../shared/services/product/product.service';
+import { SubCategoryService } from '../../../../shared/services/sub-category/sub-category.service';
 import { CreateCategoryDialogComponent } from '../../components/create-category-dialog/create-category-dialog.component';
 import { CreateProductDialogComponent } from '../../components/create-product-dialog/create-product-dialog.component';
 import { CreateSubcategoryDialogComponent } from '../../components/create-subcategory-dialog/create-subcategory-dialog.component';
@@ -33,6 +34,7 @@ import { newProductFormGroup } from '../../constants';
 })
 export class DashboardComponent implements OnInit {
   categoryService = inject(CategoryService);
+  subCategoryService = inject(SubCategoryService);
   productService = inject(ProductService);
 
   isLoading = false;
@@ -63,8 +65,11 @@ export class DashboardComponent implements OnInit {
 
   async ngOnInit() {
     this.allCategories = await this.categoryService.getCategories();
-    this.allSubCategories = await this.categoryService.getSubCategories();
+    this.allSubCategories = await this.subCategoryService.getSubCategories();
     await this.getProducts();
+    if (typeof window !== 'undefined') {
+      document.getElementById('appHeader').style.display = 'none';
+    }
   }
 
   async getProducts() {
@@ -107,6 +112,7 @@ export class DashboardComponent implements OnInit {
       });
       this.isProductDialogVisible = false;
       this.productForm.reset();
+      await this.getProducts();
     } catch (e) {
       const error = e as CustomError;
       if (error?.code && error.code === 'already-exists') {
@@ -155,7 +161,7 @@ export class DashboardComponent implements OnInit {
     const subCategoryName = this.subCategoryFormControl.value.trim();
     this.isLoading = true;
     try {
-      await this.categoryService.createSubcategory(subCategoryName, '');
+      await this.subCategoryService.createSubcategory(subCategoryName, '');
       this.messageService.add({
         key: 'global-toast',
         severity: 'success',

@@ -3,19 +3,35 @@ import {
   addDoc,
   collection,
   CollectionReference,
+  doc,
+  docData,
   Firestore,
+  getCountFromServer,
   getDocs,
+  limit,
+  orderBy,
   query,
+  QueryDocumentSnapshot,
+  QueryFieldFilterConstraint,
+  QueryOrderByConstraint,
+  startAfter,
+  where,
 } from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
 
 import { throwNewCustomError } from '../../../core/common';
-import { Category, SubCategory } from '../../../core/types';
+import { Category, ProductDoc } from '../../../core/types';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CategoryService {
   firestore = inject(Firestore);
+
+  getCategoryById(id: string) {
+    const categoryDoc = doc(this.firestore, `categories/${id}`);
+    return docData(categoryDoc) as Observable<Category>;
+  }
 
   async getCategories(): Promise<Category[]> {
     const categoriesCollection = collection(
@@ -31,48 +47,79 @@ export class CategoryService {
     }));
   }
 
-  async getSubCategories() {
-    const subCategoriesCollection = collection(
-      this.firestore,
-      'subcategories',
-    ) as CollectionReference<SubCategory>;
-    const q = query(subCategoriesCollection);
-    const subCategoryDocs = await getDocs(q);
+  async getCategoryProducts(
+    categoryId: string,
+    productsCache: QueryDocumentSnapshot[][],
+    pageIndex = 0,
+    orderByPrice?: 'asc' | 'desc',
+  ) {
+    const productsCollection = collection(this.firestore, 'products');
+    let productsQuery;
+    const newProductsCache = productsCache;
 
-    const result = [];
+    const filters: (QueryFieldFilterConstraint | QueryOrderByConstraint)[] = [
+      where('categoryId', '==', categoryId),
+    ];
 
-    subCategoryDocs.forEach((subCategDoc) =>
-      result.push({ ...subCategDoc.data(), id: subCategDoc.id }),
-    );
+    if (orderByPrice) {
+      filters.push(orderBy('price', orderByPrice));
+    }
 
-    return result;
-  }
+    if (pageIndex === 0) {
+      productsQuery = query(productsCollection, ...filters, limit(10));
+    } else {
+      const queryRequiredProductCache = newProductsCache[pageIndex - 1];
 
-  async createSubcategory(name: string, description: string) {
-    const subCategoriesCollection = collection(
-      this.firestore,
-      'subcategories',
-    ) as CollectionReference<SubCategory>;
-    const q = query(subCategoriesCollection);
-    const querySnapshot = await getDocs(q);
-    const allSubCategories = [];
+      let lastDoc;
 
-    querySnapshot.forEach((doc) => allSubCategories.push(doc.data()));
+      if (!queryRequiredProductCache) {
+        let tempSnapshot;
+        while (pageIndex + 1 > newProductsCache.length) {
+          const lastAvailableCachePage =
+            newProductsCache[newProductsCache.length - 1];
 
-    allSubCategories.forEach((subcategory) => {
-      if (subcategory.name.toLowerCase() === name.toLowerCase()) {
-        throwNewCustomError(
-          'Subcategory with this name already exists',
-          'already-exists',
-        );
+          lastDoc = lastAvailableCachePage[lastAvailableCachePage.length - 1];
+
+          console.log(lastDoc);
+
+          productsQuery = query(
+            productsCollection,
+            ...filters,
+            startAfter(lastDoc),
+            limit(10),
+          );
+          console.log('passed');
+
+          tempSnapshot = await getDocs(productsQuery);
+          newProductsCache.push(tempSnapshot.docs);
+        }
+      } else {
+        lastDoc =
+          queryRequiredProductCache[queryRequiredProductCache.length - 1];
       }
-    });
 
-    const newSubCategoryObject: Omit<SubCategory, 'id'> = {
-      name: name,
-      description: description,
-    };
-    await addDoc(subCategoriesCollection, newSubCategoryObject);
+      productsQuery = query(
+        productsCollection,
+        ...filters,
+        startAfter(lastDoc),
+        limit(10),
+      );
+    }
+
+    const snapshot = await getDocs(productsQuery);
+    const products = snapshot.docs.map((d) => ({
+      id: d.id,
+      ...(d.data() as ProductDoc),
+    })) as ProductDoc[];
+
+    newProductsCache.push(snapshot.docs as QueryDocumentSnapshot[]);
+
+    const countSnapshot = await getCountFromServer(
+      query(productsCollection, ...filters),
+    );
+    const total = countSnapshot.data().count;
+
+    return { products, total, newProductsCache };
   }
 
   async createCategory(name: string, description: string) {

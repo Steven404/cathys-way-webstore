@@ -1,5 +1,5 @@
 import { NgIf } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Button } from 'primeng/button';
@@ -13,7 +13,7 @@ import { AuthService } from '../../../../shared/services/auth/auth.service';
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   isLoading = false;
 
   usernameControl: FormControl = new FormControl('', {
@@ -32,6 +32,12 @@ export class LoginComponent {
     private router: Router,
   ) {}
 
+  ngOnInit() {
+    if (typeof window !== 'undefined') {
+      document.getElementById('appHeader').style.display = 'none';
+    }
+  }
+
   getControlsValidStatus() {
     return this.usernameControl.valid && this.passwordControl.valid;
   }
@@ -47,8 +53,7 @@ export class LoginComponent {
       .subscribe({
         next: () => {
           this.isLoading = false;
-          // this.router.navigate(['admin']);
-          console.log('logged in successfully');
+          this.router.navigate(['admin']);
         },
         error: (e) => {
           console.log(e.code);

@@ -1,0 +1,25 @@
+@tailwind components;
+
+@layer components {
+  .wrapper {
+    @apply w-full
+  }
+
+  .image-wrapper {
+    @apply h-[720px] text-center flex justify-center items-center
+    max-md:h-[400px]
+  }
+
+  .image {
+    @apply z-0 md:w-full max-md:h-[400px] object-cover
+  }
+
+  .image-text {
+    @apply absolute m-auto  z-10 bg-gray-700 bg-opacity-70 rounded-sm border-[1px]
+    text-white font-semibold italic tracking-wider font-manrope text-4xl leading-[60px]
+    py-3 px-10
+    md:py-5 md:px-40
+    lg:text-5xl lg:whitespace-nowrap
+    max-lg:w-[90%]
+  }
+}

@@ -1,0 +1,18 @@
+<div class="wrapper">
+  <p-carousel
+    [value]="images"
+    [circular]="true"
+    [showNavigators]="false"
+    indicatorsContentClass="top-[-40px] relative"
+    autoplayInterval="5000"
+  >
+    <ng-template let-item #item>
+      <div class="image-wrapper">
+        <img class="image" [src]="item.imageSrc" [alt]="item.alt" />
+        <p *ngIf="item.text" class="image-text">
+          {{ item.text }}
+        </p>
+      </div>
+    </ng-template>
+  </p-carousel>
+</div>

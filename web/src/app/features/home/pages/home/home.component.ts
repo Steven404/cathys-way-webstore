@@ -1,12 +1,34 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { MenuItem } from 'primeng/api';
 
-import { WelcomeBoxComponent } from '../../components/welcome-box/welcome-box.component';
+import { Category } from '../../../../core/types';
+import { CategoryService } from '../../../../shared/services/category/category.service';
+import { CarrouselComponent } from '../../components/carrousel/carrousel.component';
 
 @Component({
   selector: 'app-home',
-  imports: [WelcomeBoxComponent],
+  imports: [CarrouselComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
   standalone: true,
 })
-export class HomeComponent {}
+export class HomeComponent implements OnInit {
+  categories: Category[] = [];
+  categoryItems: MenuItem[] = [];
+
+  constructor(
+    private categoryService: CategoryService,
+    private router: Router,
+  ) {}
+
+  async ngOnInit() {
+    this.categories = await this.categoryService.getCategories();
+    this.categories.forEach((c) =>
+      this.categoryItems.push({
+        label: c.name,
+        command: (event) => this.router.navigate([`category/${c.id}`]),
+      }),
+    );
+  }
+}

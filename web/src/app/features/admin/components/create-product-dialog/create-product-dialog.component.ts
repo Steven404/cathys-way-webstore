@@ -1,8 +1,8 @@
 import { NgFor, NgIf } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ColorPickerDirective } from 'ngx-color-picker';
 import { Button } from 'primeng/button';
-import { ColorPicker } from 'primeng/colorpicker';
 import { Dialog } from 'primeng/dialog';
 import { InputText } from 'primeng/inputtext';
 import { Select } from 'primeng/select';
@@ -23,9 +23,9 @@ import { newProductFormGroup } from '../../constants';
     ReactiveFormsModule,
     Textarea,
     InputText,
-    ColorPicker,
     NgIf,
     NgFor,
+    ColorPickerDirective,
   ],
   templateUrl: './create-product-dialog.component.html',
   standalone: true,
@@ -44,6 +44,8 @@ export class CreateProductDialogComponent {
   @Input() isLoading = false;
 
   @Input() productForm: typeof newProductFormGroup;
+
+  color = '#FFD700';
 
   colourForm: FormControl = new FormControl('');
   newProductColours: ProductColour[] = [];
@@ -71,7 +73,7 @@ export class CreateProductDialogComponent {
     }
     this.newProductColours.push({
       name: newColourName,
-      hexCode: this.productForm.value.colour,
+      hexCode: this.color,
     });
   }
 

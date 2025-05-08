@@ -21,7 +21,11 @@ export const handleError = (error: HttpErrorResponse) => {
   }
 };
 
-export const convertPriceToFloat = (price: number) => {
+export const convertPriceToFloat = (price: string | number) => {
+  if (typeof price === 'string') {
+    return Number(price).toFixed(2);
+  }
+
   return price.toFixed(2);
 };
 

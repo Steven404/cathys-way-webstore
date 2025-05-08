@@ -56,9 +56,14 @@
         primeIcon="pi pi-euro"
       />
       <div class="w-full grid">
-        <label for="colours" class="input-label">Χρώματα</label>
+        <h1 class="input-label">Χρώματα</h1>
         <div class="flex w-full justify-between items-center mt-1.5 gap-x-1">
-          <p-colorPicker #colorPicker formControlName="colour" />
+          <input
+            [(colorPicker)]="color"
+            [style.background]="color"
+            pInputText
+            class="w-[50px]"
+          />
           <input
             pInputText
             id="colours"

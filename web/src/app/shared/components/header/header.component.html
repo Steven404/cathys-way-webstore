@@ -15,10 +15,9 @@
       severity="contrast"
       (onClick)="navigateToHome()"
     />
-    <div *ngIf="categories.length" class="justify-center">
+    <div *ngIf="categoryItems.length" class="justify-center">
       <p-button
         id="productsButton"
-        #productsButton
         label="Προϊόντα"
         variant="text"
         class="global-button text-button"
@@ -30,7 +29,7 @@
       <p-tieredMenu
         #menu
         appendTo="body"
-        [model]="items"
+        [model]="categoryItems"
         popup
         class="font-montserrat top-12"
         [autoDisplay]="true"

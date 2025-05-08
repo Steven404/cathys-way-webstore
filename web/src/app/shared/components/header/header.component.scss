@@ -4,12 +4,12 @@
   .wrapper {
     @apply w-full flex items-center justify-between sticky top-0 z-10
     bg-amber-50
-    py-2.5
+    py-5
     px-52
     shadow-xl
 
     max-xl:px-7
-    max-lg:py-5
+    max-lg:py-10
   }
 
   .header {

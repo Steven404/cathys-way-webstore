@@ -14,7 +14,6 @@
       optionLabel="name"
       placeholder="Ταξινόμιση"
       variant="outlined"
-      (onChange)="sortSelected($event)"
     />
   </div>
   <div class="products-container">
@@ -30,9 +29,9 @@
     <ng-container *ngFor="let page of pages; index as i">
       <p-button
         [label]="String(page)"
+        (click)="pageClicked(page)"
         rounded
         text
-        (click)="pageClicked(page)"
         [disabled]="activePage === page"
       />
     </ng-container>

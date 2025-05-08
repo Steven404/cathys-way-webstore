@@ -4,42 +4,42 @@ import Aura from '@primeng/themes/aura';
 export const customPreset = definePreset(Aura, {
   semantic: {
     primary: {
-      50: '{purple.50}',
-      100: '{purple.100}',
-      200: '{purple.200}',
-      300: '{purple.300}',
-      400: '{purple.400}',
-      500: '{purple.500}',
-      600: '{purple.600}',
-      700: '{purple.700}',
-      800: '{purple.800}',
-      900: '{purple.900}',
-      950: '{purple.950}',
+      50: '{fuchsia.50}',
+      100: '{fuchsia.100}',
+      200: '{fuchsia.200}',
+      300: '{fuchsia.300}',
+      400: '{fuchsia.400}',
+      500: '{fuchsia.500}',
+      600: '{fuchsia.600}',
+      700: '{fuchsia.700}',
+      800: '{fuchsia.800}',
+      900: '{fuchsia.900}',
+      950: '{fuchsia.950}',
     },
     colorScheme: {
       light: {
         primary: {
-          color: '{purple.800}',
+          color: '{fuchsia.800}',
           inverseColor: '#ffffff',
-          hoverColor: '{purple.900}',
-          activeColor: '{purple.800}',
+          hoverColor: '{fuchsia.900}',
+          activeColor: '{fuchsia.800}',
         },
         highlight: {
-          background: '{purple.950}',
-          focusBackground: '{purple.700}',
+          background: '{fuchsia.950}',
+          focusBackground: '{fuchsia.700}',
           color: '#ffffff',
           focusColor: '#ffffff',
         },
         outlined: {
-          color: '{purple.500}',
+          color: '{fuchsia.500}',
         },
       },
       dark: {
         primary: {
-          color: '{purple.50}',
-          inverseColor: '{purple.950}',
-          hoverColor: '{purple.100}',
-          activeColor: '{purple.200}',
+          color: '{fuchsia.50}',
+          inverseColor: '{fuchsia.950}',
+          hoverColor: '{fuchsia.100}',
+          activeColor: '{fuchsia.200}',
         },
         highlight: {
           background: 'rgba(250, 250, 250, .16)',
@@ -48,7 +48,7 @@ export const customPreset = definePreset(Aura, {
           focusColor: 'rgba(255,255,255,.87)',
         },
         outlined: {
-          color: '{purple.500}',
+          color: '{fuchsia.500}',
         },
       },
     },

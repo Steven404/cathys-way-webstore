@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { Product } from '../../../../../../../commonTypes';
+import { ProductDoc } from '../../../../core/types';
 import { convertPriceToFloat } from '../../../../shared/common';
 
 @Component({
@@ -12,15 +12,11 @@ import { convertPriceToFloat } from '../../../../shared/common';
   standalone: true,
 })
 export class ProductCardComponent implements OnInit {
-  @Input() product: Product;
+  @Input() product: ProductDoc;
 
   constructor(private router: Router) {}
 
-  ngOnInit() {
-    if (this.product) {
-      console.log(this.product.name);
-    }
-  }
+  ngOnInit() {}
 
   goToProduct() {
     this.router.navigate(['product/' + this.product.id]);
