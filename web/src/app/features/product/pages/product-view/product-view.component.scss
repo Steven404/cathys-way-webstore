@@ -12,7 +12,11 @@
   }
 
   .image-wrapper {
-    @apply md:w-[45%] h-fit relative w-full
+    @apply md:w-[45%] 3xl:w-[35%] h-full relative w-full transition-all duration-500
+  }
+
+  .gallery-image-wrapper {
+    @apply h-[300px] sm:h-[600px] md:h-[400px] w-full object-cover
   }
 
   .product-details {
@@ -24,7 +28,7 @@
   }
 
   .product-code {
-    @apply text-xs mt-2.5 md:mt-4 font-medium
+    @apply text-sm mt-2.5 md:mt-4 font-medium
   }
 
   .dimensions {
@@ -32,7 +36,7 @@
   }
 
   .product-description {
-    @apply lg:mt-10 mt-4 md:text-2xl text-lg
+    @apply lg:mt-8 mt-3 md:text-2xl text-xl
   }
 
   .product-footer {

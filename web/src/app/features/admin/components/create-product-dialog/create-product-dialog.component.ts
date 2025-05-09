@@ -4,6 +4,7 @@ import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ColorPickerDirective } from 'ngx-color-picker';
 import { Button } from 'primeng/button';
 import { Dialog } from 'primeng/dialog';
+import { FileSelectEvent, FileUpload } from 'primeng/fileupload';
 import { InputText } from 'primeng/inputtext';
 import { Select } from 'primeng/select';
 import { Textarea } from 'primeng/textarea';
@@ -26,6 +27,7 @@ import { newProductFormGroup } from '../../constants';
     NgIf,
     NgFor,
     ColorPickerDirective,
+    FileUpload,
   ],
   templateUrl: './create-product-dialog.component.html',
   standalone: true,
@@ -44,6 +46,12 @@ export class CreateProductDialogComponent {
   @Input() isLoading = false;
 
   @Input() productForm: typeof newProductFormGroup;
+
+  @Input() mainImage: File;
+  @Output() mainImageChange = new EventEmitter<File>();
+
+  @Input() extraImages: File[] = [];
+  @Output() extraImagesChange = new EventEmitter<File[]>();
 
   color = '#FFD700';
 
@@ -87,6 +95,25 @@ export class CreateProductDialogComponent {
   createProduct() {
     this.coloursEmitter.emit(this.newProductColours);
     this.createProductEmitter.emit();
+  }
+
+  choose(event, callback) {
+    callback();
+  }
+
+  onMainImageSelected(event: FileSelectEvent) {
+    this.mainImage = event.currentFiles[0];
+    this.mainImageChange.emit(this.mainImage);
+  }
+
+  onMainImageRemove() {
+    this.mainImage = undefined;
+    this.mainImageChange.emit(this.mainImage);
+  }
+
+  onExtraImagesSelected(event: FileSelectEvent) {
+    this.extraImages = event.currentFiles;
+    this.extraImagesChange.emit(event.currentFiles || []);
   }
 
   protected readonly newProductFormGroup = newProductFormGroup;

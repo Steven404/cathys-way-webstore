@@ -1,10 +1,16 @@
+import 'hammerjs';
+
 import { provideHttpClient, withFetch } from '@angular/common/http';
-import { ApplicationConfig } from '@angular/core';
+import { ApplicationConfig, importProvidersFrom } from '@angular/core';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { getStorage, provideStorage } from '@angular/fire/storage';
-import { provideClientHydration } from '@angular/platform-browser';
+import {
+  HammerModule,
+  provideClientHydration,
+} from '@angular/platform-browser';
+import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideRouter } from '@angular/router';
 import { MessageService } from 'primeng/api';
@@ -18,9 +24,10 @@ export const appConfig: ApplicationConfig = {
   providers: [
     { provide: MessageService, useClass: MessageService },
     provideRouter(routes),
+    provideAnimations(),
+    provideAnimationsAsync(),
     provideHttpClient(withFetch()),
     provideClientHydration(),
-    provideAnimationsAsync(),
     providePrimeNG({
       theme: {
         preset: customPreset,
@@ -33,5 +40,6 @@ export const appConfig: ApplicationConfig = {
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
     provideStorage(() => getStorage()),
+    importProvidersFrom(HammerModule),
   ],
 };

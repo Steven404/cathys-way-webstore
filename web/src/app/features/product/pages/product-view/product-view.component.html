@@ -1,32 +1,74 @@
 <div *ngIf="product" class="page">
   <div class="product">
     <div class="image-wrapper">
-      <p-image src="./assets/rings.jpg" alt="Image" preview>
-        <ng-template #indicator>
-          <i class="pi pi-eye"></i>
+      <img
+        class="gallery-image-wrapper"
+        *ngIf="!product.extraImageUrls"
+        [src]="mainImageSrc"
+        alt="Image"
+      />
+      <p-galleria
+        showTransitionOptions="500ms cubic-bezier(0, 0, 0.5, 1)"
+        hideTransitionOptions="500ms cubic-bezier(0, 0, 0.5, 1)"
+        [value]="images"
+        [numVisible]="3"
+        [showThumbnails]="true"
+        [showThumbnailNavigators]="false"
+      >
+        <ng-template #item let-item>
+          <img
+            @fadeInFadeOut
+            class="gallery-image-wrapper"
+            [src]="item"
+            text="image"
+            alt="image"
+          />
         </ng-template>
-      </p-image>
+        <ng-template #thumbnail let-item>
+          <img
+            [src]="item"
+            text="image"
+            alt="image"
+            class="object-cover w-[100px] h-[100px] overflow-hidden"
+          />
+        </ng-template>
+      </p-galleria>
     </div>
     <div class="product-details">
       <h1 class="product-title">{{ product.name }}</h1>
       <p class="product-code">
         Κωδικός προϊόντος: <span class="font-bold">{{ product.code }}</span>
       </p>
-      <p class="mt-0.5 font-medium">
-        Διαστάσεις: <span class="font-semibold">{{ product.dimensions }}</span
-        >&nbsp;
-        <span class="dimensions">(μήκος x πλάτος)</span>
-      </p>
       <p *ngIf="product.description" class="product-description">
         {{ product.description }}
       </p>
+      <div *ngIf="product.colours && product.colours.length" class="mt-2">
+        <p-select
+          styleClass="mt-1"
+          placeholder="Χρώμα"
+          [options]="product.colours"
+          optionLabel="name"
+          optionValue="name"
+          (onChange)="selectedColour = $event.value"
+        >
+          <ng-template #item let-colour>
+            <div class="flex gap-2 items-center">
+              <div
+                class="h-[20px] w-[20px] rounded-sm"
+                [style]="{ background: colour.hexCode }"
+              ></div>
+              <p>{{ colour.name }}</p>
+            </div>
+          </ng-template>
+        </p-select>
+      </div>
       <div class="product-footer">
         <p class="price">{{ convertPriceToFloat(product.price) }} &#8364;</p>
         <div class="wishlist-action">
           <i class="pi pi-heart"></i>
           <p class="wishlist-text">Προσθήκη στην λίστα επιθυμιών</p>
         </div>
-        <p-button label="Προσθήκη στο καλάθι" />
+        <p-button label="Προσθήκη στο καλάθι" (click)="addProductToCart()" />
       </div>
     </div>
   </div>

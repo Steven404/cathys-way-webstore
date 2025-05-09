@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { ProductDoc } from '../../../../core/types';
@@ -11,12 +11,12 @@ import { convertPriceToFloat } from '../../../../shared/common';
   styleUrl: './product-card.component.scss',
   standalone: true,
 })
-export class ProductCardComponent implements OnInit {
+export class ProductCardComponent {
   @Input() product: ProductDoc;
 
-  constructor(private router: Router) {}
+  @Input() imageSrc = '';
 
-  ngOnInit() {}
+  constructor(private router: Router) {}
 
   goToProduct() {
     this.router.navigate(['product/' + this.product.id]);

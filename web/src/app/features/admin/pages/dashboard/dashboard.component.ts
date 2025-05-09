@@ -13,6 +13,7 @@ import {
 import { CategoryService } from '../../../../shared/services/category/category.service';
 import { ProductService } from '../../../../shared/services/product/product.service';
 import { SubCategoryService } from '../../../../shared/services/sub-category/sub-category.service';
+import { ImageService } from '../../../shared/services/image.service';
 import { CreateCategoryDialogComponent } from '../../components/create-category-dialog/create-category-dialog.component';
 import { CreateProductDialogComponent } from '../../components/create-product-dialog/create-product-dialog.component';
 import { CreateSubcategoryDialogComponent } from '../../components/create-subcategory-dialog/create-subcategory-dialog.component';
@@ -36,6 +37,10 @@ export class DashboardComponent implements OnInit {
   categoryService = inject(CategoryService);
   subCategoryService = inject(SubCategoryService);
   productService = inject(ProductService);
+  imageService = inject(ImageService);
+
+  mainImage: File;
+  extraImages: File[] = [];
 
   isLoading = false;
 
@@ -102,7 +107,15 @@ export class DashboardComponent implements OnInit {
     };
 
     try {
-      await this.productService.createProduct(newProduct);
+      const productDoc = await this.productService.createProduct(newProduct);
+      const productDocId = productDoc.id;
+
+      await this.imageService.uploadImagesAndGetUrls(
+        productDocId,
+        this.mainImage,
+        this.extraImages,
+      );
+
       this.messageService.add({
         key: 'global-toast',
         severity: 'success',
@@ -110,6 +123,10 @@ export class DashboardComponent implements OnInit {
         detail: `Η καταχώριση του προϊόντος με κωδικό "${newProduct.code}" πραγματοποιήθηκε με επιτυχία`,
         life: 4000,
       });
+
+      this.mainImage = undefined;
+      this.extraImages = [];
+
       this.isProductDialogVisible = false;
       this.productForm.reset();
       await this.getProducts();

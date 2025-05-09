@@ -1,3 +1,5 @@
+import { StorageReference, UploadTask } from '@angular/fire/storage';
+
 export interface CustomError {
   message: string;
   code: string;
@@ -29,4 +31,16 @@ export interface ProductDoc {
   description: string;
   price: number;
   colours: ProductColour[];
+  mainImageUrl?: string;
+  extraImageUrls?: string[];
+}
+
+export interface CustomUploadTask {
+  ref: StorageReference;
+  uploadTask: UploadTask;
+}
+
+export interface ImageUploadTasks {
+  main: CustomUploadTask;
+  extras: CustomUploadTask[];
 }

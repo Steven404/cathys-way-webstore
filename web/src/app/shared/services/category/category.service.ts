@@ -80,15 +80,12 @@ export class CategoryService {
 
           lastDoc = lastAvailableCachePage[lastAvailableCachePage.length - 1];
 
-          console.log(lastDoc);
-
           productsQuery = query(
             productsCollection,
             ...filters,
             startAfter(lastDoc),
             limit(10),
           );
-          console.log('passed');
 
           tempSnapshot = await getDocs(productsQuery);
           newProductsCache.push(tempSnapshot.docs);

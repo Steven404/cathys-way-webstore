@@ -90,13 +90,67 @@
           </div>
         </div>
       </div>
+      <div class="w-full grid">
+        <p class="input-label">Φωτογραφίες</p>
+        <p-fileupload
+          accept="image/*"
+          maxFileSize="1000000"
+          mode="advanced"
+          styleClass="mt-1.5"
+          [showUploadButton]="false"
+          [showCancelButton]="false"
+          (onSelect)="onMainImageSelected($event)"
+          (onRemove)="onMainImageRemove()"
+          chooseLabel="Επιλογή"
+        >
+          <ng-template #header let-chooseCallback="chooseCallback">
+            <div class="grid gap-1">
+              <p class="upload-header-text">Κύρια φωτογραφία/εξώφυλλο</p>
+              <p-button
+                size="small"
+                (onClick)="choose($event, chooseCallback)"
+                label="Επιλογή"
+                icon="pi pi-images"
+                [rounded]="true"
+                [outlined]="true"
+              />
+            </div>
+          </ng-template>
+        </p-fileupload>
+        <p-fileupload
+          [fileLimit]="3"
+          [multiple]="true"
+          accept="image/*"
+          maxFileSize="1000000"
+          mode="advanced"
+          styleClass="mt-1.5"
+          [showUploadButton]="false"
+          [showCancelButton]="false"
+          chooseLabel="Επιλογή"
+          (onSelect)="onExtraImagesSelected($event)"
+        >
+          <ng-template #header let-chooseCallback="chooseCallback">
+            <div class="grid gap-1">
+              <p class="upload-header-text">Έξτρα φωτογραφίες(εως 3)</p>
+              <p-button
+                size="small"
+                (onClick)="choose($event, chooseCallback)"
+                label="Επιλογή"
+                icon="pi pi-images"
+                [rounded]="true"
+                [outlined]="true"
+              />
+            </div>
+          </ng-template>
+        </p-fileupload>
+      </div>
     </div>
   </form>
   <div class="w-full flex justify-end mt-5">
     <p-button
       [label]="isLoading ? '' : 'Καταχώριση'"
       severity="success"
-      [disabled]="productForm.invalid"
+      [disabled]="productForm.invalid || !mainImage"
       (click)="createProduct()"
       [loading]="isLoading"
     />

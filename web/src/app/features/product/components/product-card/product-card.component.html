@@ -1,11 +1,7 @@
-<div
-  class="wrapper custom-transition bg-[url(/assets/rings.jpg)]"
-  (click)="goToProduct()"
->
+<div class="wrapper custom-transition" (click)="goToProduct()">
+  <img class="image" [src]="imageSrc" />
   <div class="text-wrapper">
-    <div class="flex flex-col gap-1 max-lg text-center">
-      <p class="name-text">{{ product.name }}</p>
-      <p class="price-text">{{ convertPriceToFloat(product.price) }} &#8364;</p>
-    </div>
+    <p class="name-text">{{ product.name }}</p>
+    <p class="price-text">{{ convertPriceToFloat(product.price) }} &#8364;</p>
   </div>
 </div>

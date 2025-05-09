@@ -26,6 +26,10 @@ app-root {
   color: black!important;
 }
 
+.p-galleria {
+  border-width: 0!important;
+  border-radius: 0!important;
+}
 
 @layer utilities {
   .custom-transition {

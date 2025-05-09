@@ -9,4 +9,8 @@
     @apply flex gap-x-2 items-center
     text-white font-light text-sm bg-gray-500 rounded-full py-1 px-4 cursor-pointer transition-all duration-200 hover:scale-105
   }
+
+  .upload-header-text {
+    @apply font-medium text-gray-400 text-sm
+  }
 }

@@ -1,6 +1,6 @@
 import { NgIf } from '@angular/common';
 import { Component } from '@angular/core';
-import { CarouselModule } from 'primeng/carousel';
+import { Carousel, CarouselModule } from 'primeng/carousel';
 
 interface ImageData {
   imageSrc: string;
@@ -15,6 +15,18 @@ interface ImageData {
   styleUrl: './carrousel.component.scss',
 })
 export class CarrouselComponent {
+  nextSlide(carousel: Carousel, event) {
+    carousel.navForward(event as TouchEvent);
+  }
+
+  previousSlide(carousel: Carousel, event) {
+    carousel.navBackward(event as TouchEvent);
+  }
+
+  test(carousel: Carousel, event) {
+    carousel.onTouchMove(event as TouchEvent);
+  }
+
   images: ImageData[] = [
     {
       imageSrc: '/assets/cover.jpg',

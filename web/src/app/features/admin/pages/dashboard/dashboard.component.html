@@ -16,6 +16,8 @@
   (createCategoryEmitter)="createCategory()"
 />
 <app-create-product-dialog
+  [(mainImage)]="mainImage"
+  [(extraImages)]="extraImages"
   [productForm]="productForm"
   [(isVisible)]="isProductDialogVisible"
   [isLoading]="isLoading"

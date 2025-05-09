@@ -3,8 +3,10 @@ import {
   addDoc,
   collection,
   CollectionReference,
+  doc,
   Firestore,
   getCountFromServer,
+  getDoc,
   getDocs,
   limit,
   query,
@@ -42,7 +44,12 @@ export class ProductService {
       }
     });
 
-    await addDoc(productsCollection, newProduct);
+    return await addDoc(productsCollection, newProduct);
+  }
+
+  async getProduct(id: string) {
+    const productDocRef = doc(this.firestore, `products/${id}`);
+    return await getDoc(productDocRef);
   }
 
   async getAllProducts(
@@ -95,6 +102,10 @@ export class ProductService {
 
     const lastDoc = snapshot.docs[snapshot.docs.length - 1] ?? null;
 
-    return { products, totalProductsCount: total, lastDoc };
+    return {
+      products,
+      totalProductsCount: total,
+      lastDoc: lastDoc as QueryDocumentSnapshot,
+    };
   }
 }

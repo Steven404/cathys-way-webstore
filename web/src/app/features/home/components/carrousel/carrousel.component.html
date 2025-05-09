@@ -1,5 +1,6 @@
 <div class="wrapper">
   <p-carousel
+    #carousel
     [value]="images"
     [circular]="true"
     [showNavigators]="false"
@@ -7,9 +8,26 @@
     autoplayInterval="5000"
   >
     <ng-template let-item #item>
-      <div class="image-wrapper">
+      <div class="image-wrapper lg:hidden max-lg:flex">
         <img class="image" [src]="item.imageSrc" [alt]="item.alt" />
         <p *ngIf="item.text" class="image-text">
+          {{ item.text }}
+        </p>
+      </div>
+      <div class="image-wrapper max-lg:hidden lg:flex">
+        <img
+          (swipeleft)="nextSlide(carousel, $event)"
+          (swiperight)="previousSlide(carousel, $event)"
+          class="image"
+          [src]="item.imageSrc"
+          [alt]="item.alt"
+        />
+        <p
+          *ngIf="item.text"
+          class="image-text"
+          (swipeleft)="nextSlide(carousel, $event)"
+          (swiperight)="previousSlide(carousel, $event)"
+        >
           {{ item.text }}
         </p>
       </div>

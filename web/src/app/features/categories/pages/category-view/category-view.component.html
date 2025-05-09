@@ -1,4 +1,4 @@
-<div *ngIf="category && products.length" class="wrapper">
+<div *ngIf="category" class="wrapper">
   <h1 class="title">{{ removeGreekTonos(category.name).toUpperCase() }}</h1>
   <div class="index-div-wrapper">
     <p class="index-text">
@@ -14,10 +14,17 @@
       optionLabel="name"
       placeholder="Ταξινόμιση"
       variant="outlined"
+      (onChange)="sortSelected($event)"
+      optionValue="value"
     />
   </div>
   <div class="products-container">
-    <app-product-card *ngFor="let product of products" [product]="product" />
+    <app-product-card
+      @fadeInFadeOut
+      *ngFor="let product of products"
+      [product]="product"
+      [imageSrc]="product?.mainImageUrl || 'assets/ring.jpg'"
+    />
   </div>
   <div
     class="buttons-container"
