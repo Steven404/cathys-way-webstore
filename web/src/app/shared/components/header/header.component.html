@@ -44,15 +44,15 @@
     />
   </div>
   <i
-    *ngIf="shoppingCartService.cartProductsTotal() > 0"
+    *ngIf="shoppingCartService.totalCartProducts() > 0"
     class="pi pi-shopping-bag text-black cursor-pointer transition-all duration-100 hover:scale-110"
     style="font-size: 25px"
     pBadge
-    [value]="shoppingCartService.cartProductsTotal()"
+    [value]="shoppingCartService.totalCartProducts()"
     (click)="showCart()"
   ></i>
   <i
-    *ngIf="shoppingCartService.cartProductsTotal() === 0"
+    *ngIf="shoppingCartService.totalCartProducts() === 0"
     class="pi pi-shopping-bag text-black cursor-pointer transition-all duration-100 hover:scale-110"
     style="font-size: 25px"
     (click)="showCart()"
@@ -74,6 +74,7 @@
   <ng-template #headless>
     <app-shopping-cart
       (isShoppingCartVisibleEmitter)="isShoppingCartVisible = $event"
+      class="h-full"
     />
   </ng-template>
 </p-drawer>

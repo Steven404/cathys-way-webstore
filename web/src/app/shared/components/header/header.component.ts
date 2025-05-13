@@ -29,7 +29,7 @@ import { ShoppingCartComponent } from '../shopping-cart/shopping-cart.component'
 })
 export class HeaderComponent {
   isSidebarVisible = false;
-  isShoppingCartVisible = false;
+  isShoppingCartVisible = true;
 
   @Input() categoryItems: MenuItem[];
 

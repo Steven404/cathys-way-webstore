@@ -1,5 +1,9 @@
 import { StorageReference, UploadTask } from '@angular/fire/storage';
 
+export interface StoreType {
+  shoppingCart: CartProduct[];
+}
+
 export interface CustomError {
   message: string;
   code: string;
@@ -43,4 +47,4 @@ export interface CustomUploadTask {
 export type CartProduct = Omit<
   ProductDoc,
   'colours' | 'extraImageUrls' | 'description' | ''
-> & { selectedColour?: string };
+> & { selectedColour?: string; quantity: number };

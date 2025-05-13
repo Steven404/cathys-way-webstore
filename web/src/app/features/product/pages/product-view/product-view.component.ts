@@ -2,12 +2,14 @@ import { animate, style, transition, trigger } from '@angular/animations';
 import { NgIf } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { Button } from 'primeng/button';
 import { GalleriaModule } from 'primeng/galleria';
 import { Select } from 'primeng/select';
 
-import { CartProduct, ProductDoc } from '../../../../core/types';
+import { CartProduct, ProductDoc, StoreType } from '../../../../core/types';
 import { convertPriceToFloat } from '../../../../shared/common';
+import { addProductToCart } from '../../../../shared/reducers/shopping-cart/shopping-cart.actions';
 import { ApiService } from '../../../../shared/services/api/api.service';
 import { ProductService } from '../../../../shared/services/product/product.service';
 import { ShoppingCartService } from '../../../../shared/services/shopping-cart/shopping-cart.service';
@@ -43,6 +45,7 @@ export class ProductViewComponent implements OnInit {
     private apiService: ApiService,
     private activatedRoute: ActivatedRoute,
     private shoppingCartService: ShoppingCartService,
+    private store: Store<StoreType>,
   ) {}
 
   async ngOnInit() {
@@ -88,10 +91,10 @@ export class ProductViewComponent implements OnInit {
       subCategoryId: this.product.subCategoryId,
       categoryId: this.product.categoryId,
       price: parseFloat(String(this.product.price)),
+      quantity: 1,
     };
 
-    this.shoppingCartService.addProductToCart(newCartProduct);
-    console.log(this.shoppingCartService.cartProducts());
+    this.store.dispatch(() => addProductToCart({ product: newCartProduct }));
   }
 
   protected readonly convertPriceToFloat = convertPriceToFloat;

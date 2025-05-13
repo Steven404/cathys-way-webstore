@@ -10,30 +10,47 @@
   }
 
   .title {
-    @apply text-3xl font-bold
+    @apply text-xl font-bold h-[5%]
   }
 
   .products-wrapper {
-    @apply w-full h-full mt-5
+    @apply w-full h-[80%] mt-7 gap-y-4 flex flex-col
   }
 
   .product-wrapper {
     @apply flex gap-3
   }
 
+  .product-image-wrapper {
+    @apply md:w-[125px] md:h-[125px] h-[100px] w-[100px]
+  }
+
   .product-text-section {
-    @apply flex flex-col justify-between pb-2
+    @apply flex flex-col justify-between md:pb-2
   }
 
   .product-title {
-    @apply text-lg font-semibold
+    @apply md:text-lg font-semibold
   }
 
   .product-code {
-    @apply text-sm
+    @apply text-xs md:text-sm
   }
 
   .product-price {
-    @apply text-lg font-semibold
+    @apply md:text-lg font-medium
+  }
+
+  .quantity-input-wrapper {
+    @apply h-full w-[40px] md:w-[50px]
+    flex self-center justify-center items-center
+  }
+
+  .product-actions {
+    @apply absolute right-7 flex flex-col items-center justify-between md:h-[125px] h-[100px]
+  }
+
+  .footer {
+    @apply w-full h-[15%] p-7 border-t-2
   }
 }

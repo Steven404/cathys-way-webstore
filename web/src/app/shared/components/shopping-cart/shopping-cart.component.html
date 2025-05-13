@@ -6,18 +6,18 @@
   class="absolute top-6 right-5"
   severity="contrast"
 />
-<div class="wrapper" *ngIf="shoppingCartService.cartProductsTotal() > 0">
+<div class="wrapper" *ngIf="(shoppingCart$ | async).length > 0">
   <h1 class="title">
-    Το καλάθι σας(1 προϊό{{
-      shoppingCartService.cartProductsTotal() > 1 ? "ντα" : "ν"
-    }})
+    Το καλάθι σας<br /><span class="text-lg"
+      >(1 προϊό{{ totalCartProducts > 1 ? "ντα" : "ν" }})</span
+    >
   </h1>
   <div class="products-wrapper">
     <div
-      *ngFor="let product of shoppingCartService.cartProducts()"
+      *ngFor="let product of shoppingCart$ | async; index as i"
       class="product-wrapper"
     >
-      <div class="w-[125px] h-[125px]">
+      <div class="product-image-wrapper">
         <img
           [src]="product?.mainImageUrl || 'assets/main_placeholder.jpg'"
           class="object-cover"
@@ -32,13 +32,49 @@
           {{ convertPriceToFloat(product.price) | currency: "EUR" }}
         </p>
       </div>
+      <div class="product-actions">
+        <p-button
+          label="Αφαίρεση"
+          size="small"
+          text
+          severity="danger"
+          (click)="removeProductFromCart(product)"
+        />
+        <p-inputnumber
+          size="small"
+          [showButtons]="true"
+          buttonLayout="horizontal"
+          inputId="horizontal"
+          spinnerMode="horizontal"
+          [step]="1"
+          mode="decimal"
+          inputStyleClass="w-[30px] max-md:h-[30px]"
+          [max]="5"
+          [min]="1"
+          [ngModel]="product.quantity"
+          (ngModelChange)="updateProductQuantity(product, $event)"
+        >
+          <ng-template #incrementbuttonicon>
+            <span class="pi pi-plus"></span>
+          </ng-template>
+          <ng-template #decrementbuttonicon>
+            <span class="pi pi-minus"></span>
+          </ng-template>
+        </p-inputnumber>
+        <p class="text-lg font-medium">
+          {{ calculateProductTotalPrice(product) | currency: "EUR" }}
+        </p>
+      </div>
     </div>
   </div>
+  <div class="footer">
+    <span class="text-lg">Συνολική τιμή:</span>
+    <span class="text-xl font-medium">{{
+      convertPriceToFloat(cartPriceTotal) | currency: "EUR"
+    }}</span>
+  </div>
 </div>
-<div
-  *ngIf="shoppingCartService.cartProductsTotal() === 0"
-  class="empty-cart-wrapper"
->
+<div *ngIf="(shoppingCart$ | async).length === 0" class="empty-cart-wrapper">
   <p class="text-lg font-medium">
     Δεν έχετε προϊόντα στο καλάθι αυτήν την στιγμή!
   </p>

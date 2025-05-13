@@ -13,12 +13,14 @@ import {
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideRouter } from '@angular/router';
+import { provideState, provideStore } from '@ngrx/store';
 import { MessageService } from 'primeng/api';
 import { providePrimeNG } from 'primeng/config';
 
 import { environment } from '../environments/environment';
 import { customPreset } from '../primengTheme';
 import { routes } from './app.routes';
+import { shoppingCartReducer } from './shared/reducers/shopping-cart/shopping-cart.reducer';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -41,5 +43,7 @@ export const appConfig: ApplicationConfig = {
     provideFirestore(() => getFirestore()),
     provideStorage(() => getStorage()),
     importProvidersFrom(HammerModule),
+    provideStore(),
+    provideState({ name: 'shoppingCart', reducer: shoppingCartReducer }),
   ],
 };

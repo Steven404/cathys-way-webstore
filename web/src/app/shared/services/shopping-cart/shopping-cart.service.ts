@@ -17,17 +17,26 @@ export class ShoppingCartService {
       subCategoryId: 'm9n5NERJSFKiGdnObzQq',
       categoryId: 'YcQsJ5IJwomWZwwrmKTZ',
       price: 14,
+      quantity: 1,
     },
   ]);
-  cartProductsTotal = computed(() => this.cartProducts().length);
-
-  constructor() {}
+  totalCartProducts = computed(() => this.cartProducts().length);
+  cartPriceTotal = computed(() =>
+    this.cartProducts().reduce(
+      (acc, curr) => acc + curr.price * curr.quantity,
+      0,
+    ),
+  );
 
   addProductToCart(product: CartProduct) {
     this.cartProducts.update((items) => [...items, product]);
   }
 
   removeProductFromCart(product: CartProduct) {
+    if (this.totalCartProducts() === 1) {
+      this.cartProducts.update(() => []);
+      return;
+    }
     const itemToRemoveIndex = this.cartProducts().findIndex(
       (p) => p.id === product.id,
     );
@@ -35,5 +44,17 @@ export class ShoppingCartService {
     const newCartArray = this.cartProducts().splice(itemToRemoveIndex, 1);
 
     this.cartProducts.update(() => newCartArray);
+  }
+
+  updateProductQuantity(product: CartProduct, newQuantity: number) {
+    const cartProducts = this.cartProducts();
+    const cartProductChangeIndex = cartProducts.findIndex(
+      (v) => product.id === v.id,
+    );
+    cartProducts[cartProductChangeIndex].quantity = newQuantity;
+
+    this.cartProducts.update(() => cartProducts);
+    console.log(this.cartProducts());
+    console.log(this.cartPriceTotal());
   }
 }
