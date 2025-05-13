@@ -1,0 +1,45 @@
+<p-button
+  rounded
+  outlined
+  icon="pi pi-times"
+  (click)="isShoppingCartVisibleEmitter.emit(false)"
+  class="absolute top-6 right-5"
+  severity="contrast"
+/>
+<div class="wrapper" *ngIf="shoppingCartService.cartProductsTotal() > 0">
+  <h1 class="title">
+    Το καλάθι σας(1 προϊό{{
+      shoppingCartService.cartProductsTotal() > 1 ? "ντα" : "ν"
+    }})
+  </h1>
+  <div class="products-wrapper">
+    <div
+      *ngFor="let product of shoppingCartService.cartProducts()"
+      class="product-wrapper"
+    >
+      <div class="w-[125px] h-[125px]">
+        <img
+          [src]="product?.mainImageUrl || 'assets/main_placeholder.jpg'"
+          class="object-cover"
+        />
+      </div>
+      <div class="product-text-section">
+        <div>
+          <p class="product-title">{{ product.name }}</p>
+          <p class="product-code">{{ product.code }}</p>
+        </div>
+        <p class="product-price">
+          {{ convertPriceToFloat(product.price) | currency: "EUR" }}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+<div
+  *ngIf="shoppingCartService.cartProductsTotal() === 0"
+  class="empty-cart-wrapper"
+>
+  <p class="text-lg font-medium">
+    Δεν έχετε προϊόντα στο καλάθι αυτήν την στιγμή!
+  </p>
+</div>

@@ -8,17 +8,28 @@ import { Drawer } from 'primeng/drawer';
 import { Image } from 'primeng/image';
 import { TieredMenu } from 'primeng/tieredmenu';
 
+import { convertPriceToFloat } from '../../common';
 import { ShoppingCartService } from '../../services/shopping-cart/shopping-cart.service';
+import { ShoppingCartComponent } from '../shopping-cart/shopping-cart.component';
 
 @Component({
   selector: 'app-header',
-  imports: [Image, Button, Drawer, TieredMenu, NgIf, BadgeDirective],
+  imports: [
+    Image,
+    Button,
+    Drawer,
+    TieredMenu,
+    NgIf,
+    BadgeDirective,
+    ShoppingCartComponent,
+  ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
   standalone: true,
 })
 export class HeaderComponent {
   isSidebarVisible = false;
+  isShoppingCartVisible = false;
 
   @Input() categoryItems: MenuItem[];
 
@@ -35,4 +46,10 @@ export class HeaderComponent {
   changeSidebarVisibleState() {
     this.isSidebarVisible = !this.isSidebarVisible;
   }
+
+  showCart() {
+    this.isShoppingCartVisible = true;
+  }
+
+  protected readonly convertPriceToFloat = convertPriceToFloat;
 }

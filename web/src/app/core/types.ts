@@ -40,7 +40,7 @@ export interface CustomUploadTask {
   uploadTask: UploadTask;
 }
 
-export interface ImageUploadTasks {
-  main: CustomUploadTask;
-  extras: CustomUploadTask[];
-}
+export type CartProduct = Omit<
+  ProductDoc,
+  'colours' | 'extraImageUrls' | 'description' | ''
+> & { selectedColour?: string };

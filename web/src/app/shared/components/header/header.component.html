@@ -44,10 +44,18 @@
     />
   </div>
   <i
+    *ngIf="shoppingCartService.cartProductsTotal() > 0"
     class="pi pi-shopping-bag text-black cursor-pointer transition-all duration-100 hover:scale-110"
     style="font-size: 25px"
     pBadge
     [value]="shoppingCartService.cartProductsTotal()"
+    (click)="showCart()"
+  ></i>
+  <i
+    *ngIf="shoppingCartService.cartProductsTotal() === 0"
+    class="pi pi-shopping-bag text-black cursor-pointer transition-all duration-100 hover:scale-110"
+    style="font-size: 25px"
+    (click)="showCart()"
   ></i>
 </div>
 <p-drawer [(visible)]="isSidebarVisible" position="full">
@@ -55,4 +63,17 @@
     <p-button label="Προϊόντα" variant="text" size="large" />
     <p-button label="Επικοινωνία" variant="text" size="large" />
   </div>
+</p-drawer>
+<!--TODO: Make the template into it's own component-->
+<!--TODO: Make quantity option and add to the right of the screen the total price WITH the price (for example 10 euros times 2 = 20 euros total)-->
+<p-drawer
+  [(visible)]="isShoppingCartVisible"
+  position="right"
+  styleClass="!w-full md:!w-[40rem]"
+>
+  <ng-template #headless>
+    <app-shopping-cart
+      (isShoppingCartVisibleEmitter)="isShoppingCartVisible = $event"
+    />
+  </ng-template>
 </p-drawer>

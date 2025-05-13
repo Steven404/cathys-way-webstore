@@ -4,10 +4,9 @@ import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Button } from 'primeng/button';
 import { GalleriaModule } from 'primeng/galleria';
-import { Image } from 'primeng/image';
 import { Select } from 'primeng/select';
 
-import { ProductDoc } from '../../../../core/types';
+import { CartProduct, ProductDoc } from '../../../../core/types';
 import { convertPriceToFloat } from '../../../../shared/common';
 import { ApiService } from '../../../../shared/services/api/api.service';
 import { ProductService } from '../../../../shared/services/product/product.service';
@@ -15,7 +14,7 @@ import { ShoppingCartService } from '../../../../shared/services/shopping-cart/s
 
 @Component({
   selector: 'app-product-view',
-  imports: [NgIf, Image, Button, GalleriaModule, Select],
+  imports: [NgIf, Button, GalleriaModule, Select],
   templateUrl: './product-view.component.html',
   styleUrl: './product-view.component.scss',
   animations: [
@@ -80,7 +79,16 @@ export class ProductViewComponent implements OnInit {
       selectedColourObject = { selectedColour: this.selectedColour };
     }
 
-    const newCartProduct = { ...this.product, ...selectedColourObject };
+    const newCartProduct: CartProduct = {
+      ...selectedColourObject,
+      id: this.product.id,
+      code: this.product.code,
+      name: this.product.name,
+      mainImageUrl: this.product.mainImageUrl,
+      subCategoryId: this.product.subCategoryId,
+      categoryId: this.product.categoryId,
+      price: parseFloat(String(this.product.price)),
+    };
 
     this.shoppingCartService.addProductToCart(newCartProduct);
     console.log(this.shoppingCartService.cartProducts());

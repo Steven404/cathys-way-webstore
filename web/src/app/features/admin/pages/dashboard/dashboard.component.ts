@@ -100,7 +100,7 @@ export class DashboardComponent implements OnInit {
       name: newProductValues.name.trim(),
       code: newProductValues.code.trim(),
       description: newProductValues.description.trim(),
-      price: newProductValues.price,
+      price: parseFloat(String(newProductValues.price)),
       categoryId: newProductValues.category.id,
       subCategoryId: newProductValues.subCategory.id,
       colours: this.newProductColours,
