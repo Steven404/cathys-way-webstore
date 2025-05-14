@@ -17,20 +17,27 @@
       *ngFor="let product of shoppingCart$ | async; index as i"
       class="product-wrapper"
     >
-      <div class="product-image-wrapper">
-        <img
-          [src]="product?.mainImageUrl || 'assets/main_placeholder.jpg'"
-          class="object-cover"
-        />
-      </div>
-      <div class="product-text-section">
-        <div>
-          <p class="product-title">{{ product.name }}</p>
-          <p class="product-code">{{ product.code }}</p>
+      <div class="gap-3 flex">
+        <div class="product-image-wrapper">
+          <img
+            [src]="product?.mainImageUrl || 'assets/main_placeholder.jpg'"
+            class="object-cover"
+          />
         </div>
-        <p class="product-price">
-          {{ convertPriceToFloat(product.price) | currency: "EUR" }}
-        </p>
+        <div class="product-text-section">
+          <div>
+            <p class="product-title">
+              {{ product.name
+              }}<span *ngIf="product.selectedColour"
+                >-{{ product.selectedColour }}
+              </span>
+            </p>
+            <p class="product-code">{{ product.code }}</p>
+          </div>
+          <p class="product-price">
+            {{ convertPriceToFloat(product.price) | currency: "EUR" }}
+          </p>
+        </div>
       </div>
       <div class="product-actions">
         <p-button

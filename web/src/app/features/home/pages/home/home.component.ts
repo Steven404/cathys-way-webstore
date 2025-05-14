@@ -4,11 +4,12 @@ import { MenuItem } from 'primeng/api';
 
 import { Category } from '../../../../core/types';
 import { CategoryService } from '../../../../shared/services/category/category.service';
+import { HomeCategoriesComponent } from '../../../pages/components/home-categories/home-categories.component';
 import { CarrouselComponent } from '../../components/carrousel/carrousel.component';
 
 @Component({
   selector: 'app-home',
-  imports: [CarrouselComponent],
+  imports: [CarrouselComponent, HomeCategoriesComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
   standalone: true,
@@ -16,6 +17,7 @@ import { CarrouselComponent } from '../../components/carrousel/carrousel.compone
 export class HomeComponent implements OnInit {
   categories: Category[] = [];
   categoryItems: MenuItem[] = [];
+  categoriesOnDisplay: Category[] = [];
 
   constructor(
     private categoryService: CategoryService,
@@ -24,10 +26,11 @@ export class HomeComponent implements OnInit {
 
   async ngOnInit() {
     this.categories = await this.categoryService.getCategories();
+    this.categoriesOnDisplay = this.categories.filter((_v, i) => i < 4);
     this.categories.forEach((c) =>
       this.categoryItems.push({
         label: c.name,
-        command: (event) => this.router.navigate([`category/${c.id}`]),
+        command: () => this.router.navigate([`category/${c.id}`]),
       }),
     );
   }

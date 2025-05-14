@@ -7,7 +7,7 @@
       <p-image src="assets/logo_no_bg.png" alt="Image" width="200" />
     </a>
   </div>
-  <div class="max-md:hidden flex w-[500px] justify-center gap-x-5">
+  <div class="desktop-routes">
     <p-button
       label="Αρχική"
       variant="text"
@@ -28,13 +28,14 @@
       />
       <p-tieredMenu
         #menu
-        appendTo="body"
+        [appendTo]="test"
         [model]="categoryItems"
         popup
         class="font-montserrat top-12"
         [autoDisplay]="true"
         [autoZIndex]="true"
       />
+      <ng-template #test></ng-template>
     </div>
     <p-button
       label="Επικοινωνία"
@@ -43,29 +44,30 @@
       severity="contrast"
     />
   </div>
-  <i
-    *ngIf="shoppingCartService.totalCartProducts() > 0"
-    class="pi pi-shopping-bag text-black cursor-pointer transition-all duration-100 hover:scale-110"
-    style="font-size: 25px"
-    pBadge
-    [value]="shoppingCartService.totalCartProducts()"
-    (click)="showCart()"
-  ></i>
-  <i
-    *ngIf="shoppingCartService.totalCartProducts() === 0"
-    class="pi pi-shopping-bag text-black cursor-pointer transition-all duration-100 hover:scale-110"
-    style="font-size: 25px"
-    (click)="showCart()"
-  ></i>
+  <div class="lg:w-[200px]">
+    <i
+      *ngIf="totalCartProducts > 0"
+      class="pi pi-shopping-bag text-black cursor-pointer transition-all duration-100 hover:scale-110"
+      style="font-size: 25px"
+      pBadge
+      [value]="totalCartProducts"
+      (click)="showCart()"
+    ></i>
+    <i
+      *ngIf="totalCartProducts === 0"
+      class="pi pi-shopping-bag text-black cursor-pointer transition-all duration-100 hover:scale-110"
+      style="font-size: 25px"
+      (click)="showCart()"
+    ></i>
+  </div>
 </div>
 <p-drawer [(visible)]="isSidebarVisible" position="full">
   <div class="flex flex-col h-full items-center justify-center">
+    <p-button label="Αρχική" text size="large" (click)="navigateToHome()" />
     <p-button label="Προϊόντα" variant="text" size="large" />
     <p-button label="Επικοινωνία" variant="text" size="large" />
   </div>
 </p-drawer>
-<!--TODO: Make the template into it's own component-->
-<!--TODO: Make quantity option and add to the right of the screen the total price WITH the price (for example 10 euros times 2 = 20 euros total)-->
 <p-drawer
   [(visible)]="isShoppingCartVisible"
   position="right"

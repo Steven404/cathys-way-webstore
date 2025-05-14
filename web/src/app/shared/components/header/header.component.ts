@@ -1,6 +1,7 @@
-import { NgIf, ViewportScroller } from '@angular/common';
+import { NgIf } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { MenuItem } from 'primeng/api';
 import { BadgeDirective } from 'primeng/badge';
 import { Button } from 'primeng/button';
@@ -8,8 +9,8 @@ import { Drawer } from 'primeng/drawer';
 import { Image } from 'primeng/image';
 import { TieredMenu } from 'primeng/tieredmenu';
 
+import { StoreType } from '../../../core/types';
 import { convertPriceToFloat } from '../../common';
-import { ShoppingCartService } from '../../services/shopping-cart/shopping-cart.service';
 import { ShoppingCartComponent } from '../shopping-cart/shopping-cart.component';
 
 @Component({
@@ -29,17 +30,23 @@ import { ShoppingCartComponent } from '../shopping-cart/shopping-cart.component'
 })
 export class HeaderComponent {
   isSidebarVisible = false;
-  isShoppingCartVisible = true;
+  isShoppingCartVisible = false;
+
+  totalCartProducts = 0;
 
   @Input() categoryItems: MenuItem[];
 
   constructor(
     private router: Router,
-    private scroller: ViewportScroller,
-    protected shoppingCartService: ShoppingCartService,
-  ) {}
+    private store: Store<StoreType>,
+  ) {
+    this.store.select('shoppingCart').subscribe((cart) => {
+      this.totalCartProducts = cart.length;
+    });
+  }
 
   navigateToHome() {
+    this.isSidebarVisible = false;
     this.router.navigate(['home']);
   }
 

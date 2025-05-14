@@ -49,7 +49,7 @@
           [options]="product.colours"
           optionLabel="name"
           optionValue="name"
-          (onChange)="selectedColour = $event.value"
+          (onChange)="colourSelected($event)"
         >
           <ng-template #item let-colour>
             <div class="flex gap-2 items-center">
@@ -62,13 +62,18 @@
           </ng-template>
         </p-select>
       </div>
+      <p *ngIf="errorCode" class="error-text">{{ errorCode }}</p>
       <div class="product-footer">
         <p class="price">{{ convertPriceToFloat(product.price) }} &#8364;</p>
         <div class="wishlist-action">
           <i class="pi pi-heart"></i>
           <p class="wishlist-text">Προσθήκη στην λίστα επιθυμιών</p>
         </div>
-        <p-button label="Προσθήκη στο καλάθι" (click)="addProductToCart()" />
+        <p-button
+          label="Προσθήκη στο καλάθι"
+          (click)="addProductToCart()"
+          [loading]="isLoading"
+        />
       </div>
     </div>
   </div>

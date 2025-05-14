@@ -5,14 +5,13 @@ import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Button } from 'primeng/button';
 import { GalleriaModule } from 'primeng/galleria';
-import { Select } from 'primeng/select';
+import { Select, SelectChangeEvent } from 'primeng/select';
 
 import { CartProduct, ProductDoc, StoreType } from '../../../../core/types';
 import { convertPriceToFloat } from '../../../../shared/common';
 import { addProductToCart } from '../../../../shared/reducers/shopping-cart/shopping-cart.actions';
 import { ApiService } from '../../../../shared/services/api/api.service';
 import { ProductService } from '../../../../shared/services/product/product.service';
-import { ShoppingCartService } from '../../../../shared/services/shopping-cart/shopping-cart.service';
 
 @Component({
   selector: 'app-product-view',
@@ -33,6 +32,9 @@ import { ShoppingCartService } from '../../../../shared/services/shopping-cart/s
 })
 export class ProductViewComponent implements OnInit {
   private productService = inject(ProductService);
+  isLoading = false;
+
+  errorCode = '';
 
   id: string;
   product: ProductDoc;
@@ -44,7 +46,6 @@ export class ProductViewComponent implements OnInit {
   constructor(
     private apiService: ApiService,
     private activatedRoute: ActivatedRoute,
-    private shoppingCartService: ShoppingCartService,
     private store: Store<StoreType>,
   ) {}
 
@@ -70,17 +71,27 @@ export class ProductViewComponent implements OnInit {
 
   selectedColour = '';
 
-  addProductToCart() {
+  colourSelected(event: SelectChangeEvent) {
+    this.selectedColour = event.value;
+    this.errorCode = '';
+  }
+
+  async addProductToCart() {
     let selectedColourObject = {};
     if (
       this.product.colours &&
       this.product.colours.length &&
       !this.selectedColour
     ) {
+      this.errorCode = 'Παρακαλώ επιλέξτε χρώμα';
       return;
     } else {
       selectedColourObject = { selectedColour: this.selectedColour };
     }
+
+    this.errorCode = '';
+
+    this.isLoading = true;
 
     const newCartProduct: CartProduct = {
       ...selectedColourObject,
@@ -94,7 +105,12 @@ export class ProductViewComponent implements OnInit {
       quantity: 1,
     };
 
+    await new Promise((resolve) => {
+      setTimeout(resolve, 2000);
+    });
+
     this.store.dispatch(() => addProductToCart({ product: newCartProduct }));
+    this.isLoading = false;
   }
 
   protected readonly convertPriceToFloat = convertPriceToFloat;

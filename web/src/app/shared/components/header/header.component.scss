@@ -5,7 +5,7 @@
     @apply w-full flex items-center justify-between sticky top-0 z-10
     bg-amber-50
     py-5
-    px-52
+    px-40
     shadow-xl
     max-xl:px-7
     max-lg:py-10
@@ -13,5 +13,9 @@
 
   .header {
     @apply text-2xl text-purple-700 font-montserrat font-semibold
+  }
+
+  .desktop-routes {
+    @apply max-md:hidden flex justify-center gap-x-5 w-[200px]
   }
 }

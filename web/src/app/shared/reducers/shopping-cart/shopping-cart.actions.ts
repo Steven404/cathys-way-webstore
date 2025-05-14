@@ -13,6 +13,6 @@ export const removeProductFromCart = createAction(
 );
 export const changeProductQuantity = createAction(
   '[Shopping Cart] Change product quantity on cart',
-  props<{ productId: string; quantity: number }>(),
+  props<{ product: CartProduct; quantity: number }>(),
 );
 export const clearCart = createAction('[Shopping Cart] Clear Product Cart');

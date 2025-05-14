@@ -24,6 +24,7 @@ export interface Category {
   name: string;
   id: string;
   description: string;
+  image?: string;
 }
 
 export interface ProductDoc {

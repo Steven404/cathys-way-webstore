@@ -15,18 +15,20 @@ export const initialState: CartProduct[] = [];
 export const shoppingCartReducer = createReducer(
   initialState,
   on(addProductToCart, (state, { product }) => {
-    if (state.find((p) => p.id === product.id)) {
-      return state;
-    }
+    const productExistsInCart = state.some(
+      (p) => p.id === product.id && product.selectedColour === p.selectedColour,
+    );
 
-    return [...state, product];
+    return productExistsInCart ? state : [...state, product];
   }),
   on(removeProductFromCart, (state, { product }) =>
     state.filter((v) => v.id !== product.id),
   ),
-  on(changeProductQuantity, (state, { productId, quantity }) => [
+  on(changeProductQuantity, (state, { product, quantity }) => [
     ...state.map((item) =>
-      item.id === productId ? { ...item, quantity } : item,
+      item.id === product.id && item.selectedColour === product.selectedColour
+        ? { ...item, quantity }
+        : item,
     ),
   ]),
   on(clearCart, () => []),

@@ -2,11 +2,11 @@
 
 @layer components {
   .empty-cart-wrapper {
-    @apply w-full h-full flex flex-col items-center justify-center
+    @apply w-full h-full flex flex-col items-center justify-center max-md:p-5 max-md:text-center
   }
 
   .wrapper {
-    @apply w-full h-full p-7
+    @apply w-full h-full md:p-7 p-2.5
   }
 
   .title {
@@ -14,15 +14,15 @@
   }
 
   .products-wrapper {
-    @apply w-full h-[80%] mt-7 gap-y-4 flex flex-col
+    @apply w-full h-[80%] mt-7 gap-y-4 flex flex-col overflow-y-scroll
   }
 
   .product-wrapper {
-    @apply flex gap-3
+    @apply flex justify-between
   }
 
   .product-image-wrapper {
-    @apply md:w-[125px] md:h-[125px] h-[100px] w-[100px]
+    @apply md:w-[125px] md:h-[125px] h-[100px] w-[100px] flex
   }
 
   .product-text-section {
@@ -47,7 +47,7 @@
   }
 
   .product-actions {
-    @apply absolute right-7 flex flex-col items-center justify-between md:h-[125px] h-[100px]
+    @apply flex flex-col items-center justify-between md:h-[125px] h-[100px]
   }
 
   .footer {

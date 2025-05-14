@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import {
   addDoc,
   collection,
@@ -27,10 +27,16 @@ import { Category, ProductDoc } from '../../../core/types';
 })
 export class CategoryService {
   firestore = inject(Firestore);
+  categoriesSignal = signal<Category[]>([]);
 
   getCategoryById(id: string) {
     const categoryDoc = doc(this.firestore, `categories/${id}`);
     return docData(categoryDoc) as Observable<Category>;
+  }
+
+  async fetchCategories() {
+    const categories = await this.getCategories();
+    this.categoriesSignal.set(categories);
   }
 
   async getCategories(): Promise<Category[]> {

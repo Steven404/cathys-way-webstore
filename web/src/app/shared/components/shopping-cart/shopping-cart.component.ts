@@ -8,8 +8,10 @@ import { Observable } from 'rxjs';
 
 import { CartProduct, StoreType } from '../../../core/types';
 import { convertPriceToFloat } from '../../common';
-import { changeProductQuantity } from '../../reducers/shopping-cart/shopping-cart.actions';
-import { ShoppingCartService } from '../../services/shopping-cart/shopping-cart.service';
+import {
+  changeProductQuantity,
+  removeProductFromCart,
+} from '../../reducers/shopping-cart/shopping-cart.actions';
 
 @Component({
   selector: 'app-shopping-cart',
@@ -38,10 +40,7 @@ export class ShoppingCartComponent {
     return product.quantity * product.price;
   }
 
-  constructor(
-    private shoppingCartService: ShoppingCartService,
-    private store: Store<StoreType>,
-  ) {
+  constructor(private store: Store<StoreType>) {
     this.shoppingCart$ = this.store.select('shoppingCart');
     this.shoppingCart$.subscribe((cart) => {
       this.cartPriceTotal = cart.reduce(
@@ -52,13 +51,11 @@ export class ShoppingCartComponent {
   }
 
   removeProductFromCart(product: CartProduct) {
-    this.shoppingCartService.removeProductFromCart(product);
+    this.store.dispatch(() => removeProductFromCart({ product }));
   }
 
   updateProductQuantity(product: CartProduct, quantity: number) {
-    this.store.dispatch(() =>
-      changeProductQuantity({ productId: product.id, quantity }),
-    );
+    this.store.dispatch(() => changeProductQuantity({ product, quantity }));
   }
 
   protected readonly convertPriceToFloat = convertPriceToFloat;

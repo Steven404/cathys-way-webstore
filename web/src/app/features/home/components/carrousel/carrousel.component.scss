@@ -15,7 +15,7 @@
   }
 
   .image-text {
-    @apply absolute m-auto  z-10 bg-gray-700 bg-opacity-70 rounded-sm border-[1px]
+    @apply absolute m-auto z-10 bg-gray-500 bg-opacity-70 rounded-sm overflow-hidden
     text-white font-semibold italic tracking-wider font-manrope text-4xl leading-[60px]
     py-3 px-10
     md:py-5 md:px-40

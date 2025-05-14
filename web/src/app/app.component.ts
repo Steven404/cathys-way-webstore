@@ -3,7 +3,6 @@ import { Router, RouterOutlet } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { Toast } from 'primeng/toast';
 
-import { Category } from './core/types';
 import { HeaderComponent } from './shared/components/header/header.component';
 import { CategoryService } from './shared/services/category/category.service';
 
@@ -17,19 +16,26 @@ import { CategoryService } from './shared/services/category/category.service';
 export class AppComponent implements OnInit {
   title = 'cathys-way-webstore';
 
-  categories: Category[] = [];
   categoryItems: MenuItem[] = [];
   constructor(
     private categoryService: CategoryService,
     private router: Router,
   ) {}
 
-  async ngOnInit() {
-    this.categories = await this.categoryService.getCategories();
+  get categories() {
+    return this.categoryService.categoriesSignal();
+  }
+
+  ngOnInit() {
+    this.loadCategories();
+  }
+
+  async loadCategories() {
+    await this.categoryService.fetchCategories();
     this.categories.forEach((c) =>
       this.categoryItems.push({
         label: c.name,
-        command: (event) => this.router.navigate([`category/${c.id}`]),
+        command: () => this.router.navigate([`category/${c.id}`]),
       }),
     );
   }
