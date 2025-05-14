@@ -2,7 +2,7 @@
 
 @layer components {
   .wrapper {
-    @apply w-full grid md:grid-cols-2 xl:grid-cols-3
+    @apply w-full grid md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4
     items-center justify-center
     gap-10 pb-10
   }
