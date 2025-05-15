@@ -32,4 +32,5 @@
   [subCategories]="allSubCategories"
   [totalProducts]="totalProductsCount"
   [isLoading]="isLoading"
+  (lazyLoadEmitter)="onLazyLoad($event)"
 />

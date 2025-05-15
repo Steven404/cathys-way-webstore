@@ -16,7 +16,7 @@
   }
 
   .gallery-image-wrapper {
-    @apply h-[325px] sm:h-[650px] md:h-[450px] w-full object-cover
+    @apply relative h-[325px] sm:h-[650px] md:h-[450px] w-full
   }
 
   .product-details {

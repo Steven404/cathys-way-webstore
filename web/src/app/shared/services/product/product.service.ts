@@ -55,40 +55,42 @@ export class ProductService {
   async getAllProducts(
     pageSize = 8,
     pageIndex = 0,
-    lastDocsCache: QueryDocumentSnapshot[] = [],
-  ): Promise<{
-    products: ProductDoc[];
-    totalProductsCount: number;
-    lastDoc: QueryDocumentSnapshot | null;
-  }> {
+    productsCache: QueryDocumentSnapshot[][] = [],
+  ) {
     const productsCollection = collection(this.firestore, 'products');
-
     let productsQuery;
+    const newProductsCache = productsCache;
 
     if (pageIndex === 0) {
       productsQuery = query(productsCollection, limit(pageSize));
     } else {
-      let tempLastDoc;
-      let tempSnapShot;
+      const queryRequiredProductCache = newProductsCache[pageIndex - 1];
 
-      // This is for the case that user skips a page (for example from 1 goes to 3)
-      while (lastDocsCache.length < pageIndex) {
-        productsQuery = query(
-          productsCollection,
-          startAfter(lastDocsCache[lastDocsCache.length - 1]),
-          limit(pageSize),
-        );
-        tempSnapShot = await getDocs(productsQuery);
-        tempLastDoc = tempSnapShot.docs[tempSnapShot.docs.length - 1];
-        lastDocsCache.push(tempLastDoc);
+      let lastDoc;
+
+      if (!queryRequiredProductCache) {
+        let tempSnapshot;
+        while (pageIndex + 1 > newProductsCache.length) {
+          const lastAvailableCachePage =
+            newProductsCache[newProductsCache.length - 1];
+
+          lastDoc = lastAvailableCachePage[lastAvailableCachePage.length - 1];
+
+          productsQuery = query(
+            productsCollection,
+            startAfter(lastDoc),
+            limit(10),
+          );
+
+          tempSnapshot = await getDocs(productsQuery);
+          newProductsCache.push(tempSnapshot.docs);
+        }
+      } else {
+        lastDoc =
+          queryRequiredProductCache[queryRequiredProductCache.length - 1];
       }
 
-      const lastDoc = lastDocsCache[pageIndex - 1];
-      productsQuery = query(
-        productsCollection,
-        startAfter(lastDoc),
-        limit(pageSize),
-      );
+      productsQuery = query(productsCollection, startAfter(lastDoc), limit(10));
     }
 
     const snapshot = await getDocs(productsQuery);
@@ -97,15 +99,11 @@ export class ProductService {
       id: product.id,
     })) as ProductDoc[];
 
-    const countSnapshot = await getCountFromServer(query(productsQuery));
+    newProductsCache.push(snapshot.docs as QueryDocumentSnapshot[]);
+
+    const countSnapshot = await getCountFromServer(query(productsCollection));
     const total = countSnapshot.data().count;
 
-    const lastDoc = snapshot.docs[snapshot.docs.length - 1] ?? null;
-
-    return {
-      products,
-      totalProductsCount: total,
-      lastDoc: lastDoc as QueryDocumentSnapshot,
-    };
+    return { products, total, newProductsCache };
   }
 }

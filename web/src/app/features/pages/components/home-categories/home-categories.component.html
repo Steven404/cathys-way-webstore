@@ -1,8 +1,8 @@
 <div class="wrapper">
-  <div *ngFor="let category of categories">
+  <div *ngFor="let category of staticCategories">
     <div class="category-card" (click)="navigateToCategory(category)">
       <div class="category-image-wrapper">
-        <img class="category-image" src="assets/rings.jpg" />
+        <img class="object-cover" [ngSrc]="category.image" fill />
       </div>
       <div class="category-text">
         <p class="text-xl font-semibold">

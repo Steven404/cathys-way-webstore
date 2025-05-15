@@ -8,6 +8,7 @@
   [lazyLoadOnInit]="false"
   currentPageReportTemplate="Εμφανίζονται {first}-{last} από {totalRecords} προϊόντα"
   [loading]="isLoading"
+  (onLazyLoad)="lazyLoadEmitter.emit($event)"
 >
   <ng-template #header>
     <tr>

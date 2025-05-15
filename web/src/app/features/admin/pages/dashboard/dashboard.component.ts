@@ -2,6 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { QueryDocumentSnapshot } from '@angular/fire/firestore';
 import { FormControl, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
+import { TableLazyLoadEvent } from 'primeng/table';
 
 import {
   Category,
@@ -50,7 +51,7 @@ export class DashboardComponent implements OnInit {
 
   products: ProductDoc[] = [];
   totalProductsCount = 0;
-  lastProductsCache: QueryDocumentSnapshot[] = [];
+  productPageCache: QueryDocumentSnapshot[][] = [];
 
   productForm = newProductFormGroup;
   newProductColours: ProductColour[] = [];
@@ -81,10 +82,10 @@ export class DashboardComponent implements OnInit {
     this.isLoading = true;
     const retrievedData = await this.productService.getAllProducts();
     this.products = retrievedData.products;
-    this.totalProductsCount = retrievedData.totalProductsCount;
-    if (retrievedData.lastDoc) {
-      this.lastProductsCache = [retrievedData.lastDoc];
-    }
+    this.totalProductsCount = retrievedData.total;
+
+    this.productPageCache = retrievedData.newProductsCache;
+
     this.isLoading = false;
   }
 
@@ -172,6 +173,33 @@ export class DashboardComponent implements OnInit {
       }
     }
     this.isLoading = false;
+  }
+
+  async onLazyLoad(event: TableLazyLoadEvent) {
+    this.products = [];
+    const pageSize = event.rows ?? 8;
+    const pageIndex = Math.floor((event.first ?? 0) / pageSize);
+
+    const currentPageProductsCache = this.productPageCache[pageIndex];
+    if (currentPageProductsCache && currentPageProductsCache.length) {
+      this.products = currentPageProductsCache.map(
+        (c) => ({ id: c.id, ...c.data() }) as ProductDoc,
+      );
+    } else {
+      try {
+        const retrievedData = await this.productService.getAllProducts(
+          pageSize,
+          pageIndex,
+          this.productPageCache,
+        );
+
+        this.products = retrievedData.products;
+        this.productPageCache = retrievedData.newProductsCache;
+        this.totalProductsCount = retrievedData.total;
+      } catch (e) {
+        console.log(e);
+      }
+    }
   }
 
   async createSubCategory() {

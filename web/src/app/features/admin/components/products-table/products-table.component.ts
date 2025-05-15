@@ -1,9 +1,9 @@
 import { CurrencyPipe, NgFor, NgIf } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Button } from 'primeng/button';
 import { Dialog } from 'primeng/dialog';
 import { Skeleton } from 'primeng/skeleton';
-import { TableModule } from 'primeng/table';
+import { TableLazyLoadEvent, TableModule } from 'primeng/table';
 
 import { Category, ProductDoc, SubCategory } from '../../../../core/types';
 
@@ -21,6 +21,8 @@ export class ProductsTableComponent {
   @Input() subCategories: SubCategory[] = [];
 
   @Input() isLoading = false;
+
+  @Output() lazyLoadEmitter = new EventEmitter<TableLazyLoadEvent>();
 
   isDescriptionDialogVisible = false;
 

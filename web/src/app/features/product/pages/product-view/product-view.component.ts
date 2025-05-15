@@ -1,5 +1,5 @@
 import { animate, style, transition, trigger } from '@angular/animations';
-import { NgIf } from '@angular/common';
+import { NgIf, NgOptimizedImage } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -15,7 +15,7 @@ import { ProductService } from '../../../../shared/services/product/product.serv
 
 @Component({
   selector: 'app-product-view',
-  imports: [NgIf, Button, GalleriaModule, Select],
+  imports: [NgIf, Button, GalleriaModule, Select, NgOptimizedImage],
   templateUrl: './product-view.component.html',
   styleUrl: './product-view.component.scss',
   animations: [
