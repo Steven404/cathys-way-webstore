@@ -6,10 +6,11 @@ import { Category } from '../../../../core/types';
 import { CategoryService } from '../../../../shared/services/category/category.service';
 import { HomeCategoriesComponent } from '../../../pages/components/home-categories/home-categories.component';
 import { CarrouselComponent } from '../../components/carrousel/carrousel.component';
+import { InfoBlockComponent } from '../../components/info-block/info-block.component';
 
 @Component({
   selector: 'app-home',
-  imports: [CarrouselComponent, HomeCategoriesComponent],
+  imports: [CarrouselComponent, HomeCategoriesComponent, InfoBlockComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
   standalone: true,
