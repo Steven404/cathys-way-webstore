@@ -40,7 +40,6 @@ export class ShoppingCartComponent {
 
   shoppingCart$: Observable<CartProduct[]>;
 
-  cartProducts: CartProduct[] = [];
   totalCartProducts = 0;
   cartPriceTotal = 0;
 
@@ -48,7 +47,6 @@ export class ShoppingCartComponent {
     private store: Store<StoreType>,
     private router: Router,
   ) {
-    ``;
     this.shoppingCart$ = this.store.select('shoppingCart');
     this.shoppingCart$.subscribe((cart) => {
       this.cartPriceTotal = cart.reduce(

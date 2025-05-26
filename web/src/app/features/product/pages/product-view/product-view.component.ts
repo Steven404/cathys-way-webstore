@@ -1,7 +1,7 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { NgIf, NgOptimizedImage } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Button } from 'primeng/button';
 import { GalleriaModule } from 'primeng/galleria';
@@ -52,17 +52,19 @@ export class ProductViewComponent implements OnInit {
     private apiService: ApiService,
     private activatedRoute: ActivatedRoute,
     private store: Store<StoreType>,
-  ) {
-    this.shoppingCart$ = this.store.select('shoppingCart');
-    this.shoppingCart$.subscribe((value) => {
-      this.isProductInCart = value.some(
-        (v) =>
-          v.id === this.product.id && v.selectedColour === this.selectedColour,
-      );
+    private router: Router,
+  ) {}
+
+  async ngOnInit() {
+    this.getProductInfo().then(() => this.initPage());
+    this.activatedRoute.params.subscribe((value) => {
+      if (this.id && value && value['id'] !== this.id) {
+        window.location.reload();
+      }
     });
   }
 
-  async ngOnInit() {
+  async getProductInfo() {
     this.id = this.activatedRoute.snapshot.paramMap.get('id');
     if (this.id) {
       const retrievedDoc = await this.productService.getProduct(this.id);
@@ -80,6 +82,23 @@ export class ProductViewComponent implements OnInit {
         ];
       }
     }
+  }
+
+  initPage() {
+    this.subscribeToCart();
+  }
+
+  subscribeToCart() {
+    this.shoppingCart$ = this.store.select('shoppingCart');
+    this.shoppingCart$.subscribe((value) => {
+      if (value) {
+        this.isProductInCart = value.some(
+          (v) =>
+            v.id === this.product.id &&
+            v.selectedColour === this.selectedColour,
+        );
+      }
+    });
   }
 
   selectedColour = '';

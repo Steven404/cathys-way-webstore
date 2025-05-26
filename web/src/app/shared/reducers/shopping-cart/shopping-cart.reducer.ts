@@ -5,6 +5,7 @@ import {
   addProductToCart,
   changeProductQuantity,
   clearCart,
+  initCart,
   removeProductFromCart,
 } from './shopping-cart.actions';
 
@@ -14,6 +15,7 @@ export const initialState: CartProduct[] = [];
 
 export const shoppingCartReducer = createReducer(
   initialState,
+  on(initCart, (_state, { cart }) => [...cart]),
   on(addProductToCart, (state, { product }) => {
     const productExistsInCart = state.some(
       (p) => p.id === product.id && product.selectedColour === p.selectedColour,

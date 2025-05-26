@@ -1,9 +1,13 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { MenuItem } from 'primeng/api';
 import { Toast } from 'primeng/toast';
+import { Observable } from 'rxjs';
 
+import { CartPersistenceServiceService } from './core/services/cart-persistence-service/cart-persistence-service.service';
+import { CartProduct, StoreType } from './core/types';
 import { HeaderComponent } from './shared/components/header/header.component';
 import { CategoryService } from './shared/services/category/category.service';
 
@@ -17,11 +21,15 @@ import { CategoryService } from './shared/services/category/category.service';
 export class AppComponent implements OnInit {
   title = 'cathys-way-webstore';
 
+  shoppingCart$: Observable<CartProduct[]>;
+
   categoryItems: MenuItem[] = [];
   constructor(
     private categoryService: CategoryService,
     private router: Router,
     @Inject(PLATFORM_ID) private platformId: object,
+    private store: Store<StoreType>,
+    private cartPersistenceServiceService: CartPersistenceServiceService,
   ) {}
 
   get categories() {
@@ -37,6 +45,9 @@ export class AppComponent implements OnInit {
   async initApp() {
     await import('hammerjs');
     await this.loadCategories();
+
+    this.cartPersistenceServiceService.initCartFromStorage();
+    this.cartPersistenceServiceService.subscribeCartChangesToLocalStorage();
   }
 
   async loadCategories() {
