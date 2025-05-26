@@ -84,7 +84,12 @@
           <p class="wishlist-text">Προσθήκη στην λίστα επιθυμιών</p>
         </div>
         <p-button
-          label="Προσθήκη στο καλάθι"
+          [label]="
+            !isProductInCart
+              ? 'Προσθήκη στο καλάθι'
+              : 'Το προϊόν βρίσκετε ήδη στο καλάθι'
+          "
+          [disabled]="isProductInCart"
           (click)="addProductToCart()"
           [loading]="isLoading"
         />

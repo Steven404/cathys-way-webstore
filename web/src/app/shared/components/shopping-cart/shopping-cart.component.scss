@@ -22,7 +22,7 @@
   }
 
   .product-image-wrapper {
-    @apply md:w-[125px] md:h-[125px] h-[100px] w-[100px] flex
+    @apply md:w-[125px] md:h-[125px] h-[100px] w-[100px] flex relative
   }
 
   .product-text-section {

@@ -6,6 +6,7 @@ import { Store } from '@ngrx/store';
 import { Button } from 'primeng/button';
 import { GalleriaModule } from 'primeng/galleria';
 import { Select, SelectChangeEvent } from 'primeng/select';
+import { first, Observable } from 'rxjs';
 
 import { CartProduct, ProductDoc, StoreType } from '../../../../core/types';
 import { convertPriceToFloat } from '../../../../shared/common';
@@ -34,6 +35,8 @@ export class ProductViewComponent implements OnInit {
   private productService = inject(ProductService);
   isLoading = false;
 
+  shoppingCart$: Observable<CartProduct[]>;
+
   errorCode = '';
 
   id: string;
@@ -43,11 +46,21 @@ export class ProductViewComponent implements OnInit {
 
   images = [];
 
+  isProductInCart = false;
+
   constructor(
     private apiService: ApiService,
     private activatedRoute: ActivatedRoute,
     private store: Store<StoreType>,
-  ) {}
+  ) {
+    this.shoppingCart$ = this.store.select('shoppingCart');
+    this.shoppingCart$.subscribe((value) => {
+      this.isProductInCart = value.some(
+        (v) =>
+          v.id === this.product.id && v.selectedColour === this.selectedColour,
+      );
+    });
+  }
 
   async ngOnInit() {
     this.id = this.activatedRoute.snapshot.paramMap.get('id');
@@ -74,10 +87,16 @@ export class ProductViewComponent implements OnInit {
   colourSelected(event: SelectChangeEvent) {
     this.selectedColour = event.value;
     this.errorCode = '';
+    this.shoppingCart$.pipe(first()).subscribe((value) => {
+      this.isProductInCart = value.some(
+        (v) =>
+          v.id === this.product.id && v.selectedColour === this.selectedColour,
+      );
+    });
   }
 
   async addProductToCart() {
-    let selectedColourObject = {};
+    let selectedColourObject = { selectedColour: '' };
     if (
       this.product.colours &&
       this.product.colours.length &&

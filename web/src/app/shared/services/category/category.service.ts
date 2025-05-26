@@ -1,4 +1,4 @@
-import { inject, Injectable, signal } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import {
   addDoc,
   collection,
@@ -26,8 +26,9 @@ import { Category, ProductDoc } from '../../../core/types';
   providedIn: 'root',
 })
 export class CategoryService {
-  firestore = inject(Firestore);
   categoriesSignal = signal<Category[]>([]);
+
+  constructor(private firestore: Firestore) {}
 
   getCategoryById(id: string) {
     const categoryDoc = doc(this.firestore, `categories/${id}`);
@@ -35,16 +36,23 @@ export class CategoryService {
   }
 
   async fetchCategories() {
-    const categories = await this.getCategories();
-    this.categoriesSignal.set(categories);
+    console.log('trying');
+    try {
+      const categories = await this.getCategories();
+      this.categoriesSignal.set(categories);
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   async getCategories(): Promise<Category[]> {
+    console.log('getting cats...');
     const categoriesCollection = collection(
       this.firestore,
       'categories',
     ) as CollectionReference<Category>;
     const q = query(categoriesCollection);
+
     const categoryDocs = await getDocs(q);
 
     return categoryDocs.docs.map((doc) => ({

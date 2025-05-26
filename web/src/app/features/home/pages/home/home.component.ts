@@ -26,13 +26,13 @@ export class HomeComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
-    this.categories = await this.categoryService.getCategories();
-    this.categoriesOnDisplay = this.categories.filter((_v, i) => i < 4);
-    this.categories.forEach((c) =>
-      this.categoryItems.push({
-        label: c.name,
-        command: () => this.router.navigate([`category/${c.id}`]),
-      }),
-    );
+    // this.categories = await this.categoryService.getCategories();
+    // this.categoriesOnDisplay = this.categories.filter((_v, i) => i < 4);
+    // this.categories.forEach((c) =>
+    //   this.categoryItems.push({
+    //     label: c.name,
+    //     command: () => this.router.navigate([`category/${c.id}`]),
+    //   }),
+    // );
   }
 }

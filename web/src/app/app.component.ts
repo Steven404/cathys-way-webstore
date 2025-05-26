@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { Toast } from 'primeng/toast';
@@ -20,6 +21,7 @@ export class AppComponent implements OnInit {
   constructor(
     private categoryService: CategoryService,
     private router: Router,
+    @Inject(PLATFORM_ID) private platformId: object,
   ) {}
 
   get categories() {
@@ -27,7 +29,14 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loadCategories();
+    if (isPlatformBrowser(this.platformId)) {
+      this.initApp();
+    }
+  }
+
+  async initApp() {
+    await import('hammerjs');
+    await this.loadCategories();
   }
 
   async loadCategories() {

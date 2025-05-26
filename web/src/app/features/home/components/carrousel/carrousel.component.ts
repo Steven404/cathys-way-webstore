@@ -1,4 +1,4 @@
-import { NgIf } from '@angular/common';
+import { NgIf, NgOptimizedImage } from '@angular/common';
 import { Component } from '@angular/core';
 import { Carousel, CarouselModule } from 'primeng/carousel';
 
@@ -10,9 +10,10 @@ interface ImageData {
 
 @Component({
   selector: 'app-carrousel',
-  imports: [CarouselModule, NgIf],
+  imports: [CarouselModule, NgIf, NgOptimizedImage],
   templateUrl: './carrousel.component.html',
   styleUrl: './carrousel.component.scss',
+  host: { ngSkipHydration: 'true' },
 })
 export class CarrouselComponent {
   nextSlide(carousel: Carousel, event) {

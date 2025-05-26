@@ -11,7 +11,7 @@
   }
 
   .image {
-    @apply z-0 md:w-full max-md:h-[400px] object-cover
+    @apply z-0 md:w-full max-md:h-[400px] h-full relative
   }
 
   .image-text {

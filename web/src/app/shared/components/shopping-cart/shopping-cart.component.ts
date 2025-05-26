@@ -1,6 +1,13 @@
-import { AsyncPipe, CurrencyPipe, NgFor, NgIf } from '@angular/common';
+import {
+  AsyncPipe,
+  CurrencyPipe,
+  NgFor,
+  NgIf,
+  NgOptimizedImage,
+} from '@angular/common';
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Button } from 'primeng/button';
 import { InputNumber } from 'primeng/inputnumber';
@@ -23,6 +30,7 @@ import {
     InputNumber,
     FormsModule,
     AsyncPipe,
+    NgOptimizedImage,
   ],
   templateUrl: './shopping-cart.component.html',
   styleUrl: './shopping-cart.component.scss',
@@ -36,11 +44,11 @@ export class ShoppingCartComponent {
   totalCartProducts = 0;
   cartPriceTotal = 0;
 
-  calculateProductTotalPrice(product: CartProduct) {
-    return product.quantity * product.price;
-  }
-
-  constructor(private store: Store<StoreType>) {
+  constructor(
+    private store: Store<StoreType>,
+    private router: Router,
+  ) {
+    ``;
     this.shoppingCart$ = this.store.select('shoppingCart');
     this.shoppingCart$.subscribe((cart) => {
       this.cartPriceTotal = cart.reduce(
@@ -48,6 +56,14 @@ export class ShoppingCartComponent {
         0,
       );
     });
+  }
+
+  calculateProductTotalPrice(product: CartProduct) {
+    return product.quantity * product.price;
+  }
+
+  goToProduct(productId: string) {
+    this.router.navigate([`product/${productId}`]);
   }
 
   removeProductFromCart(product: CartProduct) {
