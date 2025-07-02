@@ -30,12 +30,12 @@ export class CarrouselComponent {
 
   images: ImageData[] = [
     {
-      imageSrc: '/assets/cover.jpg',
+      imageSrc: 'assets/cover.jpg',
       text: 'Έφτασαν τα Καλοκαιρινά Κοσμήματα',
       alt: 'test',
     },
     {
-      imageSrc: '/assets/main_placeholder2.jpg',
+      imageSrc: 'assets/main_placeholder2.jpg',
       text: 'Χειροποίητα Κοσμήματα Mijuki',
       alt: 'test',
     },

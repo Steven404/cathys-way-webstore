@@ -1,3 +1,4 @@
+import { FieldValue, Timestamp } from '@angular/fire/firestore';
 import { StorageReference, UploadTask } from '@angular/fire/storage';
 
 export interface StoreType {
@@ -38,6 +39,7 @@ export interface ProductDoc {
   colours: ProductColour[];
   mainImageUrl?: string;
   extraImageUrls?: string[];
+  createdAt: Timestamp | FieldValue;
 }
 
 export interface CustomUploadTask {
@@ -47,5 +49,5 @@ export interface CustomUploadTask {
 
 export type CartProduct = Omit<
   ProductDoc,
-  'colours' | 'extraImageUrls' | 'description' | ''
+  'colours' | 'extraImageUrls' | 'description' | 'createdAt'
 > & { selectedColour?: string; quantity: number };

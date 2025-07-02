@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import {
   addDoc,
   collection,
@@ -21,7 +21,14 @@ import { ProductDoc } from '../../../core/types';
   providedIn: 'root',
 })
 export class ProductService {
-  firestore = inject(Firestore);
+  productsCollection: CollectionReference;
+
+  constructor(private firestore: Firestore) {
+    this.productsCollection = collection(
+      this.firestore,
+      'products',
+    ) as CollectionReference<ProductDoc>;
+  }
 
   async createProduct(newProduct: Omit<ProductDoc, 'id'>) {
     const productsCollection = collection(
@@ -57,12 +64,12 @@ export class ProductService {
     pageIndex = 0,
     productsCache: QueryDocumentSnapshot[][] = [],
   ) {
-    const productsCollection = collection(this.firestore, 'products');
     let productsQuery;
     const newProductsCache = productsCache;
 
     if (pageIndex === 0) {
-      productsQuery = query(productsCollection, limit(pageSize));
+      console.log('first one');
+      productsQuery = query(this.productsCollection, limit(pageSize));
     } else {
       const queryRequiredProductCache = newProductsCache[pageIndex - 1];
 
@@ -77,7 +84,7 @@ export class ProductService {
           lastDoc = lastAvailableCachePage[lastAvailableCachePage.length - 1];
 
           productsQuery = query(
-            productsCollection,
+            this.productsCollection,
             startAfter(lastDoc),
             limit(10),
           );
@@ -90,7 +97,11 @@ export class ProductService {
           queryRequiredProductCache[queryRequiredProductCache.length - 1];
       }
 
-      productsQuery = query(productsCollection, startAfter(lastDoc), limit(10));
+      productsQuery = query(
+        this.productsCollection,
+        startAfter(lastDoc),
+        limit(10),
+      );
     }
 
     const snapshot = await getDocs(productsQuery);
@@ -101,7 +112,9 @@ export class ProductService {
 
     newProductsCache.push(snapshot.docs as QueryDocumentSnapshot[]);
 
-    const countSnapshot = await getCountFromServer(query(productsCollection));
+    const countSnapshot = await getCountFromServer(
+      query(this.productsCollection),
+    );
     const total = countSnapshot.data().count;
 
     return { products, total, newProductsCache };

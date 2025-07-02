@@ -9,7 +9,7 @@
   }
 
   .box-wrapper {
-    @apply flex gap-5 items-center max-md:flex-col
+    @apply flex gap-5 items-center justify-center max-md:flex-col lg:w-[45%]
   }
 
   .divider {

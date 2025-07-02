@@ -6,12 +6,12 @@
   }
 
   .image-wrapper {
-    @apply h-[720px] text-center justify-center items-center
-    max-md:h-[400px]
+    @apply text-center justify-center items-center
+
   }
 
   .image {
-    @apply z-0 md:w-full max-md:h-[400px] h-full relative
+    @apply z-0 md:w-full h-[720px] max-md:h-[400px]  relative
   }
 
   .image-text {

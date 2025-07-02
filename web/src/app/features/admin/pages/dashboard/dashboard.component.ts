@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { QueryDocumentSnapshot } from '@angular/fire/firestore';
+import { QueryDocumentSnapshot, Timestamp } from '@angular/fire/firestore';
 import { FormControl, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { TableLazyLoadEvent } from 'primeng/table';
@@ -37,7 +37,6 @@ import { newProductFormGroup } from '../../constants';
 export class DashboardComponent implements OnInit {
   categoryService = inject(CategoryService);
   subCategoryService = inject(SubCategoryService);
-  productService = inject(ProductService);
   imageService = inject(ImageService);
 
   mainImage: File;
@@ -67,7 +66,10 @@ export class DashboardComponent implements OnInit {
   allCategories: Category[] = [];
   allSubCategories: SubCategory[] = [];
 
-  constructor(private messageService: MessageService) {}
+  constructor(
+    private messageService: MessageService,
+    private productService: ProductService,
+  ) {}
 
   async ngOnInit() {
     this.allCategories = await this.categoryService.getCategories();
@@ -80,11 +82,11 @@ export class DashboardComponent implements OnInit {
 
   async getProducts() {
     this.isLoading = true;
-    const retrievedData = await this.productService.getAllProducts();
-    this.products = retrievedData.products;
-    this.totalProductsCount = retrievedData.total;
-
-    this.productPageCache = retrievedData.newProductsCache;
+    // const retrievedData = await this.productService.getAllProducts();
+    // this.products = retrievedData.products;
+    // this.totalProductsCount = retrievedData.total;
+    //
+    // this.productPageCache = retrievedData.newProductsCache;
 
     this.isLoading = false;
   }
@@ -105,6 +107,7 @@ export class DashboardComponent implements OnInit {
       categoryId: newProductValues.category.id,
       subCategoryId: newProductValues.subCategory.id,
       colours: this.newProductColours,
+      createdAt: Timestamp.now(),
     };
 
     try {
@@ -187,15 +190,15 @@ export class DashboardComponent implements OnInit {
       );
     } else {
       try {
-        const retrievedData = await this.productService.getAllProducts(
-          pageSize,
-          pageIndex,
-          this.productPageCache,
-        );
-
-        this.products = retrievedData.products;
-        this.productPageCache = retrievedData.newProductsCache;
-        this.totalProductsCount = retrievedData.total;
+        // const retrievedData = await this.productService.getAllProducts(
+        //   pageSize,
+        //   pageIndex,
+        //   this.productPageCache,
+        // );
+        //
+        // this.products = retrievedData.products;
+        // this.productPageCache = retrievedData.newProductsCache;
+        // this.totalProductsCount = retrievedData.total;
       } catch (e) {
         console.log(e);
       }

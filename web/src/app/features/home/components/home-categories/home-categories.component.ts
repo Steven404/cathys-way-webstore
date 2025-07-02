@@ -21,7 +21,7 @@ export class HomeCategoriesComponent {
       name: 'Κρεμαστά',
       id: '1bOv1gk55RCkGdwncDOH',
       description: '',
-      image: 'assets/pendants.jpg',
+      image: 'assets/necklaces.jpg',
     },
     {
       name: 'Κολιέ',

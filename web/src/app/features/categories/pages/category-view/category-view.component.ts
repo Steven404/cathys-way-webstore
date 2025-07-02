@@ -73,7 +73,16 @@ export class CategoryViewComponent implements OnInit {
 
   constructor(private activatedRoute: ActivatedRoute) {}
 
-  async ngOnInit() {
+  ngOnInit() {
+    this.getCategoryInfo();
+    this.activatedRoute.params.subscribe((value) => {
+      if (this.id && value && value['id'] !== this.id) {
+        window.location.reload();
+      }
+    });
+  }
+
+  async getCategoryInfo() {
     this.id = this.activatedRoute.snapshot.paramMap.get('id');
     if (this.id) {
       this.categoryService.getCategoryById(this.id).subscribe((v) => {
