@@ -4,7 +4,7 @@
   .wrapper {
     @apply w-full 4xl:w-[70%] grid
     md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 max-2xl:gap-y-7
-    items-center justify-center pb-10
+    items-center justify-center pb-8 pt-4
   }
 
   .category-card {

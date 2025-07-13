@@ -1,29 +1,16 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { NgForOf } from '@angular/common';
+import { Component, Input } from '@angular/core';
+import { Button } from 'primeng/button';
 
 import { ProductDoc } from '../../../../core/types';
-import { ProductService } from '../../../../shared/services/product/product.service';
+import { ProductCardComponent } from '../../../product/components/product-card/product-card.component';
 
 @Component({
   selector: 'app-new-items',
-  imports: [],
+  imports: [ProductCardComponent, NgForOf, Button],
   templateUrl: './new-items.component.html',
   styleUrl: './new-items.component.scss',
 })
-export class NewItemsComponent implements OnInit {
-  products$: Observable<ProductDoc[]>;
-
-  constructor(private productService: ProductService) {}
-
-  ngOnInit() {
-    this.productService.getProduct('pNTfvYxjquNZQoEMVh9q');
-  }
-
-  async getProducts() {
-    try {
-      // this.products = newProductsData.products;
-    } catch (e) {
-      console.log(e);
-    }
-  }
+export class NewItemsComponent {
+  @Input() products: ProductDoc[];
 }

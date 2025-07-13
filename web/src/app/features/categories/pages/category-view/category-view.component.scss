@@ -11,7 +11,7 @@
   }
 
   .title {
-    @apply text-3xl xl:text-4xl text-black font-semibold 
+    @apply text-3xl xl:text-4xl text-black font-semibold
   }
 
   .index-div-wrapper {
@@ -21,12 +21,6 @@
 
   .index-text {
     @apply font-light max-xl:text-sm
-  }
-
-  .products-container {
-    @apply w-full h-3/4 grid justify-items-center grid-cols-1 gap-y-20 gap-x-2 mb-10
-    2xl:w-[80%] 3xl:w-[70%]
-    lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1
   }
 
   .buttons-container {

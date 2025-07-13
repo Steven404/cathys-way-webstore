@@ -31,19 +31,14 @@ export class ProductService {
   }
 
   async createProduct(newProduct: Omit<ProductDoc, 'id'>) {
-    const productsCollection = collection(
-      this.firestore,
-      'products',
-    ) as CollectionReference<ProductDoc>;
-    const q = query(productsCollection);
+    const q = query(this.productsCollection);
     const querySnapshot = await getDocs(q);
     const allProducts = querySnapshot.docs.map((product) => ({
       ...product.data(),
-      id: product.id,
     }));
 
     allProducts.forEach((product) => {
-      if (product.code.toLowerCase() === newProduct.code.toLowerCase()) {
+      if (product['code'].toLowerCase() === newProduct.code.toLowerCase()) {
         throwNewCustomError(
           'Product with this code already exists',
           'already-exists',
@@ -51,7 +46,7 @@ export class ProductService {
       }
     });
 
-    return await addDoc(productsCollection, newProduct);
+    return await addDoc(this.productsCollection, newProduct);
   }
 
   async getProduct(id: string) {
@@ -68,7 +63,6 @@ export class ProductService {
     const newProductsCache = productsCache;
 
     if (pageIndex === 0) {
-      console.log('first one');
       productsQuery = query(this.productsCollection, limit(pageSize));
     } else {
       const queryRequiredProductCache = newProductsCache[pageIndex - 1];
@@ -118,5 +112,17 @@ export class ProductService {
     const total = countSnapshot.data().count;
 
     return { products, total, newProductsCache };
+  }
+
+  async getNewlyAddedProducts() {
+    const productsQuery = query(this.productsCollection, limit(3));
+    const snapshot = await getDocs(productsQuery);
+
+    const result = snapshot.docs.map((product) => ({
+      ...product.data(),
+      id: product.id,
+    }));
+
+    return result as ProductDoc[];
   }
 }

@@ -8,13 +8,14 @@ import { Observable } from 'rxjs';
 
 import { CartPersistenceServiceService } from './core/services/cart-persistence-service/cart-persistence-service.service';
 import { CartProduct, StoreType } from './core/types';
+import { FooterComponent } from './shared/components/footer/footer.component';
 import { HeaderComponent } from './shared/components/header/header.component';
 import { CategoryService } from './shared/services/category/category.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, Toast, HeaderComponent],
+  imports: [RouterOutlet, Toast, HeaderComponent, FooterComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })

@@ -19,7 +19,7 @@ export const customPreset = definePreset(Aura, {
     colorScheme: {
       light: {
         primary: {
-          color: '{fuchsia.800}',
+          color: '{fuchsia.700}',
           inverseColor: '#ffffff',
           hoverColor: '{fuchsia.900}',
           activeColor: '{fuchsia.800}',
