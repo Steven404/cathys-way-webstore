@@ -1,5 +1,13 @@
 import { NgIf } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { MenuItem } from 'primeng/api';
@@ -7,7 +15,7 @@ import { BadgeDirective } from 'primeng/badge';
 import { Button } from 'primeng/button';
 import { Drawer } from 'primeng/drawer';
 import { Image } from 'primeng/image';
-import { TieredMenu } from 'primeng/tieredmenu';
+import { Menu } from 'primeng/menu';
 
 import { StoreType } from '../../../core/types';
 import { convertPriceToFloat } from '../../common';
@@ -19,18 +27,21 @@ import { ShoppingCartComponent } from '../shopping-cart/shopping-cart.component'
     Image,
     Button,
     Drawer,
-    TieredMenu,
     NgIf,
     BadgeDirective,
     ShoppingCartComponent,
+    Menu,
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
   standalone: true,
 })
-export class HeaderComponent {
+export class HeaderComponent implements AfterViewInit {
+  @ViewChild('wrapper') wrapper: ElementRef;
+
   isSidebarVisible = false;
   isShoppingCartVisible = false;
+  @Output() heightEmitter = new EventEmitter<number>();
 
   totalCartProducts = 0;
 
@@ -59,4 +70,8 @@ export class HeaderComponent {
   }
 
   protected readonly convertPriceToFloat = convertPriceToFloat;
+
+  ngAfterViewInit() {
+    this.heightEmitter.emit(this.wrapper.nativeElement.offsetHeight);
+  }
 }

@@ -1,4 +1,9 @@
-<app-header [categoryItems]="categoryItems" id="appHeader" />
-<router-outlet />
+<app-header
+  (heightEmitter)="setContentStyle($event)"
+  [categoryItems]="categoryItems"
+/>
+<div #content><router-outlet /></div>
+<div #footer>
+  <app-footer />
+</div>
 <p-toast key="global-toast" position="top-center" />
-<app-footer />

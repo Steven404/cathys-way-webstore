@@ -1,5 +1,5 @@
 import { animate, style, transition, trigger } from '@angular/animations';
-import { NgClass, NgForOf, NgIf } from '@angular/common';
+import { NgForOf, NgIf } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { QueryDocumentSnapshot } from '@angular/fire/firestore';
 import { ActivatedRoute } from '@angular/router';
@@ -23,7 +23,6 @@ import { ProductCardComponent } from '../../../product/components/product-card/p
     DropdownModule,
     Select,
     Button,
-    NgClass,
   ],
   templateUrl: './category-view.component.html',
   styleUrl: './category-view.component.scss',
@@ -42,6 +41,8 @@ import { ProductCardComponent } from '../../../product/components/product-card/p
 export class CategoryViewComponent implements OnInit {
   id: string;
   categoryService = inject(CategoryService);
+
+  loading = false;
 
   isLoading = false;
 
@@ -128,6 +129,7 @@ export class CategoryViewComponent implements OnInit {
   }
 
   async sortSelected(event: SelectChangeEvent & { value: SortOption }) {
+    this.loading = true;
     this.priceOrderBy = event.value;
     this.products = [];
 
@@ -144,6 +146,7 @@ export class CategoryViewComponent implements OnInit {
       );
 
       this.products = retrievedData.products;
+      this.loading = false;
     } catch (e) {
       console.log(e);
     }

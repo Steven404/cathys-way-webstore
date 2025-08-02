@@ -7,7 +7,7 @@
 
 @layer components {
   .wrapper {
-    @apply w-full flex flex-col items-center lg:py-5 font-manrope py-2.5 relative
+    @apply w-full flex flex-col items-center lg:py-5 font-manrope py-2.5
   }
 
   .title {
@@ -24,7 +24,7 @@
   }
 
   .buttons-container {
-    @apply flex absolute bottom-[-50px] gap-2.5 pb-5
+    @apply flex gap-2.5 pb-5 mt-10
   }
 
   .buttons-container-fixed {

@@ -1,13 +1,21 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Inject,
+  inject,
+  Injector,
+  OnInit,
+  PLATFORM_ID,
+  ViewChild,
+} from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { MenuItem } from 'primeng/api';
 import { Toast } from 'primeng/toast';
-import { Observable } from 'rxjs';
 
 import { CartPersistenceServiceService } from './core/services/cart-persistence-service/cart-persistence-service.service';
-import { CartProduct, StoreType } from './core/types';
+import { StoreType } from './core/types';
 import { FooterComponent } from './shared/components/footer/footer.component';
 import { HeaderComponent } from './shared/components/header/header.component';
 import { CategoryService } from './shared/services/category/category.service';
@@ -22,7 +30,10 @@ import { CategoryService } from './shared/services/category/category.service';
 export class AppComponent implements OnInit {
   title = 'cathys-way-webstore';
 
-  shoppingCart$: Observable<CartProduct[]>;
+  injector = inject(Injector);
+
+  @ViewChild('content') content: ElementRef;
+  @ViewChild('footer') footer: ElementRef;
 
   categoryItems: MenuItem[] = [];
   constructor(
@@ -59,5 +70,13 @@ export class AppComponent implements OnInit {
         command: () => this.router.navigate([`category/${c.id}`]),
       }),
     );
+  }
+
+  setContentStyle(event: number) {
+    this.content.nativeElement.style.marginTop = `${event}px`;
+    if (typeof window !== 'undefined') {
+      const footerHeight = this.footer.nativeElement.offsetHeight;
+      this.content.nativeElement.style.minHeight = `${window.innerHeight - footerHeight - event}px`;
+    }
   }
 }

@@ -1,4 +1,4 @@
-<div class="wrapper">
+<div #wrapper class="wrapper">
   <p-button (click)="changeSidebarVisibleState()" text class="md:hidden">
     <i class="pi pi-bars text-black" style="font-size: 25px"></i>
   </p-button>
@@ -7,7 +7,7 @@
       <p-image src="assets/logo_no_bg.png" alt="Image" width="200" />
     </a>
   </div>
-  <div class="desktop-routes">
+  <div class="desktop-routes" #desktopRoutes>
     <p-button
       label="Αρχική"
       variant="text"
@@ -15,27 +15,18 @@
       severity="contrast"
       (onClick)="navigateToHome()"
     />
-    <div *ngIf="categoryItems.length" class="justify-center">
+    <div class="justify-center relative">
       <p-button
+        #button
+        [loading]="!categoryItems.length"
         id="productsButton"
-        label="Προϊόντα"
+        [label]="!categoryItems.length ? '' : 'Προϊόντα'"
         variant="text"
         class="global-button text-button"
-        (onClick)="menu.toggle($event)"
-        icon="pi pi-angle-down"
-        iconPos="right"
         severity="contrast"
+        (onClick)="menu.toggle($event)"
       />
-      <p-tieredMenu
-        #menu
-        [appendTo]="test"
-        [model]="categoryItems"
-        popup
-        class="font-montserrat top-12"
-        [autoDisplay]="true"
-        [autoZIndex]="true"
-      />
-      <div #test></div>
+      <p-menu #menu [popup]="true" appendTo="button" [model]="categoryItems" />
     </div>
     <p-button
       label="Επικοινωνία"

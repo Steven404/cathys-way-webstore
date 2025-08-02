@@ -9,11 +9,10 @@
 html {
   scroll-behavior: smooth;
   font-family: "Manrope", sans-serif;
-  height: 100%;
+
 }
 
 body {
-  min-height: 100vh;
   box-sizing: border-box;
 }
 
@@ -53,7 +52,7 @@ app-root {
   }
 
   .products-container {
-    @apply w-full h-3/4 grid justify-items-center grid-cols-1 gap-y-20 gap-x-2 mb-10
+    @apply w-full h-3/4 grid justify-items-center grid-cols-1 gap-y-20 gap-x-2 mb-10 transition-all duration-300 ease-in-out
     xl:w-[90%] 2xl:w-[80%]
     lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1
   }

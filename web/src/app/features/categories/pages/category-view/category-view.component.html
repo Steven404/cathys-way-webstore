@@ -26,19 +26,14 @@
       [imageSrc]="product?.mainImageUrl || 'assets/rings.jpg'"
     />
   </div>
-  <div
-    class="buttons-container"
-    [ngClass]="{
-      'buttons-container-fixed max-md:buttons-container': products.length <= 5,
-      'buttons-container': products.length > 5,
-    }"
-  >
+  <div class="buttons-container" *ngIf="products.length">
     <ng-container *ngFor="let page of pages; index as i">
       <p-button
         [label]="String(page)"
         (click)="pageClicked(page)"
         rounded
         text
+        size="large"
         [disabled]="activePage === page"
       />
     </ng-container>
