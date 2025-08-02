@@ -7,11 +7,10 @@
 
   .image-wrapper {
     @apply text-center justify-center items-center
-
   }
 
   .image {
-    @apply z-0 md:w-full h-[720px] max-md:h-[400px]  relative
+    @apply z-0 md:w-full h-[720px] max-md:h-[400px] relative
   }
 
   .image-text {

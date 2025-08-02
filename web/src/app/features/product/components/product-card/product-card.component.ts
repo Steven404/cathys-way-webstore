@@ -1,3 +1,4 @@
+import { NgOptimizedImage } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -6,15 +7,16 @@ import { convertPriceToFloat } from '../../../../shared/common';
 
 @Component({
   selector: 'app-product-card',
-  imports: [],
+  imports: [NgOptimizedImage],
   templateUrl: './product-card.component.html',
   styleUrl: './product-card.component.scss',
   standalone: true,
 })
 export class ProductCardComponent {
   @Input() product: ProductDoc;
-
   @Input() imageSrc = '';
+
+  isImageLoading = true;
 
   constructor(private router: Router) {}
 

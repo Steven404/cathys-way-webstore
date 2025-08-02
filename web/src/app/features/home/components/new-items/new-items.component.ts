@@ -1,3 +1,4 @@
+import { animate, style, transition, trigger } from '@angular/animations';
 import { NgForOf } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { Button } from 'primeng/button';
@@ -10,6 +11,17 @@ import { ProductCardComponent } from '../../../product/components/product-card/p
   imports: [ProductCardComponent, NgForOf, Button],
   templateUrl: './new-items.component.html',
   styleUrl: './new-items.component.scss',
+  animations: [
+    trigger('fadeInFadeOut', [
+      transition(':enter', [
+        style({ opacity: 0 }),
+        animate('500ms ease-in-out', style({ opacity: 1 })),
+      ]),
+      transition(':leave', [
+        animate('500ms ease-in-out', style({ opacity: 0 })),
+      ]),
+    ]),
+  ],
 })
 export class NewItemsComponent {
   @Input() products: ProductDoc[];

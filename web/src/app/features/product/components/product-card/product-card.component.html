@@ -1,12 +1,12 @@
-<!--<div class="wrapper custom-transition" (click)="goToProduct()">-->
-<!--  <img class="image" [src]="imageSrc" />-->
-<!--  <div class="text-wrapper">-->
-<!--    <p class="name-text">{{ product.name }}</p>-->
-<!--    <p class="price-text">{{ convertPriceToFloat(product.price) }} &#8364;</p>-->
-<!--  </div>-->
-<!--</div>-->
 <div class="wrapper custom-transition" (click)="goToProduct()">
-  <img class="image" [src]="imageSrc" />
+  <img
+    [hidden]="isImageLoading"
+    class="image"
+    [ngSrc]="imageSrc"
+    fill
+    (load)="this.isImageLoading = false"
+    alt="product_image"
+  />
   <div class="text-wrapper">
     <p class="name-text">{{ product.name }}</p>
     <p class="price-text">{{ convertPriceToFloat(product.price) }} &#8364;</p>

@@ -15,18 +15,26 @@
       severity="contrast"
       (onClick)="navigateToHome()"
     />
-    <div class="justify-center relative">
+    <div class="justify-center">
       <p-button
-        #button
         [loading]="!categoryItems.length"
         id="productsButton"
-        [label]="!categoryItems.length ? '' : 'Προϊόντα'"
+        label="Προϊόντα"
         variant="text"
         class="global-button text-button"
-        severity="contrast"
         (onClick)="menu.toggle($event)"
+        icon="pi pi-angle-down"
+        iconPos="right"
+        severity="contrast"
       />
-      <p-menu #menu [popup]="true" appendTo="button" [model]="categoryItems" />
+      <p-menu
+        #menu
+        appendTo="self"
+        [model]="categoryItems"
+        popup
+        class="font-montserrat top-12"
+        [autoZIndex]="true"
+      />
     </div>
     <p-button
       label="Επικοινωνία"

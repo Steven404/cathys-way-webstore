@@ -4,6 +4,7 @@ import {
   Component,
   ElementRef,
   EventEmitter,
+  HostListener,
   Input,
   Output,
   ViewChild,
@@ -27,10 +28,10 @@ import { ShoppingCartComponent } from '../shopping-cart/shopping-cart.component'
     Image,
     Button,
     Drawer,
+    Menu,
     NgIf,
     BadgeDirective,
     ShoppingCartComponent,
-    Menu,
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
@@ -38,14 +39,34 @@ import { ShoppingCartComponent } from '../shopping-cart/shopping-cart.component'
 })
 export class HeaderComponent implements AfterViewInit {
   @ViewChild('wrapper') wrapper: ElementRef;
+  @ViewChild('menu') pMenu: Menu;
 
   isSidebarVisible = false;
   isShoppingCartVisible = false;
   @Output() heightEmitter = new EventEmitter<number>();
+  @Input() categoryItems: MenuItem[];
 
   totalCartProducts = 0;
+  isMenuVisible = false;
 
-  @Input() categoryItems: MenuItem[];
+  @HostListener('document:click', [])
+  onClick(): void {
+    if (this.isMenuVisible) {
+      this.pMenu.hide();
+      this.isMenuVisible = false;
+      return;
+    }
+    if (this.pMenu && this.pMenu.visible && !this.isMenuVisible) {
+      this.isMenuVisible = true;
+    }
+  }
+
+  @HostListener('window:resize', [])
+  resize() {
+    if (this.wrapper) {
+      this.heightEmitter.emit(this.wrapper.nativeElement.offsetHeight);
+    }
+  }
 
   constructor(
     private router: Router,

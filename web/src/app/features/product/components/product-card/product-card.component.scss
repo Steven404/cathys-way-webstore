@@ -7,7 +7,7 @@
   }
 
   .image {
-    @apply z-0 object-cover h-full w-full
+    @apply z-0 object-cover relative h-[300px] w-[350px] md:h-[325px] md:w-[375px] 2xl:h-[370px] 2xl:w-[400px]
   }
 
   //.text-wrapper {
