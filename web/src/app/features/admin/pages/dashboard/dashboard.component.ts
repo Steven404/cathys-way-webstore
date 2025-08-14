@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, Inject, inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { QueryDocumentSnapshot, Timestamp } from '@angular/fire/firestore';
 import { FormControl, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
@@ -35,6 +35,8 @@ import { newProductFormGroup } from '../../constants';
   styleUrl: './dashboard.component.scss',
 })
 export class DashboardComponent implements OnInit {
+  @Inject(PLATFORM_ID) private platformId: object;
+
   categoryService = inject(CategoryService);
   subCategoryService = inject(SubCategoryService);
   imageService = inject(ImageService);
@@ -71,22 +73,25 @@ export class DashboardComponent implements OnInit {
     private productService: ProductService,
   ) {}
 
-  async ngOnInit() {
+  ngOnInit() {
+    this.initDashboard();
+  }
+
+  async initDashboard() {
     this.allCategories = await this.categoryService.getCategories();
     this.allSubCategories = await this.subCategoryService.getSubCategories();
     await this.getProducts();
-    if (typeof window !== 'undefined') {
-      document.getElementById('appHeader').style.display = 'none';
-    }
   }
 
   async getProducts() {
     this.isLoading = true;
-    // const retrievedData = await this.productService.getAllProducts();
-    // this.products = retrievedData.products;
-    // this.totalProductsCount = retrievedData.total;
-    //
-    // this.productPageCache = retrievedData.newProductsCache;
+    const retrievedData = await this.productService.getAllProducts();
+    this.products = retrievedData.products;
+    this.totalProductsCount = retrievedData.total;
+
+    console.log(this.products);
+
+    this.productPageCache = retrievedData.newProductsCache;
 
     this.isLoading = false;
   }
@@ -190,15 +195,15 @@ export class DashboardComponent implements OnInit {
       );
     } else {
       try {
-        // const retrievedData = await this.productService.getAllProducts(
-        //   pageSize,
-        //   pageIndex,
-        //   this.productPageCache,
-        // );
-        //
-        // this.products = retrievedData.products;
-        // this.productPageCache = retrievedData.newProductsCache;
-        // this.totalProductsCount = retrievedData.total;
+        const retrievedData = await this.productService.getAllProducts(
+          pageSize,
+          pageIndex,
+          this.productPageCache,
+        );
+
+        this.products = retrievedData.products;
+        this.productPageCache = retrievedData.newProductsCache;
+        this.totalProductsCount = retrievedData.total;
       } catch (e) {
         console.log(e);
       }

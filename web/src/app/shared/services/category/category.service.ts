@@ -36,7 +36,6 @@ export class CategoryService {
   }
 
   async fetchCategories() {
-    console.log('trying');
     try {
       const categories = await this.getCategories();
       this.categoriesSignal.set(categories);
@@ -46,7 +45,6 @@ export class CategoryService {
   }
 
   async getCategories(): Promise<Category[]> {
-    console.log('getting cats...');
     const categoriesCollection = collection(
       this.firestore,
       'categories',
