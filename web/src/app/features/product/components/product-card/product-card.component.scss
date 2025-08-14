@@ -10,22 +10,6 @@
     @apply z-0 object-cover relative h-[300px] w-[350px] md:h-[325px] md:w-[375px] 2xl:h-[370px] 2xl:w-[400px]
   }
 
-  //.text-wrapper {
-  //  @apply absolute bottom-0 w-full h-[25%]
-  //  flex flex-col justify-center items-center gap-y-1 md:gap-y-2.5
-  //  bg-purple-500 bg-opacity-50
-  //  px-2.5
-  //  max-lg:items-center
-  //}
-  //
-  //.name-text {
-  //  @apply text-white text-xl font-semibold max-lg:text-xl
-  //}
-  //
-  //.price-text {
-  //  @apply text-white font-medium text-lg
-  //}
-
   .text-wrapper {
     @apply w-full mt-2
     flex flex-col justify-center items-center gap-y-1
