@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 
 import { Category, ProductDoc } from '../../../../core/types';
+import { LoadingSpinnerComponent } from '../../../../shared/components/loading-spinner/loading-spinner.component';
 import { ProductService } from '../../../../shared/services/product/product.service';
 import { CarrouselComponent } from '../../components/carrousel/carrousel.component';
 import { HomeCategoriesComponent } from '../../components/home-categories/home-categories.component';
@@ -17,6 +18,7 @@ import { NewItemsComponent } from '../../components/new-items/new-items.componen
     HomeCategoriesComponent,
     InfoBlockComponent,
     NewItemsComponent,
+    LoadingSpinnerComponent,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
@@ -26,6 +28,8 @@ export class HomeComponent implements OnInit {
   categoryItems: MenuItem[] = [];
   categoriesOnDisplay: Category[] = [];
   newProducts: ProductDoc[] = [];
+
+  hasLoadedCarousel = false;
 
   constructor(
     private router: Router,

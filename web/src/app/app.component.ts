@@ -1,13 +1,20 @@
 import { isPlatformBrowser, NgIf } from '@angular/common';
-import { Component, ElementRef, Inject, inject, Injector, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Inject,
+  inject,
+  Injector,
+  OnInit,
+  PLATFORM_ID,
+  ViewChild,
+} from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { MenuItem } from 'primeng/api';
 import { Toast } from 'primeng/toast';
 
-import {
-  CartPersistenceServiceService
-} from './core/services/cart-persistence-service/cart-persistence-service.service';
+import { CartPersistenceServiceService } from './core/services/cart-persistence-service/cart-persistence-service.service';
 import { StoreType } from './core/types';
 import { FooterComponent } from './shared/components/footer/footer.component';
 import { HeaderComponent } from './shared/components/header/header.component';

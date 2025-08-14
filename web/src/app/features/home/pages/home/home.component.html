@@ -1,5 +1,6 @@
 <div>
-  <app-carrousel />
+  <app-loading-spinner [fullScreen]="true" [show]="!hasLoadedCarousel" />
+  <app-carrousel (carouselLoadedEmitter)="hasLoadedCarousel = $event" />
   <app-home-categories
     [categories]="categoriesOnDisplay"
     class="flex justify-center"

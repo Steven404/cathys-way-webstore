@@ -1,5 +1,5 @@
 import { NgIf, NgOptimizedImage } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { Carousel, CarouselModule } from 'primeng/carousel';
 
 interface ImageData {
@@ -16,6 +16,9 @@ interface ImageData {
   host: { ngSkipHydration: 'true' },
 })
 export class CarrouselComponent {
+  @Output() carouselLoadedEmitter = new EventEmitter<boolean>();
+  loadedImages = 0;
+
   nextSlide(carousel: Carousel, event) {
     carousel.navForward(event as TouchEvent);
   }
@@ -26,6 +29,13 @@ export class CarrouselComponent {
 
   test(carousel: Carousel, event) {
     carousel.onTouchMove(event as TouchEvent);
+  }
+
+  imageLoaded() {
+    this.loadedImages += 1;
+    if (this.loadedImages === this.images.length) {
+      this.carouselLoadedEmitter.emit(true);
+    }
   }
 
   images: ImageData[] = [

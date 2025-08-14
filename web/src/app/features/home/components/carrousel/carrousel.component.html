@@ -10,7 +10,13 @@
     <ng-template let-item #item>
       <div class="image-wrapper lg:hidden max-lg:flex">
         <div class="image">
-          <img [ngSrc]="item.imageSrc" [alt]="item.alt" fill priority />
+          <img
+            [ngSrc]="item.imageSrc"
+            [alt]="item.alt"
+            fill
+            priority
+            (load)="imageLoaded()"
+          />
         </div>
         <p *ngIf="item.text" class="image-text">
           {{ item.text }}

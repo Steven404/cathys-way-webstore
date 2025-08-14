@@ -3,7 +3,7 @@
     <div class="image-wrapper">
       <div
         @fadeInFadeOut
-        *ngIf="!product.extraImageUrls"
+        *ngIf="!product.extraImageUrls || !product.extraImageUrls.length"
         class="gallery-image-wrapper"
       >
         <img

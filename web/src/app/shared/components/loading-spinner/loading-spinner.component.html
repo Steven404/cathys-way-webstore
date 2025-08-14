@@ -1,3 +1,10 @@
-<div *ngIf="show" class="spinner-overlay">
+<div
+  *ngIf="show"
+  [ngClass]="
+    fullScreen
+      ? 'spinner-overlay spinner-overlay--fullscreen'
+      : 'spinner-overlay'
+  "
+>
   <div class="spinner"></div>
 </div>
