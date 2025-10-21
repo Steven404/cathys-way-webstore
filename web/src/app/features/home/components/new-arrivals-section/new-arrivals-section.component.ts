@@ -7,10 +7,10 @@ import { ProductDoc } from '../../../../core/types';
 import { ProductCardComponent } from '../../../product/components/product-card/product-card.component';
 
 @Component({
-  selector: 'app-new-items',
+  selector: 'app-new-arrivals-section',
   imports: [ProductCardComponent, NgForOf, Button],
-  templateUrl: './new-items.component.html',
-  styleUrl: './new-items.component.scss',
+  templateUrl: './new-arrivals-section.component.html',
+  styleUrl: './new-arrivals-section.component.scss',
   animations: [
     trigger('fadeInFadeOut', [
       transition(':enter', [
@@ -23,6 +23,6 @@ import { ProductCardComponent } from '../../../product/components/product-card/p
     ]),
   ],
 })
-export class NewItemsComponent {
+export class NewArrivalsSectionComponent {
   @Input() products: ProductDoc[];
 }

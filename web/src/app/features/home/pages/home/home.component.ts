@@ -9,7 +9,7 @@ import { ProductService } from '../../../../shared/services/product/product.serv
 import { CarrouselComponent } from '../../components/carrousel/carrousel.component';
 import { HomeCategoriesComponent } from '../../components/home-categories/home-categories.component';
 import { InfoBlockComponent } from '../../components/info-block/info-block.component';
-import { NewItemsComponent } from '../../components/new-items/new-items.component';
+import { NewArrivalsSectionComponent } from '../../components/new-arrivals-section/new-arrivals-section.component';
 
 @Component({
   selector: 'app-home',
@@ -17,7 +17,7 @@ import { NewItemsComponent } from '../../components/new-items/new-items.componen
     CarrouselComponent,
     HomeCategoriesComponent,
     InfoBlockComponent,
-    NewItemsComponent,
+    NewArrivalsSectionComponent,
     LoadingSpinnerComponent,
   ],
   templateUrl: './home.component.html',
