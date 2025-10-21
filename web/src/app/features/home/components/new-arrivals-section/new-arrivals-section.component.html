@@ -8,5 +8,10 @@
       [imageSrc]="product?.mainImageUrl || 'assets/rings.jpg'"
     />
   </div>
-  <p-button label="Προβολή όλων" size="large" class="mt-10" />
+  <p-button
+    label="Προβολή όλων"
+    size="large"
+    class="mt-10"
+    (onClick)="viewAll()"
+  />
 </div>

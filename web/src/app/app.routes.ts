@@ -11,6 +11,13 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'new-arrivals',
+    loadComponent: () =>
+      import('./features/home/pages/new-arrivals/new-arrivals.component').then(
+        (m) => m.NewArrivalsComponent,
+      ),
+  },
+  {
     path: 'category/:id',
     loadComponent: () =>
       import(

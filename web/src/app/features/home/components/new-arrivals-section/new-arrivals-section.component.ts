@@ -1,6 +1,7 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { NgForOf } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
+import { Router } from '@angular/router';
 import { Button } from 'primeng/button';
 
 import { ProductDoc } from '../../../../core/types';
@@ -25,4 +26,9 @@ import { ProductCardComponent } from '../../../product/components/product-card/p
 })
 export class NewArrivalsSectionComponent {
   @Input() products: ProductDoc[];
+  private router = inject(Router);
+
+  viewAll() {
+    this.router.navigate(['/new-arrivals']);
+  }
 }

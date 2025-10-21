@@ -115,8 +115,8 @@ export class ProductService {
     return { products, total, newProductsCache };
   }
 
-  async getNewlyAddedProducts() {
-    const productsQuery = query(this.productsCollection, limit(3));
+  async getNewlyAddedProducts(productLimit = 3) {
+    const productsQuery = query(this.productsCollection, limit(productLimit));
     const snapshot = await getDocs(productsQuery);
 
     const result = snapshot.docs.map((product) => ({

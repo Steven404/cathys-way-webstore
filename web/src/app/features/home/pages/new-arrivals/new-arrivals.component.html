@@ -1,0 +1,31 @@
+<div class="wrapper">
+  <h1 class="title">Νέες Αφίξεις</h1>
+  <div class="index-div-wrapper">
+    <p class="index-text">
+      Βλέπετε
+      <span class="font-semibold">
+        {{ firstProductIndex }}-{{ lastProductIndex }}
+      </span>
+      από <span class="font-semibold">{{ totalProductsCount }}</span> προϊόντα
+    </p>
+  </div>
+  <div class="products-container">
+    <app-product-card
+      @fadeInFadeOut
+      *ngFor="let product of products"
+      [product]="product"
+      [imageSrc]="product?.mainImageUrl || 'assets/rings.jpg'"
+    />
+  </div>
+  <!--  <div class="buttons-container" *ngIf="products.length && pages.length > 1">-->
+  <!--    <ng-container *ngFor="let page of pages; index as i">-->
+  <!--      <p-button-->
+  <!--        [label]="String(page)"-->
+  <!--        rounded-->
+  <!--        text-->
+  <!--        size="large"-->
+  <!--        [disabled]="activePage === page"-->
+  <!--      />-->
+  <!--    </ng-container>-->
+  <!--  </div>-->
+</div>
