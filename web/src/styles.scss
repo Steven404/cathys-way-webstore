@@ -30,6 +30,10 @@ app-root {
   border-radius: 0!important;
 }
 
+.p-button {
+  font-family: "Manrope", sans-serif !important;
+}
+
 @layer utilities {
   .custom-transition {
     @apply transition-all duration-300 ease-in-out

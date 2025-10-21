@@ -19,4 +19,20 @@
   .desktop-routes {
     @apply max-md:hidden flex justify-center gap-x-5 w-[200px]
   }
+
+  .p-drawer-body-container {
+    @apply relative w-full h-full overflow-hidden
+  }
+
+  .p-drawer-body {
+    @apply flex flex-col h-full items-center justify-center
+  }
+
+  .menu-fade-in {
+    animation: fadeIn 0.4s ease-in-out;
+  }
+
+  .shopping-cart-icon {
+    @apply text-black cursor-pointer transition-all duration-100 hover:scale-110
+  }
 }

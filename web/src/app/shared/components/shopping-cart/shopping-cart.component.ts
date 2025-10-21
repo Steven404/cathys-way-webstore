@@ -61,6 +61,7 @@ export class ShoppingCartComponent {
   }
 
   goToProduct(productId: string) {
+    this.isShoppingCartVisibleEmitter.emit(false);
     this.router.navigate([`product/${productId}`]);
   }
 

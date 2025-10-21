@@ -1,4 +1,5 @@
-import { NgIf } from '@angular/common';
+import { animate, style, transition, trigger } from '@angular/animations';
+import { NgFor, NgIf } from '@angular/common';
 import {
   AfterViewInit,
   Component,
@@ -11,7 +12,7 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { MenuItem } from 'primeng/api';
+import { MenuItem, PrimeTemplate } from 'primeng/api';
 import { BadgeDirective } from 'primeng/badge';
 import { Button } from 'primeng/button';
 import { Drawer } from 'primeng/drawer';
@@ -30,12 +31,23 @@ import { ShoppingCartComponent } from '../shopping-cart/shopping-cart.component'
     Drawer,
     Menu,
     NgIf,
+    NgFor,
     BadgeDirective,
     ShoppingCartComponent,
+    PrimeTemplate,
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
   standalone: true,
+  animations: [
+    trigger('fadeInOut', [
+      transition(':enter', [
+        style({ opacity: 0 }),
+        animate('300ms 300ms ease-in', style({ opacity: 1 })),
+      ]),
+      // transition(':leave', [animate('150ms ease-out', style({ opacity: 0 }))]),
+    ]),
+  ],
 })
 export class HeaderComponent implements AfterViewInit {
   @ViewChild('wrapper') wrapper: ElementRef;
@@ -43,8 +55,9 @@ export class HeaderComponent implements AfterViewInit {
 
   isSidebarVisible = false;
   isShoppingCartVisible = false;
+  isProductsMenuExpanded = false;
   @Output() heightEmitter = new EventEmitter<number>();
-  @Input() categoryItems: MenuItem[];
+  @Input() categoryItems: MenuItem[] = [];
 
   totalCartProducts = 0;
   isMenuVisible = false;
@@ -82,8 +95,23 @@ export class HeaderComponent implements AfterViewInit {
     this.router.navigate(['home']);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+  navigateToCategory(navigationCallback: Function) {
+    this.isSidebarVisible = false;
+    navigationCallback();
+  }
+
   changeSidebarVisibleState() {
     this.isSidebarVisible = !this.isSidebarVisible;
+    // Reset the products menu when closing the drawer
+    if (!this.isSidebarVisible) {
+      this.isProductsMenuExpanded = false;
+    }
+  }
+
+  toggleProductsMenu() {
+    this.isProductsMenuExpanded = !this.isProductsMenuExpanded;
+    this.isMenuVisible = false;
   }
 
   showCart() {

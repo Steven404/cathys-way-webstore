@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import {
   addDoc,
   collection,
@@ -26,9 +26,8 @@ import { Category, ProductDoc } from '../../../core/types';
   providedIn: 'root',
 })
 export class CategoryService {
+  private firestore = inject(Firestore);
   categoriesSignal = signal<Category[]>([]);
-
-  constructor(private firestore: Firestore) {}
 
   getCategoryById(id: string) {
     const categoryDoc = doc(this.firestore, `categories/${id}`);

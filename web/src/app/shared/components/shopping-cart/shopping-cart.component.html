@@ -17,12 +17,13 @@
       *ngFor="let product of shoppingCart$ | async; index as i"
       class="product-wrapper"
     >
-      <div class="gap-3 flex cursor-pointer" (click)="goToProduct(product.id)">
+      <div class="gap-3 flex cursor-pointer">
         <div class="product-image-wrapper">
           <img
             [ngSrc]="product?.mainImageUrl || 'assets/main_placeholder.jpg'"
             class="object-cover"
             fill
+            (click)="goToProduct(product.id)"
             alt="product-image"
           />
         </div>

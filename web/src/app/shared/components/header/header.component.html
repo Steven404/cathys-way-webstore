@@ -46,7 +46,7 @@
   <div class="lg:w-[200px]">
     <i
       *ngIf="totalCartProducts > 0"
-      class="pi pi-shopping-bag text-black cursor-pointer transition-all duration-100 hover:scale-110"
+      class="pi pi-shopping-bag shopping-cart-icon"
       style="font-size: 25px"
       pBadge
       [value]="totalCartProducts"
@@ -54,17 +54,68 @@
     ></i>
     <i
       *ngIf="totalCartProducts === 0"
-      class="pi pi-shopping-bag text-black cursor-pointer transition-all duration-100 hover:scale-110"
+      class="pi pi-shopping-bag shopping-cart-icon"
       style="font-size: 25px"
       (click)="showCart()"
     ></i>
   </div>
 </div>
-<p-drawer [(visible)]="isSidebarVisible" position="full">
-  <div class="flex flex-col h-full items-center justify-center">
-    <p-button label="Αρχική" text size="large" (click)="navigateToHome()" />
-    <p-button label="Προϊόντα" variant="text" size="large" />
-    <p-button label="Επικοινωνία" variant="text" size="large" />
+<p-drawer
+  [visible]="isSidebarVisible"
+  position="left"
+  [closable]="false"
+  styleClass="!w-full"
+>
+  <ng-template pTemplate="header">
+    <div>
+      <p-button
+        *ngIf="!isProductsMenuExpanded"
+        [rounded]="true"
+        [text]="true"
+        severity="secondary"
+        icon="pi pi-times"
+        (click)="isSidebarVisible = false"
+      />
+      <p-button
+        *ngIf="isProductsMenuExpanded"
+        [rounded]="true"
+        [text]="true"
+        severity="secondary"
+        icon="pi pi-arrow-left"
+        (click)="isProductsMenuExpanded = false"
+      />
+    </div>
+  </ng-template>
+  <div class="p-drawer-body-container">
+    <div
+      *ngIf="!isProductsMenuExpanded"
+      class="p-drawer-body menu-fade-in"
+      [@fadeInOut]
+    >
+      <p-button label="Αρχική" text size="large" (click)="navigateToHome()" />
+      <p-button
+        label="Προϊόντα"
+        variant="text"
+        size="large"
+        (click)="toggleProductsMenu()"
+        [icon]="'pi pi-angle-right'"
+        iconPos="right"
+      />
+      <p-button label="Επικοινωνία" variant="text" size="large" />
+    </div>
+    <div
+      *ngIf="isProductsMenuExpanded"
+      class="p-drawer-body menu-fade-in"
+      [@fadeInOut]
+    >
+      <p-button
+        *ngFor="let item of categoryItems"
+        [label]="item.label"
+        text
+        size="large"
+        (click)="item.command && navigateToCategory(item.command)"
+      />
+    </div>
   </div>
 </p-drawer>
 <p-drawer

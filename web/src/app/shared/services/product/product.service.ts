@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import {
   addDoc,
   collection,
@@ -22,8 +22,9 @@ import { ProductDoc } from '../../../core/types';
 })
 export class ProductService {
   productsCollection: CollectionReference;
+  private firestore = inject(Firestore);
 
-  constructor(private firestore: Firestore) {
+  constructor() {
     this.productsCollection = collection(
       this.firestore,
       'products',
