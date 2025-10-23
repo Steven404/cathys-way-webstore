@@ -73,5 +73,10 @@ export class ShoppingCartComponent {
     this.store.dispatch(() => changeProductQuantity({ product, quantity }));
   }
 
+  proceedToCheckout() {
+    this.router.navigate(['checkout']);
+    this.isShoppingCartVisibleEmitter.emit(false);
+  }
+
   protected readonly convertPriceToFloat = convertPriceToFloat;
 }

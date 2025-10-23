@@ -1,7 +1,6 @@
 import { animate, style, transition, trigger } from '@angular/animations';
-import { NgForOf, NgIf } from '@angular/common';
+import { NgForOf } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
-import { Button } from 'primeng/button';
 
 import { ProductDoc } from '../../../../core/types';
 import { ProductService } from '../../../../shared/services/product/product.service';
@@ -10,7 +9,7 @@ import { ProductCardComponent } from '../../../product/components/product-card/p
 @Component({
   selector: 'app-new-arrivals',
   standalone: true,
-  imports: [NgIf, NgForOf, ProductCardComponent, Button],
+  imports: [NgForOf, ProductCardComponent],
   templateUrl: './new-arrivals.component.html',
   styleUrl: './new-arrivals.component.scss',
   animations: [

@@ -31,7 +31,7 @@
           <div>
             <p class="product-title">
               {{ product.name
-              }}<span *ngIf="product.selectedColour"
+              }}<span *ngIf="product.selectedColour" class="product-colour"
                 >-{{ product.selectedColour }}
               </span>
             </p>
@@ -78,10 +78,19 @@
     </div>
   </div>
   <div class="footer">
-    <span class="text-lg">Συνολική τιμή:</span>
-    <span class="text-xl font-medium">{{
-      convertPriceToFloat(cartPriceTotal) | currency: "EUR"
-    }}</span>
+    <div>
+      <span class="text-lg">Συνολική τιμή:</span>
+      <span class="text-xl font-medium">{{
+        convertPriceToFloat(cartPriceTotal) | currency: "EUR"
+      }}</span>
+    </div>
+    <p-button
+      text
+      label="Ολοκλήρωση Αγοράς"
+      class="md:w-auto"
+      rounded
+      (click)="proceedToCheckout()"
+    />
   </div>
 </div>
 <div *ngIf="(shoppingCart$ | async).length === 0" class="empty-cart-wrapper">

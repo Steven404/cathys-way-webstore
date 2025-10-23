@@ -33,6 +33,10 @@
     @apply md:text-lg font-semibold
   }
 
+  .product-colour {
+    @apply text-gray-600 font-normal;
+  }
+
   .product-code {
     @apply text-xs md:text-sm
   }
@@ -51,6 +55,7 @@
   }
 
   .footer {
-    @apply w-full h-[15%] p-7 border-t-2
+    @apply w-full h-[15%] p-7 border-t-2 items-center justify-center max-md:flex-col gap-y-2
+    flex md:justify-evenly md:items-center
   }
 }

@@ -24,7 +24,15 @@ export const shoppingCartReducer = createReducer(
     return productExistsInCart ? state : [...state, product];
   }),
   on(removeProductFromCart, (state, { product }) =>
-    state.filter((v) => v.id !== product.id),
+    state.filter((v) => {
+      if (product.selectedColour) {
+        return !(
+          v.id === product.id && v.selectedColour === product.selectedColour
+        );
+      } else {
+        return v.id !== product.id;
+      }
+    }),
   ),
   on(changeProductQuantity, (state, { product, quantity }) => [
     ...state.map((item) =>

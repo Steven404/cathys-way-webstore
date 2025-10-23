@@ -18,6 +18,13 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'checkout',
+    loadComponent: () =>
+      import('./features/checkout/page/checkout.component').then(
+        (m) => m.CheckoutComponent,
+      ),
+  },
+  {
     path: 'category/:id',
     loadComponent: () =>
       import(
