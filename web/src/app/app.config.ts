@@ -12,6 +12,7 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideRouter } from '@angular/router';
 import { provideState, provideStore } from '@ngrx/store';
+import { provideNgxStripe } from 'ngx-stripe';
 import { MessageService } from 'primeng/api';
 import { providePrimeNG } from 'primeng/config';
 
@@ -23,6 +24,7 @@ import { shoppingCartReducer } from './shared/reducers/shopping-cart/shopping-ca
 export const appConfig: ApplicationConfig = {
   providers: [
     { provide: MessageService, useClass: MessageService },
+    provideNgxStripe(environment.stripe.publishable_key),
     provideRouter(routes),
     provideAnimations(),
     provideAnimationsAsync(),

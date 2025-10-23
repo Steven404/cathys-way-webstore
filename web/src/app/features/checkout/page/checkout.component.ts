@@ -5,7 +5,7 @@ import {
   NgIf,
   NgOptimizedImage,
 } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -15,11 +15,18 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { StripeElementsOptions } from '@stripe/stripe-js';
+import {
+  injectStripe,
+  StripeElementsDirective,
+  StripePaymentElementComponent,
+} from 'ngx-stripe';
 import { Button } from 'primeng/button';
 import { InputNumber } from 'primeng/inputnumber';
 import { RadioButton } from 'primeng/radiobutton';
 import { Observable } from 'rxjs';
 
+import { environment } from '../../../../environments/environment';
 import { CartProduct, StoreType } from '../../../core/types';
 import { convertPriceToFloat } from '../../../shared/common';
 import {
@@ -27,6 +34,7 @@ import {
   clearCart,
   removeProductFromCart,
 } from '../../../shared/reducers/shopping-cart/shopping-cart.actions';
+import { StripePaymentsService } from '../../../shared/stripe-payments/stripe-payments.service';
 
 @Component({
   selector: 'app-checkout',
@@ -41,15 +49,34 @@ import {
     InputNumber,
     FormsModule,
     RadioButton,
+    StripePaymentElementComponent,
+    StripeElementsDirective,
   ],
   templateUrl: './checkout.component.html',
   styleUrl: './checkout.component.scss',
 })
-export class CheckoutComponent {
+export class CheckoutComponent implements OnInit {
   shoppingCart$: Observable<CartProduct[]>;
-  checkoutForm: FormGroup;
+  checkoutForm: FormGroup = this.fb.group({
+    firstName: ['', Validators.required],
+    lastName: ['', Validators.required],
+    email: ['', [Validators.required, Validators.email]],
+    phone: ['', Validators.required],
+    address: ['', Validators.required],
+    paymentMethod: ['', Validators.required],
+    notes: [''],
+  });
   cartPriceTotal = 0;
   isSubmitting = false;
+
+  stripe = injectStripe(environment.stripe.publishable_key);
+
+  elementsOptions: StripeElementsOptions = {
+    locale: 'en',
+    appearance: {
+      theme: 'flat',
+    },
+  };
 
   paymentOptions = [
     { label: 'Χρεωστική/Πιστωτική καρτα', value: 'cod' },
@@ -63,6 +90,7 @@ export class CheckoutComponent {
     private store: Store<StoreType>,
     private fb: FormBuilder,
     private router: Router,
+    private stripePaymentsService: StripePaymentsService,
   ) {
     this.shoppingCart$ = this.store.select('shoppingCart');
 
@@ -77,18 +105,14 @@ export class CheckoutComponent {
         this.router.navigate(['/']);
       }
     });
+  }
 
-    this.checkoutForm = this.fb.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      phone: ['', Validators.required],
-      address: ['', Validators.required],
-      city: ['', Validators.required],
-      postalCode: ['', Validators.required],
-      paymentMethod: ['', Validators.required],
-      notes: [''],
-    });
+  ngOnInit() {
+    this.stripePaymentsService
+      .createPaymentIntent(this.cartPriceTotal)
+      .subscribe((pi) => {
+        this.elementsOptions.clientSecret = pi.client_secret as string;
+      });
   }
 
   removeProductFromCart(product: CartProduct) {

@@ -178,54 +178,6 @@
           </div>
         </div>
 
-        <div class="form-row">
-          <div class="form-group">
-            <label for="city">Πόλη *</label>
-            <input
-              id="city"
-              type="text"
-              formControlName="city"
-              class="form-input"
-              [class.invalid]="
-                checkoutForm.get('city')?.invalid &&
-                checkoutForm.get('city')?.touched
-              "
-            />
-            <span
-              class="error-message"
-              *ngIf="
-                checkoutForm.get('city')?.invalid &&
-                checkoutForm.get('city')?.touched
-              "
-            >
-              Η πόλη είναι υποχρεωτική
-            </span>
-          </div>
-
-          <div class="form-group">
-            <label for="postalCode">Ταχυδρομικός Κώδικας *</label>
-            <input
-              id="postalCode"
-              type="text"
-              formControlName="postalCode"
-              class="form-input"
-              [class.invalid]="
-                checkoutForm.get('postalCode')?.invalid &&
-                checkoutForm.get('postalCode')?.touched
-              "
-            />
-            <span
-              class="error-message"
-              *ngIf="
-                checkoutForm.get('postalCode')?.invalid &&
-                checkoutForm.get('postalCode')?.touched
-              "
-            >
-              Ο ταχυδρομικός κώδικας είναι υποχρεωτικός
-            </span>
-          </div>
-        </div>
-
         <div class="payment-form-row">
           <div>Τρόπος πληρωμής</div>
           <div class="payment-options">
@@ -267,4 +219,9 @@
       </div>
     </div>
   </div>
+  @if (elementsOptions.clientSecret) {
+    <ngx-stripe-elements [stripe]="stripe" [elementsOptions]="elementsOptions">
+      <ngx-stripe-payment />
+    </ngx-stripe-elements>
+  }
 </div>
