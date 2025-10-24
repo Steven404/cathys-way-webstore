@@ -9,4 +9,9 @@ export class StripePaymentsService {
     const callable = this.fns.httpsCallable('createPaymentIntent');
     return callable({ amount });
   }
+
+  createCheckoutSession(amount: number, email: string) {
+    const callable = this.fns.httpsCallable('createCheckoutSession');
+    return callable({ amount, email });
+  }
 }

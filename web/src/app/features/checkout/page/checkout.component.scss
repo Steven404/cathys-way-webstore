@@ -16,7 +16,7 @@
 }
 
 .products-list {
-  @apply space-y-4 mb-6 w-full gap-y-4 flex flex-col overflow-y-scroll md:max-h-[575px] flex-1;
+  @apply space-y-4 mb-6 w-full gap-y-4 flex flex-col overflow-y-scroll md:max-h-[calc(100%-80px)] flex-1;
 }
 
 .product-image-wrapper {
@@ -89,7 +89,7 @@
 }
 
 .checkout-form {
-  @apply space-y-6 flex-1;
+  @apply space-y-6 flex-1 mb-6;
 }
 
 .form-row {

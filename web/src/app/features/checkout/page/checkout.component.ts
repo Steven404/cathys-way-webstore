@@ -1,3 +1,4 @@
+import { animate, style, transition, trigger } from '@angular/animations';
 import {
   AsyncPipe,
   CurrencyPipe,
@@ -5,9 +6,9 @@ import {
   NgIf,
   NgOptimizedImage,
 } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import {
-  FormBuilder,
+  FormControl,
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
@@ -15,16 +16,15 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { StripeElementsOptions } from '@stripe/stripe-js';
 import {
-  injectStripe,
-  StripeElementsDirective,
-  StripePaymentElementComponent,
-} from 'ngx-stripe';
+  StripeAddressElementOptions,
+  StripeElementsOptions,
+} from '@stripe/stripe-js';
+import { injectStripe, StripeService } from 'ngx-stripe';
 import { Button } from 'primeng/button';
 import { InputNumber } from 'primeng/inputnumber';
 import { RadioButton } from 'primeng/radiobutton';
-import { Observable } from 'rxjs';
+import { Observable, switchMap } from 'rxjs';
 
 import { environment } from '../../../../environments/environment';
 import { CartProduct, StoreType } from '../../../core/types';
@@ -49,22 +49,38 @@ import { StripePaymentsService } from '../../../shared/stripe-payments/stripe-pa
     InputNumber,
     FormsModule,
     RadioButton,
-    StripePaymentElementComponent,
-    StripeElementsDirective,
   ],
   templateUrl: './checkout.component.html',
   styleUrl: './checkout.component.scss',
+  animations: [
+    trigger('fadeInFadeOut', [
+      transition(':enter', [
+        style({ opacity: 0, height: 0, marginTop: 0, overflow: 'hidden' }),
+        animate(
+          '300ms ease-in-out',
+          style({ opacity: 1, height: '*', marginTop: '*' }),
+        ),
+      ]),
+      transition(':leave', [
+        style({ overflow: 'hidden' }),
+        animate(
+          '300ms ease-in-out',
+          style({ opacity: 0, height: 0, marginTop: 0 }),
+        ),
+      ]),
+    ]),
+  ],
 })
-export class CheckoutComponent implements OnInit {
+export class CheckoutComponent {
   shoppingCart$: Observable<CartProduct[]>;
-  checkoutForm: FormGroup = this.fb.group({
-    firstName: ['', Validators.required],
-    lastName: ['', Validators.required],
-    email: ['', [Validators.required, Validators.email]],
-    phone: ['', Validators.required],
-    address: ['', Validators.required],
-    paymentMethod: ['', Validators.required],
-    notes: [''],
+  checkoutForm: FormGroup = new FormGroup({
+    firstName: new FormControl('', Validators.required),
+    lastName: new FormControl('', Validators.required),
+    email: new FormControl('', [Validators.required, Validators.email]),
+    phone: new FormControl('', Validators.required),
+    address: new FormControl('', Validators.required),
+    paymentMethod: new FormControl('', Validators.required),
+    notes: new FormControl(''),
   });
   cartPriceTotal = 0;
   isSubmitting = false;
@@ -79,18 +95,20 @@ export class CheckoutComponent implements OnInit {
   };
 
   paymentOptions = [
-    { label: 'Χρεωστική/Πιστωτική καρτα', value: 'cod' },
-    { label: 'IRIS Payment', value: 'card' },
+    { label: 'Χρεωστική/Πιστωτική καρτα *', value: 'card' },
+    { label: 'IRIS Payment', value: 'iris' },
     { label: 'Κατάθεση σε τραπεζικό λογαριασμό', value: 'paypal' },
   ];
 
-  paymentMethod = '';
+  billingAddressOptions: StripeAddressElementOptions = {
+    mode: 'billing',
+  };
 
   constructor(
     private store: Store<StoreType>,
-    private fb: FormBuilder,
     private router: Router,
     private stripePaymentsService: StripePaymentsService,
+    private stripeService: StripeService,
   ) {
     this.shoppingCart$ = this.store.select('shoppingCart');
 
@@ -107,14 +125,6 @@ export class CheckoutComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
-    this.stripePaymentsService
-      .createPaymentIntent(this.cartPriceTotal)
-      .subscribe((pi) => {
-        this.elementsOptions.clientSecret = pi.client_secret as string;
-      });
-  }
-
   removeProductFromCart(product: CartProduct) {
     this.store.dispatch(() => removeProductFromCart({ product }));
   }
@@ -127,11 +137,32 @@ export class CheckoutComponent implements OnInit {
     return product.quantity * product.price;
   }
 
-  onSubmit() {
+  checkout() {
+    this.stripePaymentsService
+      .createCheckoutSession(
+        this.cartPriceTotal * 100,
+        this.checkoutForm.controls['email'].value,
+      )
+      .pipe(
+        switchMap((session) => {
+          return this.stripeService.redirectToCheckout({
+            sessionId: session.sessionId,
+          });
+        }),
+      )
+      .subscribe((result) => {
+        // If `redirectToCheckout` fails due to a browser or network
+        // error, you should display the localized error message to your
+        // customer using `error.message`.
+        if (result.error) {
+          alert(result.error.message);
+        }
+      });
+
+    return;
     if (this.checkoutForm.valid && !this.isSubmitting) {
       this.isSubmitting = true;
 
-      // TODO: Implement actual order submission logic
       console.log('Order submitted:', {
         customerInfo: this.checkoutForm.value,
         cartTotal: this.cartPriceTotal,

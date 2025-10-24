@@ -79,7 +79,7 @@
       <h2 class="section-title">Στοιχεία Παραγγελίας</h2>
       <form
         [formGroup]="checkoutForm"
-        (ngSubmit)="onSubmit()"
+        (ngSubmit)="checkout()"
         class="checkout-form"
       >
         <div class="form-row">
@@ -195,6 +195,13 @@
               </label>
             </div>
           </div>
+          <p
+            @fadeInFadeOut
+            *ngIf="checkoutForm.get('paymentMethod')?.value === 'card'"
+            class="text-sm text-gray-600"
+          >
+            * μέσω ασφαλές περιβάλοντος πληρωμών της Stripe.
+          </p>
         </div>
 
         <div class="form-group">
@@ -212,16 +219,11 @@
         <p-button
           label="Ολοκλήρωση Παραγγελίας"
           type="submit"
-          [disabled]="checkoutForm.invalid || isSubmitting"
+          (click)="checkout()"
           severity="primary"
           size="large"
         />
       </div>
     </div>
   </div>
-  @if (elementsOptions.clientSecret) {
-    <ngx-stripe-elements [stripe]="stripe" [elementsOptions]="elementsOptions">
-      <ngx-stripe-payment />
-    </ngx-stripe-elements>
-  }
 </div>

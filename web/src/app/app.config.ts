@@ -2,6 +2,8 @@ import { provideHttpClient, withFetch } from '@angular/common/http';
 import { ApplicationConfig, importProvidersFrom } from '@angular/core';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
+import { AngularFireModule } from '@angular/fire/compat';
+import { AngularFireFunctionsModule } from '@angular/fire/compat/functions';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { getStorage, provideStorage } from '@angular/fire/storage';
 import {
@@ -42,7 +44,11 @@ export const appConfig: ApplicationConfig = {
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
     provideStorage(() => getStorage()),
-    importProvidersFrom(HammerModule),
+    importProvidersFrom(
+      AngularFireModule.initializeApp(environment.firebaseConfig),
+      AngularFireFunctionsModule,
+      HammerModule,
+    ),
     provideStore(),
     provideState({ name: 'shoppingCart', reducer: shoppingCartReducer }),
   ],
