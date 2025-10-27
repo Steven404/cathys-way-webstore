@@ -52,7 +52,9 @@ export class AppComponent implements OnInit {
     const url = this.router.url;
     // Hide header/footer for admin dashboard and login (and their subroutes)
     return !(
-      url.startsWith('/admin/dashboard') || url.startsWith('/admin/login')
+      url.startsWith('/admin/dashboard') ||
+      url.startsWith('/admin/login') ||
+      url.startsWith('/order-placed')
     );
   }
 
@@ -82,8 +84,9 @@ export class AppComponent implements OnInit {
 
   setContentStyle(event: number) {
     setTimeout(() => {
-      this.content.nativeElement.style.marginTop = `${event}px`;
-      if (typeof window !== 'undefined') {
+      if (typeof window !== 'undefined' && this.showHeaderFooter) {
+        this.content.nativeElement.style.marginTop = `${event}px`;
+
         const footerHeight = this.footer.nativeElement.offsetHeight;
         this.content.nativeElement.style.minHeight = `${window.innerHeight - footerHeight - event}px`;
       }

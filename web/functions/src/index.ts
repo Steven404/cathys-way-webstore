@@ -62,7 +62,7 @@ exports.createCheckoutSession = onCall(
         ],
         mode: 'payment',
         success_url: `${process.env.FRONTEND_URL || 'http://localhost:4200'}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${process.env.FRONTEND_URL || 'http://localhost:4200'}/checkout/cancel`,
+        cancel_url: `${process.env.FRONTEND_URL || 'http://localhost:4200'}/`,
       });
 
       return { sessionId: session.id };

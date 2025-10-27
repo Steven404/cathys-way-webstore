@@ -76,7 +76,7 @@
 }
 
 .total-amount {
-  @apply text-2xl font-bold text-blue-600;
+  @apply text-2xl font-bold text-purple-600;
 }
 
 .product-actions {
@@ -118,7 +118,7 @@ label {
 
 .form-input,
 .form-textarea {
-  @apply w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all;
+  @apply w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all;
 
   &.invalid {
     @apply border-red-500 focus:ring-red-500;

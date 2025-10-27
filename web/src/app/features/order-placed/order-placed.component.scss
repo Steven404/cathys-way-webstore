@@ -1,0 +1,119 @@
+.order-placed-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+
+  .success-card {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    padding: 3rem 2rem;
+    max-width: 600px;
+    width: 100%;
+    text-align: center;
+    animation: slideIn 0.5s ease-out;
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .checkmark-wrapper {
+      margin-bottom: 2rem;
+
+      .checkmark-icon {
+        font-size: 5rem;
+        color: #22c55e;
+        animation: scaleIn 0.6s ease-out;
+
+        @keyframes scaleIn {
+          0% {
+            transform: scale(0);
+          }
+          50% {
+            transform: scale(1.1);
+          }
+          100% {
+            transform: scale(1);
+          }
+        }
+      }
+    }
+
+    .thank-you-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1f2937;
+      margin-bottom: 1.5rem;
+      line-height: 1.3;
+
+      @media (max-width: 768px) {
+        font-size: 1.5rem;
+      }
+    }
+
+    .payment-info {
+      margin-bottom: 2.5rem;
+      padding: 1.5rem;
+      background: #f8fafc;
+      border-radius: 12px;
+      border-left: 4px solid #a21caf;
+
+      p {
+        font-size: 1.05rem;
+        line-height: 1.8;
+        color: #374151;
+        margin: 0;
+        text-align: left;
+
+        @media (max-width: 768px) {
+          font-size: 0.95rem;
+        }
+
+        ::ng-deep b {
+          color: #1f2937;
+          font-weight: 600;
+        }
+      }
+    }
+
+    .button-container {
+      display: flex;
+      justify-content: center;
+
+      ::ng-deep .p-button {
+        padding: 0.75rem 2rem;
+        font-size: 1rem;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        @media (max-width: 768px) {
+          width: 100%;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 1rem;
+
+    .success-card {
+      padding: 2rem 1.5rem;
+    }
+  }
+}
+

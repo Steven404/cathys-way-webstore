@@ -25,6 +25,13 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'order-placed',
+    loadComponent: () =>
+      import('./features/order-placed/order-placed.component').then(
+        (m) => m.OrderPlacedComponent,
+      ),
+  },
+  {
     path: 'category/:id',
     loadComponent: () =>
       import(
