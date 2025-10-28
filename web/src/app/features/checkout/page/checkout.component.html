@@ -219,6 +219,8 @@
         <p-button
           label="Ολοκλήρωση Παραγγελίας"
           type="submit"
+          [loading]="isSubmitting"
+          [disabled]="checkoutForm.invalid || isSubmitting"
           (click)="checkout()"
           severity="primary"
           size="large"

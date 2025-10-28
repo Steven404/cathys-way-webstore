@@ -1,5 +1,6 @@
 <div class="order-placed-container">
-  <div class="success-card">
+  <app-loading-spinner [show]="isLoading" [fullScreen]="true" />
+  <div class="success-card" *ngIf="!isLoading">
     <!-- Checkmark Icon -->
     <div class="checkmark-wrapper">
       <i class="pi pi-check-circle checkmark-icon"></i>
@@ -10,17 +11,17 @@
 
     <!-- Payment Method Specific Information -->
     <div class="payment-info">
-      <p [innerHTML]="getPaymentMessage()"></p>
+      <p class="payment-message" [innerHTML]="getPaymentMessage()"></p>
     </div>
 
     <!-- Return to Home Button -->
     <div class="button-container">
       <p-button
         label="Επιστροφή στην αρχική σελίδα"
-        icon="pi pi-home"
+        text
+        rounded
         (click)="goToHome()"
-        styleClass="p-button-lg"
-      ></p-button>
+      />
     </div>
   </div>
 </div>

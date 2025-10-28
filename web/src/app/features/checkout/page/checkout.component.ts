@@ -24,16 +24,20 @@ import { injectStripe, StripeService } from 'ngx-stripe';
 import { Button } from 'primeng/button';
 import { InputNumber } from 'primeng/inputnumber';
 import { RadioButton } from 'primeng/radiobutton';
-import { Observable, switchMap } from 'rxjs';
+import { firstValueFrom, Observable, take } from 'rxjs';
+import { v4 as uuidv4 } from 'uuid';
 
 import { environment } from '../../../../environments/environment';
 import { CartProduct, StoreType } from '../../../core/types';
-import { convertPriceToFloat } from '../../../shared/common';
+import {
+  convertPriceToFloat,
+  generateOrderNumberFromUUID,
+} from '../../../shared/common';
 import {
   changeProductQuantity,
-  clearCart,
   removeProductFromCart,
 } from '../../../shared/reducers/shopping-cart/shopping-cart.actions';
+import { OrdersService } from '../../../shared/services/orders/orders.service';
 import { StripePaymentsService } from '../../../shared/stripe-payments/stripe-payments.service';
 
 @Component({
@@ -78,7 +82,6 @@ export class CheckoutComponent {
     lastName: new FormControl('', Validators.required),
     email: new FormControl('', [Validators.required, Validators.email]),
     phone: new FormControl('', Validators.required),
-    address: new FormControl('', Validators.required),
     paymentMethod: new FormControl('', Validators.required),
     notes: new FormControl(''),
   });
@@ -97,7 +100,7 @@ export class CheckoutComponent {
   paymentOptions = [
     { label: 'Χρεωστική/Πιστωτική καρτα *', value: 'card' },
     { label: 'IRIS Payment', value: 'iris' },
-    { label: 'Κατάθεση σε τραπεζικό λογαριασμό', value: 'paypal' },
+    { label: 'Κατάθεση σε τραπεζικό λογαριασμό', value: 'bank_transaction' },
   ];
 
   billingAddressOptions: StripeAddressElementOptions = {
@@ -109,6 +112,7 @@ export class CheckoutComponent {
     private router: Router,
     private stripePaymentsService: StripePaymentsService,
     private stripeService: StripeService,
+    private ordersService: OrdersService,
   ) {
     this.shoppingCart$ = this.store.select('shoppingCart');
 
@@ -138,42 +142,90 @@ export class CheckoutComponent {
   }
 
   checkout() {
-    this.stripePaymentsService
-      .createCheckoutSession(
-        this.cartPriceTotal * 100,
-        this.checkoutForm.controls['email'].value,
-      )
-      .pipe(
-        switchMap((session) => {
-          return this.stripeService.redirectToCheckout({
-            sessionId: session.sessionId,
-          });
-        }),
-      )
-      .subscribe((result) => {
-        // If `redirectToCheckout` fails due to a browser or network
-        // error, you should display the localized error message to your
-        // customer using `error.message`.
-        if (result.error) {
-          alert(result.error.message);
-        }
-      });
-
-    return;
     if (this.checkoutForm.valid && !this.isSubmitting) {
       this.isSubmitting = true;
 
-      console.log('Order submitted:', {
-        customerInfo: this.checkoutForm.value,
-        cartTotal: this.cartPriceTotal,
+      // Get cart products from observable
+      this.shoppingCart$.pipe(take(1)).subscribe(async (cartProducts) => {
+        try {
+          const orderId = uuidv4();
+          const order_number = generateOrderNumberFromUUID(orderId);
+          const paymentMethod =
+            this.checkoutForm.controls['paymentMethod'].value;
+          const productIds = cartProducts.map((product) => product.id);
+
+          // Handle different payment methods
+          if (paymentMethod === 'card') {
+            // Card payment: Create Stripe checkout session
+            const session = await firstValueFrom(
+              this.stripePaymentsService.createCheckoutSession(
+                order_number,
+                this.cartPriceTotal * 100,
+                this.checkoutForm.controls['email'].value,
+              ),
+            );
+
+            if (!session) {
+              throw new Error('Failed to create checkout session');
+            }
+
+            // Store the order in Firestore
+            await this.ordersService.storeOrder(
+              orderId,
+              order_number,
+              session.sessionId,
+              'pending',
+              productIds,
+              paymentMethod,
+              this.cartPriceTotal,
+            );
+
+            // Redirect to Stripe checkout
+            this.stripeService
+              .redirectToCheckout({
+                sessionId: session.sessionId,
+              })
+              .subscribe((result) => {
+                // If `redirectToCheckout` fails due to a browser or network
+                // error, you should display the localized error message to your
+                // customer using `error.message`.
+                if (result.error) {
+                  alert(result.error.message);
+                  this.isSubmitting = false;
+                }
+              });
+          } else if (
+            paymentMethod === 'iris' ||
+            paymentMethod === 'bank_transaction'
+          ) {
+            // IRIS or Bank Transaction: Store order and redirect to order-placed page
+            await this.ordersService.storeOrder(
+              orderId,
+              order_number,
+              '', // No session ID for non-Stripe payments
+              'pending',
+              productIds,
+              paymentMethod,
+              this.cartPriceTotal,
+            );
+
+            // Redirect to order-placed page with query parameters
+            this.router.navigate(['/order-placed'], {
+              queryParams: {
+                method: paymentMethod,
+                orderNumber: order_number,
+                amount: this.cartPriceTotal,
+              },
+            });
+          } else {
+            throw new Error('Invalid payment method selected');
+          }
+        } catch (error) {
+          console.error('Error during checkout:', error);
+          alert('An error occurred during checkout. Please try again.');
+          this.isSubmitting = false;
+        }
       });
-
-      // Clear cart after successful order
-      this.store.dispatch(clearCart());
-
-      // Navigate to success page or home
-      alert('Η παραγγελία σας ολοκληρώθηκε με επιτυχία!');
-      this.router.navigate(['/']);
     }
   }
 

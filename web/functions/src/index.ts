@@ -12,6 +12,7 @@ interface CreatePaymentIntentRequest {
 
 interface CreateCheckoutSessionRequest {
   data: {
+    order_number: string;
     amount: number;
     email: string;
   };
@@ -43,7 +44,7 @@ exports.createCheckoutSession = onCall(
       const stripe = new Stripe(process.env.STRIPE_SECRET || '', {
         apiVersion: '2025-09-30.clover',
       });
-      const { amount, email } = request.data;
+      const { amount, email, order_number } = request.data;
 
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ['card'],
@@ -61,7 +62,7 @@ exports.createCheckoutSession = onCall(
           },
         ],
         mode: 'payment',
-        success_url: `${process.env.FRONTEND_URL || 'http://localhost:4200'}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+        success_url: `${process.env.FRONTEND_URL || 'http://localhost:4200'}/order-placed?method=card&orderNumber=${order_number}&amount=${amount}`,
         cancel_url: `${process.env.FRONTEND_URL || 'http://localhost:4200'}/`,
       });
 

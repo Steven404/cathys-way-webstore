@@ -9,7 +9,7 @@ import {
   PLATFORM_ID,
   ViewChild,
 } from '@angular/core';
-import { Router, RouterOutlet } from '@angular/router';
+import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { MenuItem } from 'primeng/api';
 import { Toast } from 'primeng/toast';
@@ -42,7 +42,16 @@ export class AppComponent implements OnInit {
     @Inject(PLATFORM_ID) private platformId: object,
     private store: Store<StoreType>,
     private cartPersistenceServiceService: CartPersistenceServiceService,
-  ) {}
+  ) {
+    this.router.events.subscribe((event) => {
+      if (
+        event instanceof NavigationEnd &&
+        event.url.startsWith('/order-placed')
+      ) {
+        this.content.nativeElement.style.marginTop = `0`;
+      }
+    });
+  }
 
   get categories() {
     return this.categoryService.categoriesSignal();

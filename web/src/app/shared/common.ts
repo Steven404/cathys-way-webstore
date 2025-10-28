@@ -32,3 +32,13 @@ export const convertPriceToFloat = (price: string | number) => {
 export const removeGreekTonos = (str: string) => {
   return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 };
+
+export const generateOrderNumberFromUUID = (uuid) => {
+  // Take part of the UUID for uniqueness
+  const shortId = uuid.split('-')[0].toUpperCase(); // e.g. "A3F6B0A2"
+
+  // Add a readable prefix
+  const randomSuffix = Math.random().toString(36).substring(2, 4).toUpperCase();
+
+  return `ORD-${shortId}-${randomSuffix}`;
+};
