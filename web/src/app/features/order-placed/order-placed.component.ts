@@ -27,7 +27,7 @@ export class OrderPlacedComponent implements OnInit {
     private ordersService: OrdersService,
   ) {}
 
-  async ngOnInit() {
+  ngOnInit() {
     this.activatedRoute.queryParams.subscribe(async (params) => {
       const orderNumber = params['orderNumber'];
 
@@ -50,7 +50,7 @@ export class OrderPlacedComponent implements OnInit {
       this.orderNumber = order.order_number;
       this.paymentMethod = order.payment_method as PaymentMethod;
       this.totalAmount = order.amount;
-      setTimeout(() => (this.isLoading = false), 2000);
+      this.isLoading = false;
     });
   }
 

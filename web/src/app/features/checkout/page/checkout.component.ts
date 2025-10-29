@@ -154,6 +154,14 @@ export class CheckoutComponent {
             this.checkoutForm.controls['paymentMethod'].value;
           const productIds = cartProducts.map((product) => product.id);
 
+          // Extract selected colours from cart products
+          const selectedColours = cartProducts
+            .filter((product) => product.selectedColour)
+            .map((product) => ({
+              productId: product.id,
+              colour: product.selectedColour!,
+            }));
+
           // Handle different payment methods
           if (paymentMethod === 'card') {
             // Card payment: Create Stripe checkout session
@@ -178,6 +186,8 @@ export class CheckoutComponent {
               productIds,
               paymentMethod,
               this.cartPriceTotal,
+              this.checkoutForm.controls['email'].value,
+              selectedColours,
             );
 
             // Redirect to Stripe checkout
@@ -207,6 +217,8 @@ export class CheckoutComponent {
               productIds,
               paymentMethod,
               this.cartPriceTotal,
+              this.checkoutForm.controls['email'].value,
+              selectedColours,
             );
 
             // Redirect to order-placed page with query parameters

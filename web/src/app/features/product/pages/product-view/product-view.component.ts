@@ -1,7 +1,7 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { NgIf, NgOptimizedImage } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Button } from 'primeng/button';
 import { GalleriaModule } from 'primeng/galleria';
@@ -11,7 +11,6 @@ import { first, Observable } from 'rxjs';
 import { CartProduct, ProductDoc, StoreType } from '../../../../core/types';
 import { convertPriceToFloat } from '../../../../shared/common';
 import { addProductToCart } from '../../../../shared/reducers/shopping-cart/shopping-cart.actions';
-import { ApiService } from '../../../../shared/services/api/api.service';
 import { ProductService } from '../../../../shared/services/product/product.service';
 
 @Component({
@@ -49,10 +48,8 @@ export class ProductViewComponent implements OnInit {
   isProductInCart = false;
 
   constructor(
-    private apiService: ApiService,
     private activatedRoute: ActivatedRoute,
     private store: Store<StoreType>,
-    private router: Router,
   ) {}
 
   async ngOnInit() {

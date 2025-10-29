@@ -6,23 +6,16 @@ import {
   getDocs,
   query,
   setDoc,
+  Timestamp,
   updateDoc,
   where,
 } from '@angular/fire/firestore';
 
-type OrderStatus = 'pending' | 'paid';
-type PaymentMethod = 'card' | 'iris' | 'bank_transfer';
-
-interface Order {
-  id: string;
-  stripe_session_id: string;
-  status: OrderStatus;
-  products: string[];
-  payment_method: PaymentMethod;
-  order_number: string;
-  amount: number;
-  hasSendEmail: boolean;
-}
+import {
+  Order,
+  OrderStatus,
+  PaymentMethod,
+} from '../../../../../../commonTypes';
 
 @Injectable({
   providedIn: 'root',
@@ -38,6 +31,8 @@ export class OrdersService {
     products: string[],
     payment_method: PaymentMethod,
     amount: number,
+    email: string,
+    selectedColours: { productId: string; colour: string }[],
   ): Promise<void> {
     const order: Order = {
       id,
@@ -48,6 +43,9 @@ export class OrdersService {
       order_number,
       amount,
       hasSendEmail: false,
+      email,
+      timeCreated: Timestamp.now(),
+      selectedColours,
     };
 
     const orderDocRef = doc(this.firestore, 'orders', id);
