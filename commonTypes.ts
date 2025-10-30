@@ -43,5 +43,5 @@ export interface Order {
     hasSendEmail: boolean;
     email: string;
     selectedColours: { productId: string; colour: string }[];
-    timeCreated: any; // Firestore Timestamp
+    createdAt: any; // Firestore Timestamp
 }

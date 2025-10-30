@@ -44,7 +44,7 @@ export class OrdersService {
       amount,
       hasSendEmail: false,
       email,
-      timeCreated: Timestamp.now(),
+      createdAt: Timestamp.now(),
       selectedColours,
     };
 

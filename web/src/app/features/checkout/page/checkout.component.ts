@@ -16,10 +16,6 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import {
-  StripeAddressElementOptions,
-  StripeElementsOptions,
-} from '@stripe/stripe-js';
 import { injectStripe, StripeService } from 'ngx-stripe';
 import { Button } from 'primeng/button';
 import { InputNumber } from 'primeng/inputnumber';
@@ -90,22 +86,11 @@ export class CheckoutComponent {
 
   stripe = injectStripe(environment.stripe.publishable_key);
 
-  elementsOptions: StripeElementsOptions = {
-    locale: 'en',
-    appearance: {
-      theme: 'flat',
-    },
-  };
-
   paymentOptions = [
     { label: 'Χρεωστική/Πιστωτική καρτα *', value: 'card' },
     { label: 'IRIS Payment', value: 'iris' },
     { label: 'Κατάθεση σε τραπεζικό λογαριασμό', value: 'bank_transaction' },
   ];
-
-  billingAddressOptions: StripeAddressElementOptions = {
-    mode: 'billing',
-  };
 
   constructor(
     private store: Store<StoreType>,
@@ -226,7 +211,6 @@ export class CheckoutComponent {
               queryParams: {
                 method: paymentMethod,
                 orderNumber: order_number,
-                amount: this.cartPriceTotal,
               },
             });
           } else {

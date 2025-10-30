@@ -9,8 +9,6 @@ import {
   removeProductFromCart,
 } from './shopping-cart.actions';
 
-export type ShoppingCartState = CartProduct[];
-
 export const initialState: CartProduct[] = [];
 
 export const shoppingCartReducer = createReducer(

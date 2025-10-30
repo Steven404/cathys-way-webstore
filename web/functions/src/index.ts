@@ -19,7 +19,7 @@ export interface Order {
   hasSendEmail: boolean;
   email: string;
   selectedColours: { productId: string; colour: string }[];
-  timeCreated: Timestamp | FieldValue;
+  createdAt: Timestamp | FieldValue;
 }
 
 initializeApp();
