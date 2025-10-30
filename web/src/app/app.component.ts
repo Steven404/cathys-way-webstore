@@ -42,16 +42,7 @@ export class AppComponent implements OnInit {
     @Inject(PLATFORM_ID) private platformId: object,
     private store: Store<StoreType>,
     private cartPersistenceServiceService: CartPersistenceServiceService,
-  ) {
-    this.router.events.subscribe((event) => {
-      if (
-        event instanceof NavigationEnd &&
-        event.url.startsWith('/order-placed')
-      ) {
-        this.content.nativeElement.style.marginTop = `0`;
-      }
-    });
-  }
+  ) {}
 
   get categories() {
     return this.categoryService.categoriesSignal();
@@ -70,6 +61,21 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
       this.initApp();
+
+      // Subscribe to router events after view initialization
+      this.router.events.subscribe((event) => {
+        if (
+          event instanceof NavigationEnd &&
+          event.url.startsWith('/order-placed')
+        ) {
+          // Use setTimeout to ensure the view is fully initialized
+          setTimeout(() => {
+            if (this.content?.nativeElement) {
+              this.content.nativeElement.style.marginTop = `0`;
+            }
+          }, 0);
+        }
+      });
     }
   }
 
@@ -94,10 +100,14 @@ export class AppComponent implements OnInit {
   setContentStyle(event: number) {
     setTimeout(() => {
       if (typeof window !== 'undefined' && this.showHeaderFooter) {
-        this.content.nativeElement.style.marginTop = `${event}px`;
+        if (this.content?.nativeElement) {
+          this.content.nativeElement.style.marginTop = `${event}px`;
+        }
 
-        const footerHeight = this.footer.nativeElement.offsetHeight;
-        this.content.nativeElement.style.minHeight = `${window.innerHeight - footerHeight - event}px`;
+        if (this.footer?.nativeElement && this.content?.nativeElement) {
+          const footerHeight = this.footer.nativeElement.offsetHeight;
+          this.content.nativeElement.style.minHeight = `${window.innerHeight - footerHeight - event}px`;
+        }
       }
     }, 250);
   }

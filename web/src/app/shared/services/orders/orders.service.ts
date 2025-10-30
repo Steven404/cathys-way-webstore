@@ -10,6 +10,7 @@ import {
   updateDoc,
   where,
 } from '@angular/fire/firestore';
+import { Functions, httpsCallable } from '@angular/fire/functions';
 
 import {
   Order,
@@ -22,6 +23,7 @@ import {
 })
 export class OrdersService {
   private firestore = inject(Firestore);
+  private functions = inject(Functions);
 
   async storeOrder(
     id: string,
@@ -34,6 +36,7 @@ export class OrdersService {
     email: string,
     selectedColours: { productId: string; colour: string }[],
   ): Promise<void> {
+    // TODO: Store phone number and shipping address (box now) when needed
     const order: Order = {
       id,
       stripe_session_id,
@@ -79,5 +82,22 @@ export class OrdersService {
 
     const orderDoc = querySnapshot.docs[0];
     return orderDoc.data() as Order;
+  }
+
+  async sendPaymentInstructions(
+    order_number: string,
+  ): Promise<{ success?: boolean; error?: string }> {
+    const sendPaymentInstructionsCallable = httpsCallable<
+      { order_number: string },
+      { success?: boolean; message?: string; error?: string }
+    >(this.functions, 'sendPaymentInstructions');
+
+    try {
+      const result = await sendPaymentInstructionsCallable({ order_number });
+      return result.data;
+    } catch (error) {
+      console.error('Error calling sendPaymentInstructions function:', error);
+      return { error: (error as Error).message };
+    }
   }
 }

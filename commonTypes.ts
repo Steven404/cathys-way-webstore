@@ -30,7 +30,7 @@ export interface SortOption {
 }
 
 export type OrderStatus = 'pending' | 'paid';
-export type PaymentMethod = 'card' | 'iris' | 'bank_transfer';
+export type PaymentMethod = 'card' | 'iris' | 'bank_transaction';
 
 export interface Order {
     id: string;

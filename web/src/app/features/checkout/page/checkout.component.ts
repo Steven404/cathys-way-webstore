@@ -6,7 +6,7 @@ import {
   NgIf,
   NgOptimizedImage,
 } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -20,7 +20,7 @@ import { injectStripe, StripeService } from 'ngx-stripe';
 import { Button } from 'primeng/button';
 import { InputNumber } from 'primeng/inputnumber';
 import { RadioButton } from 'primeng/radiobutton';
-import { firstValueFrom, Observable, take } from 'rxjs';
+import { firstValueFrom, Observable, Subscription, take } from 'rxjs';
 import { v4 as uuidv4 } from 'uuid';
 
 import { environment } from '../../../../environments/environment';
@@ -71,7 +71,7 @@ import { StripePaymentsService } from '../../../shared/stripe-payments/stripe-pa
     ]),
   ],
 })
-export class CheckoutComponent {
+export class CheckoutComponent implements OnDestroy {
   shoppingCart$: Observable<CartProduct[]>;
   checkoutForm: FormGroup = new FormGroup({
     firstName: new FormControl('', Validators.required),
@@ -83,6 +83,7 @@ export class CheckoutComponent {
   });
   cartPriceTotal = 0;
   isSubmitting = false;
+  private cartSubscription: Subscription;
 
   stripe = injectStripe(environment.stripe.publishable_key);
 
@@ -101,17 +102,25 @@ export class CheckoutComponent {
   ) {
     this.shoppingCart$ = this.store.select('shoppingCart');
 
-    this.shoppingCart$.subscribe((cart) => {
+    this.cartSubscription = this.shoppingCart$.subscribe((cart) => {
       this.cartPriceTotal = cart.reduce(
         (acc, curr) => acc + curr.price * curr.quantity,
         0,
       );
 
       // If cart is empty, redirect to home
-      if (cart.length === 0) {
+      // Only redirect if not currently submitting (prevents race condition with order-placed clearing cart)
+      if (cart.length === 0 && !this.isSubmitting) {
         this.router.navigate(['/']);
       }
     });
+  }
+
+  ngOnDestroy() {
+    // Unsubscribe to prevent redirect when cart is cleared on order-placed page
+    if (this.cartSubscription) {
+      this.cartSubscription.unsubscribe();
+    }
   }
 
   removeProductFromCart(product: CartProduct) {
@@ -193,26 +202,46 @@ export class CheckoutComponent {
             paymentMethod === 'iris' ||
             paymentMethod === 'bank_transaction'
           ) {
-            // IRIS or Bank Transaction: Store order and redirect to order-placed page
-            await this.ordersService.storeOrder(
-              orderId,
-              order_number,
-              '', // No session ID for non-Stripe payments
-              'pending',
-              productIds,
-              paymentMethod,
-              this.cartPriceTotal,
-              this.checkoutForm.controls['email'].value,
-              selectedColours,
-            );
+            console.log('Processing non-card payment method');
+            // IRIS or Bank Transaction: Store order and send payment instructions email
+            // Ensure order is stored before navigation
+            try {
+              await this.ordersService.storeOrder(
+                orderId,
+                order_number,
+                '', // No session ID for non-Stripe payments
+                'pending',
+                productIds,
+                paymentMethod,
+                this.cartPriceTotal,
+                this.checkoutForm.controls['email'].value,
+                selectedColours,
+              );
 
-            // Redirect to order-placed page with query parameters
-            this.router.navigate(['/order-placed'], {
-              queryParams: {
-                method: paymentMethod,
-                orderNumber: order_number,
-              },
-            });
+              console.log(
+                'Order stored successfully, sending payment instructions',
+              );
+
+              // Send payment instructions email
+              const emailResult =
+                await this.ordersService.sendPaymentInstructions(order_number);
+
+              if (emailResult.error) {
+                alert(emailResult.error);
+                // Still proceed even if email fails
+              }
+              // Redirect to order-placed page with query parameters
+              // Using await router.navigate to ensure navigation completes
+              this.router.navigate(['order-placed'], {
+                queryParams: {
+                  paymentMethod: paymentMethod,
+                  orderNumber: order_number,
+                },
+              });
+            } catch (error) {
+              console.error('Error storing order or sending email:', error);
+              throw error; // Re-throw to be caught by outer catch block
+            }
           } else {
             throw new Error('Invalid payment method selected');
           }

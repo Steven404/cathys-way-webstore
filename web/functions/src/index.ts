@@ -6,7 +6,7 @@ import * as nodemailer from 'nodemailer';
 import Stripe from 'stripe';
 
 type OrderStatus = 'pending' | 'paid';
-type PaymentMethod = 'card' | 'iris' | 'bank_transfer';
+type PaymentMethod = 'card' | 'iris' | 'bank_transaction';
 
 export interface Order {
   id: string;
@@ -47,6 +47,83 @@ interface Product {
   name: string;
   price: number;
   mainImageUrl?: string;
+}
+
+// Helper function to fetch order by order number
+async function fetchOrderByOrderNumber(orderNumber: string) {
+  const ordersCollection = db.collection('orders');
+  const orderQuery = await ordersCollection
+    .where('order_number', '==', orderNumber)
+    .get();
+
+  if (orderQuery.empty) {
+    return null;
+  }
+
+  const orderDoc = orderQuery.docs[0];
+  const order = orderDoc.data() as Order;
+
+  return { orderDoc, order };
+}
+
+// Helper function to fetch product details from order
+async function fetchProductsFromOrder(order: Order): Promise<Product[]> {
+  const products: Product[] = [];
+
+  for (const productId of order.products) {
+    const productDoc = await db.collection('products').doc(productId).get();
+    if (productDoc.exists) {
+      const productData = productDoc.data();
+      products.push({
+        id: productDoc.id,
+        code: productData?.code || '',
+        name: productData?.name || '',
+        price: productData?.price || 0,
+        mainImageUrl: productData?.mainImageUrl || '',
+      });
+    }
+  }
+
+  return products;
+}
+
+// Helper function to create selected colours map
+function createSelectedColoursMap(
+  selectedColours?: { productId: string; colour: string }[],
+): Map<string, string> {
+  const selectedColoursMap = new Map<string, string>();
+  if (selectedColours && selectedColours.length > 0) {
+    selectedColours.forEach((item) => {
+      selectedColoursMap.set(item.productId, item.colour);
+    });
+  }
+  return selectedColoursMap;
+}
+
+// Helper function to build product list HTML
+function buildProductListHtml(
+  products: Product[],
+  selectedColoursMap: Map<string, string>,
+): string {
+  return products
+    .map((product) => {
+      const selectedColour = selectedColoursMap.get(product.id);
+      const colourInfo = selectedColour
+        ? `<br/><span style="font-size: 0.9em; color: #666;">Χρώμα: ${selectedColour}</span>`
+        : '';
+
+      return `
+        <tr>
+          <td style="padding: 10px; border-bottom: 1px solid #ddd;">
+            ${product.name} (${product.code})${colourInfo}
+          </td>
+          <td style="padding: 10px; border-bottom: 1px solid #ddd; text-align: right;">
+            €${product.price.toFixed(2)}
+          </td>
+        </tr>
+      `;
+    })
+    .join('');
 }
 
 exports.createCheckoutSession = onCall(
@@ -123,19 +200,15 @@ exports.stripeSessionCompleteWebhook = onRequest(async (req, res) => {
       }
 
       // 1) Fetch the order doc from Firestore
-      const ordersCollection = db.collection('orders');
-      const orderQuery = await ordersCollection
-        .where('order_number', '==', orderNumber)
-        .get();
+      const orderResult = await fetchOrderByOrderNumber(orderNumber);
 
-      if (orderQuery.empty) {
+      if (!orderResult) {
         console.error(`Order not found: ${orderNumber}`);
         res.status(404).send('Order not found');
         return;
       }
 
-      const orderDoc = orderQuery.docs[0];
-      const order = orderDoc.data() as Order;
+      const { orderDoc, order } = orderResult;
       const customerEmail = session.customer_email;
 
       if (!customerEmail) {
@@ -151,51 +224,18 @@ exports.stripeSessionCompleteWebhook = onRequest(async (req, res) => {
       });
 
       // Fetch product details
-      const productIds = order.products;
-      const products: Product[] = [];
-
-      for (const productId of productIds) {
-        const productDoc = await db.collection('products').doc(productId).get();
-        if (productDoc.exists) {
-          const productData = productDoc.data();
-          products.push({
-            id: productDoc.id,
-            code: productData?.code || '',
-            name: productData?.name || '',
-            price: productData?.price || 0,
-            mainImageUrl: productData?.mainImageUrl || '',
-          });
-        }
-      }
+      const products = await fetchProductsFromOrder(order);
 
       // Create a map of product IDs to selected colors
-      const selectedColoursMap = new Map<string, string>();
-      if (order.selectedColours && order.selectedColours.length > 0) {
-        order.selectedColours.forEach((item) => {
-          selectedColoursMap.set(item.productId, item.colour);
-        });
-      }
+      const selectedColoursMap = createSelectedColoursMap(
+        order.selectedColours,
+      );
 
       // Build email HTML with order details
-      const productListHtml = products
-        .map((product) => {
-          const selectedColour = selectedColoursMap.get(product.id);
-          const colourInfo = selectedColour
-            ? `<br/><span style="font-size: 0.9em; color: #666;">Χρώμα: ${selectedColour}</span>`
-            : '';
-
-          return `
-        <tr>
-          <td style="padding: 10px; border-bottom: 1px solid #ddd;">
-            ${product.name} (${product.code})${colourInfo}
-          </td>
-          <td style="padding: 10px; border-bottom: 1px solid #ddd; text-align: right;">
-            €${product.price.toFixed(2)}
-          </td>
-        </tr>
-      `;
-        })
-        .join('');
+      const productListHtml = buildProductListHtml(
+        products,
+        selectedColoursMap,
+      );
 
       const emailHtml = `
         <!DOCTYPE html>
@@ -258,3 +298,159 @@ exports.stripeSessionCompleteWebhook = onRequest(async (req, res) => {
     res.status(500).send(`Webhook Error: ${(error as Error).message}`);
   }
 });
+
+interface SendPaymentInstructionsRequest {
+  data: {
+    order_number: string;
+  };
+}
+
+exports.sendPaymentInstructions = onCall(
+  async (request: SendPaymentInstructionsRequest) => {
+    try {
+      const { order_number } = request.data;
+
+      // Fetch the order from Firestore
+      const orderResult = await fetchOrderByOrderNumber(order_number);
+
+      if (!orderResult) {
+        console.error(`Order not found: ${order_number}`);
+        return { error: 'Order not found' };
+      }
+
+      const { orderDoc, order } = orderResult;
+
+      console.log('order: ', order);
+
+      // Only send instructions for IRIS or bank_transaction payments
+      if (
+        order.payment_method !== 'iris' &&
+        order.payment_method !== 'bank_transaction'
+      ) {
+        return {
+          error: 'This function is only for IRIS or bank transfer payments',
+        };
+      }
+
+      // Check if email was already sent
+      if (order.hasSendEmail) {
+        return { error: 'Payment instructions already sent for this order' };
+      }
+
+      // Fetch product details
+      const products = await fetchProductsFromOrder(order);
+
+      // Create a map of product IDs to selected colors
+      const selectedColoursMap = createSelectedColoursMap(
+        order.selectedColours,
+      );
+
+      // Build email HTML with order details
+      const productListHtml = buildProductListHtml(
+        products,
+        selectedColoursMap,
+      );
+
+      // Payment instructions based on method
+      let paymentInstructions = '';
+      let paymentMethodTitle = '';
+
+      if (order.payment_method === 'iris') {
+        paymentMethodTitle = 'IRIS';
+        paymentInstructions = `
+          <div style="background-color: #fef3c7; padding: 20px; margin: 20px 0; border-radius: 5px; border-left: 4px solid #f59e0b;">
+            <h3 style="margin-top: 0; color: #92400e;">Οδηγίες Πληρωμής IRIS</h3>
+            <p><strong>Αριθμός τηλεφώνου για πληρωμή IRIS:</strong></p>
+            <p style="font-size: 1.2em; font-weight: bold; color: #92400e;">6948484848</p>
+            <p style="margin-top: 15px;"><strong>Σημαντικό:</strong></p>
+            <ul style="margin-top: 10px;">
+              <li>Παρακαλώ προσθέστε τον <strong>αριθμό παραγγελίας ${order_number}</strong> στα σχόλια της συναλλαγής</li>
+              <li>Η παραγγελία σας θα διαγραφεί αυτόματα σε <strong>48 ώρες</strong> εάν δεν ολοκληρωθεί η πληρωμή</li>
+            </ul>
+          </div>
+        `;
+      } else if (order.payment_method === 'bank_transaction') {
+        paymentMethodTitle = 'Τραπεζική Κατάθεση';
+        paymentInstructions = `
+          <div style="background-color: #fef3c7; padding: 20px; margin: 20px 0; border-radius: 5px; border-left: 4px solid #f59e0b;">
+            <h3 style="margin-top: 0; color: #92400e;">Οδηγίες Τραπεζικής Κατάθεσης</h3>
+            <p><strong>IBAN:</strong></p>
+            <p style="font-size: 1.2em; font-weight: bold; color: #92400e;">GR1601101230000012345678900</p>
+            <p style="margin-top: 15px;"><strong>Σημαντικό:</strong></p>
+            <ul style="margin-top: 10px;">
+              <li>Παρακαλώ προσθέστε τον <strong>αριθμό παραγγελίας ${order_number}</strong> στα σχόλια/πληροφορίες δικαιούχου</li>
+              <li>Η παραγγελία σας θα διαγραφεί αυτόματα σε <strong>48 ώρες</strong> εάν δεν ολοκληρωθεί η πληρωμή</li>
+            </ul>
+          </div>
+        `;
+      }
+
+      const emailHtml = `
+        <!DOCTYPE html>
+        <html lang="en">
+          <head>
+            <meta charset="utf-8">
+            <title>Οδηγίες Πληρωμής</title>
+          </head>
+          <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+            <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+              <h1 style="color: #9333ea;">Οδηγίες Πληρωμής - ${paymentMethodTitle}</h1>
+              <p>Σας ευχαριστούμε για την παραγγελία σας!</p>
+
+              <div style="background-color: #f9f9f9; padding: 15px; margin: 20px 0; border-radius: 5px;">
+                <p><strong>Αριθμός Παραγγελίας:</strong> ${order_number}</p>
+                <p><strong>Συνολικό Ποσό:</strong> €${order.amount.toFixed(2)}</p>
+                <p><strong>Μέθοδος Πληρωμής:</strong> ${paymentMethodTitle}</p>
+              </div>
+
+              ${paymentInstructions}
+
+              <h2 style="color: #333; margin-top: 30px;">Λεπτομέρειες Παραγγελίας</h2>
+              <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+                <thead>
+                  <tr style="background-color: #f2f2f2;">
+                    <th style="padding: 10px; text-align: left; border-bottom: 2px solid #ddd;">Προϊόν</th>
+                    <th style="padding: 10px; text-align: right; border-bottom: 2px solid #ddd;">Τιμή</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${productListHtml}
+                </tbody>
+              </table>
+
+              <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd;">
+                <p>Μετά την επιβεβαίωση της πληρωμής, θα σας αποσταλεί email επιβεβαίωσης.</p>
+                <p>Στη συνέχεια, θα λάβετε εντώς των επόμενων 2 εργάσημων ημερών email με τον αριθμό παρακολούθησης της box now.</p>
+                <p>Aν έχετε απορίες σχετικά με την παραγγελία σας παρακαλώ απευθυνθείτε στο <a href="mailto:help@cathysway.com">help@cathysway.com</a></p>
+                <p>Thank you for shopping with us!</p>
+              </div>
+            </div>
+          </body>
+        </html>
+      `;
+
+      const mailOptions = {
+        from: process.env.SENDER_EMAIL,
+        to: order.email,
+        subject: `Οδηγίες Πληρωμής - ${order_number}`,
+        html: emailHtml,
+      };
+
+      await transporter.sendMail(mailOptions);
+
+      // Update the order to mark email as sent
+      await orderDoc.ref.update({
+        hasSendEmail: true,
+      });
+
+      console.log(
+        `Payment instructions sent for order ${order_number} to ${order.email}`,
+      );
+
+      return { success: true, message: 'Payment instructions sent' };
+    } catch (error: unknown) {
+      console.error('Error sending payment instructions:', error);
+      return { error: (error as Error).message };
+    }
+  },
+);

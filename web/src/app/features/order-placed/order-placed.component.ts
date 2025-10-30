@@ -44,18 +44,17 @@ export class OrderPlacedComponent implements OnInit {
         this.paymentMethod = paymentMethod;
       }
 
-      // If no order number in URL, redirect to home
       if (!orderNumber) {
         this.router.navigate(['/']);
+        alert('Order not found. Please contact help@cathysway.com.');
         return;
       }
 
-      // Fetch order from database
       const order = await this.ordersService.getOrderByOrderNumber(orderNumber);
 
-      // If order not found, redirect to home
       if (!order) {
         this.router.navigate(['/']);
+        alert('Order not found. Please contact help@cathysway.com.');
         return;
       }
 
@@ -83,6 +82,7 @@ export class OrderPlacedComponent implements OnInit {
   }
 
   goToHome() {
+    console.log('Navigating to home');
     this.router.navigate(['/']);
   }
 }
