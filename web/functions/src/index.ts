@@ -38,6 +38,7 @@ interface CreateCheckoutSessionRequest {
     order_number: string;
     amount: number;
     email: string;
+    base_url?: string;
   };
 }
 
@@ -134,6 +135,11 @@ exports.createCheckoutSession = onCall(
       });
       const { amount, email, order_number } = request.data;
 
+      const baseUrl =
+        process.env.FRONTEND_URL ||
+        request.data.base_url ||
+        'http://localhost:4200';
+
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ['card'],
         customer_email: email,
@@ -153,8 +159,8 @@ exports.createCheckoutSession = onCall(
           },
         ],
         mode: 'payment',
-        success_url: `http://localhost:4200/order-placed?orderNumber=${order_number}`, // TODO: replace url with process.env.FRONTEND_URL
-        cancel_url: `http://localhost:4200/`,
+        success_url: `${baseUrl}/order-placed?orderNumber=${order_number}`, // TODO: replace url with process.env.FRONTEND_URL
+        cancel_url: `${baseUrl}/checkout`,
       });
 
       return { sessionId: session.id };

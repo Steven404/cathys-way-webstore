@@ -10,8 +10,13 @@ export class StripePaymentsService {
     return callable({ amount });
   }
 
-  createCheckoutSession(order_number: string, amount: number, email: string) {
+  createCheckoutSession(
+    order_number: string,
+    amount: number,
+    email: string,
+    origin: string,
+  ) {
     const callable = this.fns.httpsCallable('createCheckoutSession');
-    return callable({ amount, email, order_number });
+    return callable({ amount, email, order_number, base_url: origin });
   }
 }

@@ -6,7 +6,7 @@ import {
   NgIf,
   NgOptimizedImage,
 } from '@angular/common';
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -71,7 +71,7 @@ import { StripePaymentsService } from '../../../shared/stripe-payments/stripe-pa
     ]),
   ],
 })
-export class CheckoutComponent implements OnDestroy {
+export class CheckoutComponent implements OnDestroy, OnInit {
   shoppingCart$: Observable<CartProduct[]>;
   checkoutForm: FormGroup = new FormGroup({
     firstName: new FormControl('', Validators.required),
@@ -84,6 +84,8 @@ export class CheckoutComponent implements OnDestroy {
   cartPriceTotal = 0;
   isSubmitting = false;
   private cartSubscription: Subscription;
+
+  origin = '';
 
   stripe = injectStripe(environment.stripe.publishable_key);
 
@@ -114,6 +116,12 @@ export class CheckoutComponent implements OnDestroy {
         this.router.navigate(['/']);
       }
     });
+  }
+
+  ngOnInit() {
+    if (typeof window !== 'undefined') {
+      this.origin = window.location.origin;
+    }
   }
 
   ngOnDestroy() {
@@ -164,6 +172,7 @@ export class CheckoutComponent implements OnDestroy {
                 order_number,
                 this.cartPriceTotal * 100,
                 this.checkoutForm.controls['email'].value,
+                this.origin,
               ),
             );
 
