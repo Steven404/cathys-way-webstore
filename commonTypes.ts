@@ -42,6 +42,7 @@ export interface Order {
     amount: number;
     hasSendEmail: boolean;
     email: string;
+    phone: string;
     selectedColours: { productId: string; colour: string }[];
     createdAt: any; // Firestore Timestamp
 }

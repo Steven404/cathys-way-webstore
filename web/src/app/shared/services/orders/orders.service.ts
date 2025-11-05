@@ -34,9 +34,10 @@ export class OrdersService {
     payment_method: PaymentMethod,
     amount: number,
     email: string,
+    phone: string,
     selectedColours: { productId: string; colour: string }[],
   ): Promise<void> {
-    // TODO: Store phone number and shipping address (box now) when needed
+    // TODO: Store shipping address (box now) when needed
     const order: Order = {
       id,
       stripe_session_id,
@@ -47,6 +48,7 @@ export class OrdersService {
       amount,
       hasSendEmail: false,
       email,
+      phone,
       createdAt: Timestamp.now(),
       selectedColours,
     };

@@ -2,11 +2,18 @@ import { animate, style, transition, trigger } from '@angular/animations';
 import {
   AsyncPipe,
   CurrencyPipe,
+  isPlatformBrowser,
   NgFor,
   NgIf,
   NgOptimizedImage,
 } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  Inject,
+  OnDestroy,
+  OnInit,
+  PLATFORM_ID,
+} from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -101,6 +108,7 @@ export class CheckoutComponent implements OnDestroy, OnInit {
     private stripePaymentsService: StripePaymentsService,
     private stripeService: StripeService,
     private ordersService: OrdersService,
+    @Inject(PLATFORM_ID) private platformId: object,
   ) {
     this.shoppingCart$ = this.store.select('shoppingCart');
 
@@ -190,6 +198,7 @@ export class CheckoutComponent implements OnDestroy, OnInit {
               paymentMethod,
               this.cartPriceTotal,
               this.checkoutForm.controls['email'].value,
+              this.checkoutForm.controls['phone'].value,
               selectedColours,
             );
 
@@ -203,7 +212,9 @@ export class CheckoutComponent implements OnDestroy, OnInit {
                 // error, you should display the localized error message to your
                 // customer using `error.message`.
                 if (result.error) {
-                  alert(result.error.message);
+                  if (isPlatformBrowser(this.platformId)) {
+                    alert(result.error.message);
+                  }
                   this.isSubmitting = false;
                 }
               });
@@ -211,7 +222,6 @@ export class CheckoutComponent implements OnDestroy, OnInit {
             paymentMethod === 'iris' ||
             paymentMethod === 'bank_transaction'
           ) {
-            console.log('Processing non-card payment method');
             // IRIS or Bank Transaction: Store order and send payment instructions email
             // Ensure order is stored before navigation
             try {
@@ -224,6 +234,7 @@ export class CheckoutComponent implements OnDestroy, OnInit {
                 paymentMethod,
                 this.cartPriceTotal,
                 this.checkoutForm.controls['email'].value,
+                this.checkoutForm.controls['phone'].value,
                 selectedColours,
               );
 
@@ -236,7 +247,9 @@ export class CheckoutComponent implements OnDestroy, OnInit {
                 await this.ordersService.sendPaymentInstructions(order_number);
 
               if (emailResult.error) {
-                alert(emailResult.error);
+                if (isPlatformBrowser(this.platformId)) {
+                  alert(emailResult.error);
+                }
                 // Still proceed even if email fails
               }
               // Redirect to order-placed page with query parameters
@@ -256,7 +269,9 @@ export class CheckoutComponent implements OnDestroy, OnInit {
           }
         } catch (error) {
           console.error('Error during checkout:', error);
-          alert('An error occurred during checkout. Please try again.');
+          if (isPlatformBrowser(this.platformId)) {
+            alert('An error occurred during checkout. Please try again.');
+          }
           this.isSubmitting = false;
         }
       });

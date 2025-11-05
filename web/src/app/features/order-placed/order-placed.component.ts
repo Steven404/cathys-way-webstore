@@ -1,5 +1,5 @@
-import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { ButtonModule } from 'primeng/button';
@@ -31,6 +31,7 @@ export class OrderPlacedComponent implements OnInit {
     private router: Router,
     private ordersService: OrdersService,
     private store: Store<StoreType>,
+    @Inject(PLATFORM_ID) private platformId: object,
   ) {
     this.shoppingCart$ = this.store.select('shoppingCart');
   }
@@ -46,7 +47,9 @@ export class OrderPlacedComponent implements OnInit {
 
       if (!orderNumber) {
         this.router.navigate(['/']);
-        alert('Order not found. Please contact help@cathysway.com.');
+        if (isPlatformBrowser(this.platformId)) {
+          alert('Order not found. Please contact help@cathysway.com.');
+        }
         return;
       }
 
@@ -54,7 +57,9 @@ export class OrderPlacedComponent implements OnInit {
 
       if (!order) {
         this.router.navigate(['/']);
-        alert('Order not found. Please contact help@cathysway.com.');
+        if (isPlatformBrowser(this.platformId)) {
+          alert('Order not found. Please contact help@cathysway.com.');
+        }
         return;
       }
 
@@ -64,7 +69,7 @@ export class OrderPlacedComponent implements OnInit {
       this.orderNumber = order.order_number;
       this.paymentMethod = order.payment_method as PaymentMethod;
       this.totalAmount = order.amount;
-      setTimeout(() => (this.isLoading = false), 2000);
+      this.isLoading = false;
     });
   }
 
