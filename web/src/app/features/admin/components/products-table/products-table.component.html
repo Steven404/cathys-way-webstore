@@ -1,0 +1,77 @@
+<p-table
+  [lazy]="true"
+  [rows]="8"
+  [paginator]="true"
+  [value]="products"
+  [showCurrentPageReport]="true"
+  [totalRecords]="totalProducts"
+  [lazyLoadOnInit]="false"
+  currentPageReportTemplate="Εμφανίζονται {first}-{last} από {totalRecords} προϊόντα"
+  [loading]="isLoading"
+  (onLazyLoad)="lazyLoadEmitter.emit($event)"
+>
+  <ng-template #header>
+    <tr>
+      <th>Κωδικός</th>
+      <th>Όνομα</th>
+      <th>Κατηγορία</th>
+      <th>Υποκατηγορία</th>
+      <th>Περιγραφή</th>
+      <th>Τιμή</th>
+      <th style="width: 300px">Χρώματα</th>
+    </tr>
+  </ng-template>
+  <ng-template #body let-product>
+    <tr>
+      <td>{{ product.code }}</td>
+      <td>{{ product.name }}</td>
+      <td>{{ getCategoryName(product.categoryId) }}</td>
+      <td>{{ getSubCategoryName(product.subCategoryId) }}</td>
+      <td>
+        <p-button
+          label="Προβολή"
+          [disabled]="!product.description"
+          (click)="showDescriptionDialog(product)"
+        />
+      </td>
+      <td>{{ product.price | currency: "EUR" }}</td>
+      <td>
+        <div
+          *ngIf="product.colours && product.colours.length"
+          class="colours-wrapper"
+        >
+          <div *ngFor="let colour of product.colours" class="product-colour">
+            {{ colour.name }}
+            <div
+              [style]="{
+                background: colour.hexCode,
+                height: '18px',
+                width: '18px',
+                'border-radius': '5px',
+              }"
+            ></div>
+          </div>
+        </div>
+        <div *ngIf="!product.colours || !product.colours.length">-</div>
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template #loadingbody>
+    <tr *ngFor="let number of [0, 1, 2, 3, 4]">
+      <td><p-skeleton width="70%" class="skeleton" borderRadius="16px" /></td>
+      <td><p-skeleton width="70%" class="skeleton" borderRadius="16px" /></td>
+      <td><p-skeleton width="60%" class="skeleton" borderRadius="16px" /></td>
+      <td><p-skeleton width="50%" class="skeleton" borderRadius="16px" /></td>
+      <td><p-skeleton width="90%" class="skeleton" borderRadius="16px" /></td>
+    </tr>
+  </ng-template>
+</p-table>
+<p-dialog
+  [(visible)]="isDescriptionDialogVisible"
+  [modal]="true"
+  [header]="selectedProductDescriptionDialogHeader"
+>
+  <div class="description-dialog-body">
+    <p class="text-lg">{{ selectedProductDescription }}</p>
+  </div>
+</p-dialog>

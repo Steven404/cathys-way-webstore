@@ -1,0 +1,10 @@
+<app-header
+  *ngIf="showHeaderFooter"
+  (heightEmitter)="setContentStyle($event)"
+  [categoryItems]="categoryItems"
+/>
+<div #content><router-outlet /></div>
+<div #footer *ngIf="showHeaderFooter">
+  <app-footer />
+</div>
+<p-toast key="global-toast" position="top-center" />

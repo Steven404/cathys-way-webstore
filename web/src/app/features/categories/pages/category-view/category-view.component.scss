@@ -1,0 +1,33 @@
+@tailwind components;
+
+:host {
+  display: block;
+  height: calc(100% - 64px);
+}
+
+@layer components {
+  .wrapper {
+    @apply w-full flex flex-col items-center lg:py-5 font-manrope py-2.5
+  }
+
+  .title {
+    @apply text-3xl xl:text-4xl text-black font-semibold
+  }
+
+  .index-div-wrapper {
+    @apply w-full py-5 lg:px-20 flex lg:items-center justify-between
+    items-start max-lg:flex-col max-lg:gap-5 max-lg:px-3
+  }
+
+  .index-text {
+    @apply font-light max-xl:text-sm
+  }
+
+  .buttons-container {
+    @apply flex gap-2.5 pb-5 mt-10
+  }
+
+  .buttons-container-fixed {
+    @apply flex fixed bottom-14 gap-2.5 pb-5
+  }
+}

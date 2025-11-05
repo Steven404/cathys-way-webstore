@@ -1,0 +1,35 @@
+<div class="w-full">
+  <label [for]="inputId" *ngIf="label" class="input-label">{{ label }}</label>
+  <p-iconfield class="w-full" [ngClass]="{ 'mt-1.5': label !== '' }">
+    <input
+      [id]="inputId"
+      [ngClass]="{
+        'w-full': true,
+        'p-inputtext-sm': windowWidth < 640,
+        'ng-dirty ng-invalid': control.invalid && !control.untouched,
+      }"
+      [type]="type"
+      pInputText
+      [placeholder]="placeholder"
+      [formControl]="control"
+      [maxlength]="maxLength"
+    />
+    <p-inputicon
+      *ngIf="primeIcon && !isPassword"
+      [styleClass]="String(primeIcon)"
+    />
+    <p-inputicon
+      *ngIf="isPassword && !isPasswordVisible"
+      styleClass="pi pi-eye"
+      (click)="changePasswordVisibility()"
+    />
+    <p-inputicon
+      *ngIf="isPassword && isPasswordVisible"
+      styleClass="pi pi-eye-slash"
+      (click)="changePasswordVisibility()"
+    />
+  </p-iconfield>
+  <div *ngIf="control.invalid && !control.untouched" class="error-text">
+    {{ errorMessage }}
+  </div>
+</div>

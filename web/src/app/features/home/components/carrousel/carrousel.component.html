@@ -1,0 +1,48 @@
+<div class="wrapper">
+  <p-carousel
+    #carousel
+    [value]="images"
+    [circular]="true"
+    [showNavigators]="false"
+    indicatorsContentClass="top-[-40px] relative"
+    autoplayInterval="5000"
+  >
+    <ng-template let-item #item>
+      <div class="image-wrapper lg:hidden max-lg:flex">
+        <div class="image">
+          <img
+            [ngSrc]="item.imageSrc"
+            [alt]="item.alt"
+            fill
+            priority
+            (load)="imageLoaded()"
+          />
+        </div>
+        <p *ngIf="item.text" class="image-text">
+          {{ item.text }}
+        </p>
+      </div>
+      <div class="image-wrapper max-lg:hidden lg:flex">
+        <div class="image">
+          <img
+            class="object-cover"
+            (swipeleft)="nextSlide(carousel, $event)"
+            (swiperight)="previousSlide(carousel, $event)"
+            [ngSrc]="item.imageSrc"
+            fill
+            [alt]="item.alt"
+            priority
+          />
+        </div>
+        <p
+          *ngIf="item.text"
+          class="image-text"
+          (swipeleft)="nextSlide(carousel, $event)"
+          (swiperight)="previousSlide(carousel, $event)"
+        >
+          {{ item.text }}
+        </p>
+      </div>
+    </ng-template>
+  </p-carousel>
+</div>

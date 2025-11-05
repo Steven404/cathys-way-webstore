@@ -1,0 +1,36 @@
+<app-toolbar
+  (addSubCategoryEmitter)="isSubCategoryDialogVisible = true"
+  (addCategoryEmitter)="isCategoryDialogVisible = true"
+  (addProductEmitter)="isProductDialogVisible = true"
+/>
+<app-create-subcategory-dialog
+  [(isVisible)]="isSubCategoryDialogVisible"
+  [isLoading]="isLoading"
+  [subCategoryFormControl]="subCategoryFormControl"
+  (createSubCategoryEmitter)="createSubCategory()"
+/>
+<app-create-category-dialog
+  [categoryFormControl]="categoryFormControl"
+  [(isVisible)]="isCategoryDialogVisible"
+  [isLoading]="isLoading"
+  (createCategoryEmitter)="createCategory()"
+/>
+<app-create-product-dialog
+  [(mainImage)]="mainImage"
+  [(extraImages)]="extraImages"
+  [productForm]="productForm"
+  [(isVisible)]="isProductDialogVisible"
+  [isLoading]="isLoading"
+  (createProductEmitter)="createProduct()"
+  [categories]="allCategories"
+  [subCategories]="allSubCategories"
+  (coloursEmitter)="newProductColours = $event"
+/>
+<app-products-table
+  [products]="products"
+  [categories]="allCategories"
+  [subCategories]="allSubCategories"
+  [totalProducts]="totalProductsCount"
+  [isLoading]="isLoading"
+  (lazyLoadEmitter)="onLazyLoad($event)"
+/>

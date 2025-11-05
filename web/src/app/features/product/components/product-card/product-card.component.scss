@@ -1,0 +1,26 @@
+@tailwind components;
+
+@layer components {
+  .wrapper {
+    @apply h-[300px] w-[350px] md:h-[325px] md:w-[375px] 2xl:h-[370px] 2xl:w-[400px]
+    relative rounded bg-cover hover:cursor-pointer
+  }
+
+  .image {
+    @apply z-0 object-cover relative h-[300px] w-[350px] md:h-[325px] md:w-[375px] 2xl:h-[370px] 2xl:w-[400px]
+  }
+
+  .text-wrapper {
+    @apply w-full mt-2
+    flex flex-col justify-center items-center gap-y-1
+    max-lg:items-center
+  }
+
+  .name-text {
+    @apply text-black text-xl font-bold max-lg:text-xl
+  }
+
+  .price-text {
+    @apply text-gray-600 font-semibold text-sm
+  }
+}

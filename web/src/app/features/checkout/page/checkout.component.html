@@ -1,0 +1,231 @@
+<div class="checkout-container">
+  <div class="checkout-wrapper">
+    <!-- Order Summary Section -->
+    <div class="order-summary-section">
+      <h2 class="section-title">Προϊόντα προς αγορά</h2>
+
+      <div class="products-list">
+        <div *ngFor="let product of shoppingCart$ | async" class="product-item">
+          <div class="product-info">
+            <div class="product-image-wrapper">
+              <img
+                [ngSrc]="product?.mainImageUrl || 'assets/main_placeholder.jpg'"
+                class="object-cover"
+                fill
+                alt="product-image"
+              />
+            </div>
+            <div class="product-text-section">
+              <div>
+                <p class="product-title">
+                  {{ product.name
+                  }}<span *ngIf="product.selectedColour" class="product-colour"
+                    >-{{ product.selectedColour }}
+                  </span>
+                </p>
+                <p class="product-code">{{ product.code }}</p>
+              </div>
+              <p class="product-price">
+                {{ convertPriceToFloat(product.price) | currency: "EUR" }}
+              </p>
+            </div>
+          </div>
+          <div class="product-actions">
+            <p-button
+              label="Αφαίρεση"
+              size="small"
+              text
+              severity="danger"
+              (click)="removeProductFromCart(product)"
+            />
+            <p-inputnumber
+              size="small"
+              [showButtons]="true"
+              buttonLayout="horizontal"
+              inputId="horizontal"
+              spinnerMode="horizontal"
+              [step]="1"
+              mode="decimal"
+              inputStyleClass="w-[30px] max-md:h-[30px]"
+              [max]="5"
+              [min]="1"
+              [ngModel]="product.quantity"
+              (ngModelChange)="updateProductQuantity(product, $event)"
+            >
+              <ng-template #incrementbuttonicon>
+                <span class="pi pi-plus"></span>
+              </ng-template>
+              <ng-template #decrementbuttonicon>
+                <span class="pi pi-minus"></span>
+              </ng-template>
+            </p-inputnumber>
+            <p class="text-lg font-medium">
+              {{ calculateProductTotalPrice(product) | currency: "EUR" }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="order-total">
+        <span class="total-label">Συνολική Τιμή:</span>
+        <span class="total-amount">{{
+          convertPriceToFloat(cartPriceTotal) | currency: "EUR"
+        }}</span>
+      </div>
+    </div>
+
+    <!-- Customer Information Form -->
+    <div class="customer-info-section">
+      <h2 class="section-title">Στοιχεία Παραγγελίας</h2>
+      <form
+        [formGroup]="checkoutForm"
+        (ngSubmit)="checkout()"
+        class="checkout-form"
+      >
+        <div class="form-row">
+          <div class="form-group">
+            <label for="firstName">Όνομα *</label>
+            <input
+              id="firstName"
+              type="text"
+              formControlName="firstName"
+              class="form-input"
+              [class.invalid]="
+                checkoutForm.get('firstName')?.invalid &&
+                checkoutForm.get('firstName')?.touched
+              "
+            />
+            <span
+              class="error-message"
+              *ngIf="
+                checkoutForm.get('firstName')?.invalid &&
+                checkoutForm.get('firstName')?.touched
+              "
+            >
+              Το όνομα είναι υποχρεωτικό
+            </span>
+          </div>
+
+          <div class="form-group">
+            <label for="lastName">Επώνυμο *</label>
+            <input
+              id="lastName"
+              type="text"
+              formControlName="lastName"
+              class="form-input"
+              [class.invalid]="
+                checkoutForm.get('lastName')?.invalid &&
+                checkoutForm.get('lastName')?.touched
+              "
+            />
+            <span
+              class="error-message"
+              *ngIf="
+                checkoutForm.get('lastName')?.invalid &&
+                checkoutForm.get('lastName')?.touched
+              "
+            >
+              Το επώνυμο είναι υποχρεωτικό
+            </span>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="email">Email *</label>
+            <input
+              id="email"
+              type="email"
+              formControlName="email"
+              class="form-input"
+              [class.invalid]="
+                checkoutForm.get('email')?.invalid &&
+                checkoutForm.get('email')?.touched
+              "
+            />
+            <span
+              class="error-message"
+              *ngIf="
+                checkoutForm.get('email')?.invalid &&
+                checkoutForm.get('email')?.touched
+              "
+            >
+              Εισάγετε έγκυρο email
+            </span>
+          </div>
+
+          <div class="form-group">
+            <label for="phone">Τηλέφωνο *</label>
+            <input
+              id="phone"
+              type="tel"
+              formControlName="phone"
+              class="form-input"
+              [class.invalid]="
+                checkoutForm.get('phone')?.invalid &&
+                checkoutForm.get('phone')?.touched
+              "
+            />
+            <span
+              class="error-message"
+              *ngIf="
+                checkoutForm.get('phone')?.invalid &&
+                checkoutForm.get('phone')?.touched
+              "
+            >
+              Το τηλέφωνο είναι υποχρεωτικό
+            </span>
+          </div>
+        </div>
+
+        <div class="payment-form-row">
+          <div>Τρόπος πληρωμής</div>
+          <div class="payment-options">
+            <div
+              class="payment-option"
+              *ngFor="let paymentOption of paymentOptions"
+            >
+              <p-radio-button
+                formControlName="paymentMethod"
+                inputId="paymentMethod1"
+                [value]="paymentOption.value"
+              />
+              <label for="paymentMethod1" class="!mb-0">
+                {{ paymentOption.label }}
+              </label>
+            </div>
+          </div>
+          <p
+            @fadeInFadeOut
+            *ngIf="checkoutForm.get('paymentMethod')?.value === 'card'"
+            class="text-sm text-gray-600"
+          >
+            * μέσω ασφαλές περιβάλοντος πληρωμών της Stripe.
+          </p>
+        </div>
+
+        <div class="form-group">
+          <label for="notes">Σημειώσεις Παραγγελίας</label>
+          <textarea
+            id="notes"
+            formControlName="notes"
+            class="form-textarea"
+            rows="4"
+            placeholder="Προαιρετικές σημειώσεις για την παραγγελία σας..."
+          ></textarea>
+        </div>
+      </form>
+      <div class="form-actions">
+        <p-button
+          label="Ολοκλήρωση Παραγγελίας"
+          type="submit"
+          [loading]="isSubmitting"
+          [disabled]="checkoutForm.invalid || isSubmitting"
+          (click)="checkout()"
+          severity="primary"
+          size="large"
+        />
+      </div>
+    </div>
+  </div>
+</div>

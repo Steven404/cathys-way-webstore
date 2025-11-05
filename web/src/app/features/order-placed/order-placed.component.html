@@ -1,0 +1,27 @@
+<div class="order-placed-container">
+  <app-loading-spinner [show]="isLoading" [fullScreen]="true" />
+  <div class="success-card" *ngIf="!isLoading">
+    <!-- Checkmark Icon -->
+    <div class="checkmark-wrapper">
+      <i class="pi pi-check-circle checkmark-icon"></i>
+    </div>
+
+    <!-- Thank You Message -->
+    <h1 class="thank-you-title">Σας ευχαριστούμε για την προτίμησή σας!</h1>
+
+    <!-- Payment Method Specific Information -->
+    <div class="payment-info">
+      <p class="payment-message" [innerHTML]="getPaymentMessage()"></p>
+    </div>
+
+    <!-- Return to Home Button -->
+    <div class="button-container">
+      <p-button
+        label="Επιστροφή στην αρχική σελίδα"
+        text
+        rounded
+        (click)="goToHome()"
+      />
+    </div>
+  </div>
+</div>

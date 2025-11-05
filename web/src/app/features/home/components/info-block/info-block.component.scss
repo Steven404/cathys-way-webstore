@@ -1,0 +1,40 @@
+@tailwind components;
+
+@layer components {
+  .page-wrapper {
+    @apply w-full bg-purple-600 font-manrope p-10
+    flex max-lg:flex-col
+    lg:flex lg:justify-evenly
+    max-lg:gap-10
+  }
+
+  .box-wrapper {
+    @apply flex gap-5 items-center justify-center max-md:flex-col lg:w-[45%]
+  }
+
+  .divider {
+    @apply bg-white bg-opacity-50 relative
+    w-[2px]
+    max-lg:w-full max-lg:h-[2px]
+    rounded-full
+  }
+
+  .image-wrapper {
+    @apply relative
+    w-[100px] h-[100px]
+  }
+
+  .info-title {
+    @apply text-white text-2xl font-bold max-lg:text-center
+  }
+
+  .info-details {
+    @apply text-white
+  }
+
+  .list {
+    @apply flex flex-col
+    lg:ml-5 lg:list-disc lg:mt-1
+    mt-2 max-lg:text-center max-lg:max-w-[320px]
+  }
+}

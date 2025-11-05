@@ -1,0 +1,98 @@
+.order-placed-container {
+  @apply min-h-screen flex items-center justify-center p-8 bg-gradient-to-br from-slate-50 to-slate-300;
+
+  @media (max-width: 768px) {
+    @apply p-0 bg-white items-start;
+  }
+}
+
+.success-card {
+  @apply bg-white rounded-2xl shadow-2xl px-8 py-12 max-w-[600px] w-full text-center;
+  animation: slideIn 0.5s ease-out;
+
+  @media (max-width: 768px) {
+    @apply bg-transparent rounded-none shadow-none px-5 py-8;
+    animation: none;
+  }
+}
+
+.checkmark-wrapper {
+  @apply mb-8;
+
+  @media (max-width: 768px) {
+    @apply mb-6;
+  }
+}
+
+.checkmark-icon {
+  @apply text-8xl text-green-500;
+  animation: scaleIn 0.6s ease-out;
+
+  @media (max-width: 768px) {
+    @apply text-6xl;
+  }
+}
+
+.thank-you-title {
+  @apply text-3xl font-bold text-gray-800 mb-6 leading-tight;
+
+  @media (max-width: 768px) {
+    @apply text-[1.375rem] mb-5;
+  }
+}
+
+.payment-info {
+  @apply mb-10 p-6 bg-slate-50 rounded-xl border-l-4 border-fuchsia-800;
+
+  @media (max-width: 768px) {
+    @apply mb-8 p-5 rounded-lg;
+  }
+}
+
+.payment-message {
+  @apply text-[1.05rem] leading-relaxed text-gray-700 m-0 text-left;
+
+  @media (max-width: 768px) {
+    @apply text-[0.9rem] leading-normal;
+  }
+
+  ::ng-deep b {
+    @apply text-gray-800 font-semibold;
+  }
+}
+
+.button-container {
+  @apply flex justify-center;
+
+  ::ng-deep .p-button {
+    @media (max-width: 768px) {
+      @apply w-full;
+    }
+  }
+}
+
+// Custom animations
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+

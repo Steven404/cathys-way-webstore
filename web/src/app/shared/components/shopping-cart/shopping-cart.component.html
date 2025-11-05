@@ -1,0 +1,100 @@
+<p-button
+  rounded
+  outlined
+  icon="pi pi-times"
+  (click)="isShoppingCartVisibleEmitter.emit(false)"
+  class="absolute top-6 right-5"
+  severity="contrast"
+/>
+<div class="wrapper" *ngIf="(shoppingCart$ | async).length > 0">
+  <h1 class="title">
+    Το καλάθι σας<br /><span class="text-lg"
+      >(1 προϊό{{ totalCartProducts > 1 ? "ντα" : "ν" }})</span
+    >
+  </h1>
+  <div class="products-wrapper">
+    <div
+      *ngFor="let product of shoppingCart$ | async; index as i"
+      class="product-wrapper"
+    >
+      <div class="gap-3 flex cursor-pointer">
+        <div class="product-image-wrapper">
+          <img
+            [ngSrc]="product?.mainImageUrl || 'assets/main_placeholder.jpg'"
+            class="object-cover"
+            fill
+            (click)="goToProduct(product.id)"
+            alt="product-image"
+          />
+        </div>
+        <div class="product-text-section">
+          <div>
+            <p class="product-title">
+              {{ product.name
+              }}<span *ngIf="product.selectedColour" class="product-colour"
+                >-{{ product.selectedColour }}
+              </span>
+            </p>
+            <p class="product-code">{{ product.code }}</p>
+          </div>
+          <p class="product-price">
+            {{ convertPriceToFloat(product.price) | currency: "EUR" }}
+          </p>
+        </div>
+      </div>
+      <div class="product-actions">
+        <p-button
+          label="Αφαίρεση"
+          size="small"
+          text
+          severity="danger"
+          (click)="removeProductFromCart(product)"
+        />
+        <p-inputnumber
+          size="small"
+          [showButtons]="true"
+          buttonLayout="horizontal"
+          inputId="horizontal"
+          spinnerMode="horizontal"
+          [step]="1"
+          mode="decimal"
+          inputStyleClass="w-[30px] max-md:h-[30px]"
+          [max]="5"
+          [min]="1"
+          [ngModel]="product.quantity"
+          (ngModelChange)="updateProductQuantity(product, $event)"
+        >
+          <ng-template #incrementbuttonicon>
+            <span class="pi pi-plus"></span>
+          </ng-template>
+          <ng-template #decrementbuttonicon>
+            <span class="pi pi-minus"></span>
+          </ng-template>
+        </p-inputnumber>
+        <p class="text-lg font-medium">
+          {{ calculateProductTotalPrice(product) | currency: "EUR" }}
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="footer">
+    <div>
+      <span class="text-lg">Συνολική τιμή:</span>
+      <span class="text-xl font-medium">{{
+        convertPriceToFloat(cartPriceTotal) | currency: "EUR"
+      }}</span>
+    </div>
+    <p-button
+      text
+      label="Ολοκλήρωση Αγοράς"
+      class="md:w-auto"
+      rounded
+      (click)="proceedToCheckout()"
+    />
+  </div>
+</div>
+<div *ngIf="(shoppingCart$ | async).length === 0" class="empty-cart-wrapper">
+  <p class="text-lg font-medium">
+    Δεν έχετε προϊόντα στο καλάθι αυτήν την στιγμή!
+  </p>
+</div>

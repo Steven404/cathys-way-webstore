@@ -1,0 +1,35 @@
+<div class="wrapper">
+  <h1 class="title-text">Cathy's Way - Admin Control panel</h1>
+  <div class="login-box">
+    <p class="login-text">Σύνδεση Διαχειριστή</p>
+    <p class="login-subtitle">Συμπληρώστε τα στοιχεία σύνδεσης</p>
+    <div class="inputs-wrapper">
+      <app-text-input
+        inputId="username"
+        label="Ηλεκτρονική διεύθυνση(email)"
+        [control]="usernameControl"
+        errorMessage="Παρακαλώ συμπληρώστε το email σας"
+      />
+      <app-text-input
+        inputId="text"
+        label="Κωδικός πρόσβασης"
+        [control]="passwordControl"
+        type="text"
+        [isPassword]="true"
+        errorMessage="Παρακαλώ συμπληρώστε τον κωδικό σας"
+      />
+    </div>
+    <p *ngIf="errorMessage" class="error-text my-5 font-semibold">
+      {{ errorMessage }}
+    </p>
+    <div class="button-wrapper">
+      <p-button
+        [label]="isLoading ? '' : 'Σύνδεση'"
+        raised
+        (onClick)="signIn()"
+        [disabled]="!getControlsValidStatus()"
+        [loading]="isLoading"
+      />
+    </div>
+  </div>
+</div>

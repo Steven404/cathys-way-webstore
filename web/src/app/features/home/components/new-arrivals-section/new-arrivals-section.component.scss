@@ -1,0 +1,11 @@
+@tailwind components;
+
+@layer components {
+  .wrapper {
+    @apply w-full flex flex-col p-10 items-center
+  }
+
+  .title {
+    @apply text-4xl font-semibold
+  }
+}

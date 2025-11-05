@@ -1,0 +1,158 @@
+<p-dialog
+  [(visible)]="isVisible"
+  header="Καταχώριση Προϊόντως"
+  (onHide)="onDialogHide()"
+  [modal]="true"
+>
+  <form [formGroup]="newProductFormGroup">
+    <div class="w-[400px] gap-y-5 grid">
+      <app-text-input
+        label="Κωδικός"
+        [control]="newProductFormGroup.controls.code"
+        errorMessage="Το πεδίο αυτό δεν μπορεί να παραμήνει κενό"
+      />
+      <app-text-input
+        label="Όνομα"
+        [control]="newProductFormGroup.controls.name"
+        errorMessage="Το πεδίο αυτό δεν μπορεί να παραμήνει κενό"
+      />
+      <div class="w-full grid">
+        <label for="category" class="input-label">Κατηγορία</label>
+        <p-select
+          id="category"
+          formControlName="category"
+          class="mt-1.5"
+          [options]="categories"
+          optionLabel="name"
+        />
+      </div>
+      <div class="w-full grid">
+        <label for="subcategory" class="input-label">Υποκατηγορία</label>
+        <p-select
+          id="subcategory"
+          formControlName="subCategory"
+          class="mt-1.5"
+          [options]="subCategories"
+          optionLabel="name"
+        />
+      </div>
+      <div class="w-full grid">
+        <label for="description" class="input-label">Περιγραφή</label>
+        <textarea
+          pTextarea
+          rows="3"
+          cols="30"
+          id="description"
+          formControlName="description"
+          class="mt-1.5"
+        ></textarea>
+      </div>
+      <app-text-input
+        label="Τιμή"
+        [control]="newProductFormGroup.controls.price"
+        [errorMessage]="
+          getFormControlErrorMessage(newProductFormGroup.controls.price)
+        "
+        primeIcon="pi pi-euro"
+      />
+      <div class="w-full grid">
+        <h1 class="input-label">Χρώματα</h1>
+        <div class="flex w-full justify-between items-center mt-1.5 gap-x-1">
+          <input
+            [(colorPicker)]="color"
+            [style.background]="color"
+            pInputText
+            class="w-[50px]"
+          />
+          <input
+            pInputText
+            id="colours"
+            class="w-full"
+            [formControl]="colourForm"
+          />
+          <p-button label="Προσθήκη" (click)="addNewColour()" />
+        </div>
+        <div class="new-colours-wrapper" *ngIf="newProductColours.length">
+          <div
+            *ngFor="let newColour of newProductColours"
+            class="new-product-colour"
+            (click)="removeColour(newColour)"
+          >
+            <p>{{ newColour.name }}</p>
+            <div
+              [style]="{
+                background: newColour.hexCode,
+                height: '18px',
+                width: '18px',
+                'border-radius': '5px',
+              }"
+            ></div>
+          </div>
+        </div>
+      </div>
+      <div class="w-full grid">
+        <p class="input-label">Φωτογραφίες</p>
+        <p-fileupload
+          accept="image/*"
+          maxFileSize="1000000"
+          mode="advanced"
+          styleClass="mt-1.5"
+          [showUploadButton]="false"
+          [showCancelButton]="false"
+          (onSelect)="onMainImageSelected($event)"
+          (onRemove)="onMainImageRemove()"
+          chooseLabel="Επιλογή"
+        >
+          <ng-template #header let-chooseCallback="chooseCallback">
+            <div class="grid gap-1">
+              <p class="upload-header-text">Κύρια φωτογραφία/εξώφυλλο</p>
+              <p-button
+                size="small"
+                (onClick)="choose($event, chooseCallback)"
+                label="Επιλογή"
+                icon="pi pi-images"
+                [rounded]="true"
+                [outlined]="true"
+              />
+            </div>
+          </ng-template>
+        </p-fileupload>
+        <p-fileupload
+          [fileLimit]="3"
+          [multiple]="true"
+          accept="image/*"
+          maxFileSize="1000000"
+          mode="advanced"
+          styleClass="mt-1.5"
+          [showUploadButton]="false"
+          [showCancelButton]="false"
+          chooseLabel="Επιλογή"
+          (onSelect)="onExtraImagesSelected($event)"
+        >
+          <ng-template #header let-chooseCallback="chooseCallback">
+            <div class="grid gap-1">
+              <p class="upload-header-text">Έξτρα φωτογραφίες(εως 3)</p>
+              <p-button
+                size="small"
+                (onClick)="choose($event, chooseCallback)"
+                label="Επιλογή"
+                icon="pi pi-images"
+                [rounded]="true"
+                [outlined]="true"
+              />
+            </div>
+          </ng-template>
+        </p-fileupload>
+      </div>
+    </div>
+  </form>
+  <div class="w-full flex justify-end mt-5">
+    <p-button
+      [label]="isLoading ? '' : 'Καταχώριση'"
+      severity="success"
+      [disabled]="productForm.invalid || !mainImage"
+      (click)="createProduct()"
+      [loading]="isLoading"
+    />
+  </div>
+</p-dialog>

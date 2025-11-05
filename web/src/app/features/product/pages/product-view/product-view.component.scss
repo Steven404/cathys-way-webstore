@@ -1,0 +1,58 @@
+@tailwind components;
+
+@layer components {
+  .page {
+    @apply flex flex-col items-center font-manrope
+    lg:p-10 p-4
+  }
+
+  .product {
+    @apply flex 2xl:w-[70%] xl:w-[75%] w-full max-md:flex-col min-h-[450px] max-md:items-center
+    m-2.5 md:mt-10 md:justify-center md:gap-10 gap-4
+  }
+
+  .image-wrapper {
+    @apply md:w-[47.5%] 3xl:w-[35%] h-full relative w-full transition-all duration-500
+  }
+
+  .gallery-image-wrapper {
+    @apply relative h-[325px] sm:h-[650px] md:h-[450px] w-full
+  }
+
+  .product-details {
+    @apply flex flex-col md:w-[47.5%] relative md:h-[450px] w-full
+  }
+
+  .product-title {
+    @apply text-4xl font-bold tracking-wide
+  }
+
+  .product-code {
+    @apply text-sm mt-2.5 md:mt-4 font-medium
+  }
+
+  .dimensions {
+    @apply text-sm
+  }
+
+  .product-description {
+    @apply lg:mt-8 mt-3 md:text-2xl text-xl
+  }
+
+  .product-footer {
+    @apply md:absolute max-md:mt-5 bottom-1 flex flex-col
+    gap-2.5
+  }
+
+  .price {
+    @apply mb-5 text-2xl font-semibold
+  }
+
+  .wishlist-action {
+    @apply flex items-center hover:cursor-pointer
+  }
+
+  .wishlist-text {
+    @apply text-sm underline ml-2
+  }
+}

@@ -1,0 +1,41 @@
+<div *ngIf="category" class="wrapper">
+  <h1 class="title">{{ removeGreekTonos(category.name).toUpperCase() }}</h1>
+  <div class="index-div-wrapper">
+    <p class="index-text">
+      Βλέπετε
+      <span class="font-semibold">
+        {{ firstProductIndex }}-{{ lastProductIndex }}
+      </span>
+      από <span class="font-semibold">{{ totalProductsCount }}</span> προϊόντα
+      στην κατηγορία
+    </p>
+    <p-select
+      [options]="sortOptions"
+      optionLabel="name"
+      placeholder="Ταξινόμιση"
+      variant="outlined"
+      (onChange)="sortSelected($event)"
+      optionValue="value"
+    />
+  </div>
+  <div class="products-container">
+    <app-product-card
+      @fadeInFadeOut
+      *ngFor="let product of products"
+      [product]="product"
+      [imageSrc]="product?.mainImageUrl || 'assets/rings.jpg'"
+    />
+  </div>
+  <div class="buttons-container" *ngIf="products.length">
+    <ng-container *ngFor="let page of pages; index as i">
+      <p-button
+        [label]="String(page)"
+        (click)="pageClicked(page)"
+        rounded
+        text
+        size="large"
+        [disabled]="activePage === page"
+      />
+    </ng-container>
+  </div>
+</div>

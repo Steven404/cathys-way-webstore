@@ -1,0 +1,13 @@
+@tailwind components;
+
+@layer components {
+  .spinner-overlay {
+    @apply inset-0 flex items-center justify-center bg-[#f9fafb] bg-opacity-60 z-[2] h-full;
+  }
+  .spinner-overlay--fullscreen {
+    @apply fixed w-screen h-screen min-h-screen z-50;
+  }
+  .spinner {
+    @apply w-8 h-8 border-4 border-purple-500 bg-[#f9fafb] border-t-transparent rounded-full animate-spin;
+  }
+}

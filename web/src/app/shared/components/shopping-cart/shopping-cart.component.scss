@@ -1,0 +1,61 @@
+@tailwind components;
+
+@layer components {
+  .empty-cart-wrapper {
+    @apply w-full h-full flex flex-col items-center justify-center max-md:p-5 max-md:text-center
+  }
+
+  .wrapper {
+    @apply w-full h-full md:p-7 p-2.5
+  }
+
+  .title {
+    @apply text-xl font-bold h-[5%]
+  }
+
+  .products-wrapper {
+    @apply w-full h-[80%] mt-7 gap-y-4 flex flex-col overflow-y-scroll
+  }
+
+  .product-wrapper {
+    @apply flex justify-between
+  }
+
+  .product-image-wrapper {
+    @apply md:w-[125px] md:h-[125px] h-[100px] w-[100px] flex relative
+  }
+
+  .product-text-section {
+    @apply flex flex-col justify-between md:pb-2
+  }
+
+  .product-title {
+    @apply md:text-lg font-semibold
+  }
+
+  .product-colour {
+    @apply text-gray-600 font-normal;
+  }
+
+  .product-code {
+    @apply text-xs md:text-sm
+  }
+
+  .product-price {
+    @apply md:text-lg font-medium
+  }
+
+  .quantity-input-wrapper {
+    @apply h-full w-[40px] md:w-[50px]
+    flex self-center justify-center items-center
+  }
+
+  .product-actions {
+    @apply flex flex-col items-center justify-between md:h-[125px] h-[100px]
+  }
+
+  .footer {
+    @apply w-full h-[15%] p-7 border-t-2 items-center justify-center max-md:flex-col gap-y-2
+    flex md:justify-evenly md:items-center
+  }
+}

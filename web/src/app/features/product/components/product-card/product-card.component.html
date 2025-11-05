@@ -1,0 +1,24 @@
+<div
+  class="wrapper custom-transition"
+  tabindex="0"
+  role="button"
+  (click)="goToProduct()"
+  (keydown.enter)="goToProduct()"
+  (keydown.space)="goToProduct(); $event.preventDefault()"
+>
+  <app-loading-spinner [show]="isImageLoading"></app-loading-spinner>
+  <div class="image" [hidden]="isImageLoading">
+    <img
+      class="object-cover"
+      [ngSrc]="imageSrc"
+      fill
+      [loading]="'auto'"
+      (load)="this.isImageLoading = false"
+      alt="product_image"
+    />
+  </div>
+  <div class="text-wrapper">
+    <p class="name-text">{{ product.name }}</p>
+    <p class="price-text">{{ convertPriceToFloat(product.price) }} &#8364;</p>
+  </div>
+</div>

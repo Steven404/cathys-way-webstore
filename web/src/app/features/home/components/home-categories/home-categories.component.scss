@@ -1,0 +1,25 @@
+@tailwind components;
+
+@layer components {
+  .wrapper {
+    @apply w-full 4xl:w-[70%] grid
+    md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 max-2xl:gap-y-7
+    items-center justify-center pb-8 pt-4
+  }
+
+  .category-card {
+    @apply flex flex-col items-center
+  }
+
+  .category-image-wrapper {
+    @apply relative w-[300px] h-[250px] flex cursor-pointer
+  }
+
+  .category-image {
+    @apply object-cover h-full w-full
+  }
+
+  .category-text {
+    @apply w-full text-center font-manrope mt-2 cursor-pointer
+  }
+}

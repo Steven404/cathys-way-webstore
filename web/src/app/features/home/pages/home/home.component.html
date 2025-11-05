@@ -1,0 +1,10 @@
+<div>
+  <app-loading-spinner [fullScreen]="true" [show]="!hasLoadedCarousel" />
+  <app-carrousel (carouselLoadedEmitter)="hasLoadedCarousel = $event" />
+  <app-home-categories
+    [categories]="categoriesOnDisplay"
+    class="flex justify-center"
+  />
+  <app-info-block />
+  <app-new-arrivals-section [products]="newProducts" />
+</div>

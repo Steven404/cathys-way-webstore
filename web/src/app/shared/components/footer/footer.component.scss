@@ -1,0 +1,23 @@
+@tailwind components;
+
+@layer components {
+  .wrapper {
+    @apply relative bg-fuchsia-700 text-gray-300 flex flex-col items-center p-20
+  }
+
+  .copyright-text {
+    @apply text-sm
+  }
+
+  .icons-container {
+    @apply flex justify-evenly gap-4 mt-5
+  }
+
+  .icon {
+    @apply hover:text-amber-300 cursor-pointer hover:scale-110 transition-all
+  }
+
+  .icons8-attribute {
+    @apply absolute z-[2] bottom-2 text-gray-400 text-xs font-light
+  }
+}

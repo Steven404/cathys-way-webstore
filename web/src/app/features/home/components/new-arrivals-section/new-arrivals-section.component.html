@@ -1,0 +1,17 @@
+<div class="wrapper">
+  <p class="title">Νέες Αφίξεις</p>
+  <div class="products-container mt-10">
+    <app-product-card
+      @fadeInFadeOut
+      *ngFor="let product of products"
+      [product]="product"
+      [imageSrc]="product?.mainImageUrl || 'assets/rings.jpg'"
+    />
+  </div>
+  <p-button
+    label="Προβολή όλων"
+    size="large"
+    class="mt-10"
+    (onClick)="viewAll()"
+  />
+</div>
